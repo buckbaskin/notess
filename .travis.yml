@@ -20,12 +20,13 @@ install:
 
 script:
   - nosetests --with-timer --timer-top-n 5 --timer-ok 250ms --timer-warning 500ms --with-coverage --cover-erase --cover-html --cover-package=app --cover-branches
-  - if [$? == 0]; then
-      codecov
-      exit 0
-    else
-      exit 1
-    fi
+  - |
+      if [ $? == 0 ]; then
+        codecov
+        exit 0
+      else
+        exit 1
+      fi
 
 after-success:
   - codecov
