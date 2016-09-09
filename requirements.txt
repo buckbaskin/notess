@@ -1,2 +1,6 @@
-nose
+codecov
+coverage
 flask
+nose
+nose-timer
+requests
