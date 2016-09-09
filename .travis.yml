@@ -1,0 +1,25 @@
+language: python
+python:
+  - "2.7"
+  - "3.3"
+  - "3.4"
+  - "3.5"
+  - "nightly"
+
+# save pip installs between runs
+cache: "pip"
+
+# services such as databases that can be used during tests
+# services:
+#   - memcached
+#   - redis-server
+
+# command to install dependencies
+install: 
+  - pip install requirements.txt
+
+script:
+  - nosetests
+
+after-success:
+  - codecov
