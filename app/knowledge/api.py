@@ -16,4 +16,27 @@ def get_keywords():
         print("*****" + text)
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_TEXT)
-    return watson_api.get_keywords(text)
+    keywords = prune_keywords(watson_api.get_keywords(text))
+    return keywords
+
+
+def prune_keywords(keywords):
+    keywords_parsed = json.loads(keywords)
+    threshold = compute_threshold(keywords_parsed)
+    num_keywords = len(keywords_parsed)
+    valid_keywords = []
+    print(keywords_parsed)
+    for i in range(0, num_keywords):
+        if (float(keywords_parsed[i]['relevance']) > threshold):
+            valid_keywords.append(keywords_parsed[i])
+    print(json.dumps(valid_keywords))
+    return valid_keywords
+
+def compute_threshold(keywords):
+    sum_relevance = 0.0
+    num_keywords = len(keywords)
+    for i in range(0, num_keywords):
+        print(keywords[i]['relevance'])
+        sum_relevance = float(keywords[i]['relevance']) + sum_relevance
+    threshold = sum_relevance / num_keywords
+    return threshold
