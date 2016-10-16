@@ -14,9 +14,10 @@
 
 #test {
     z-index: 5000;
-    width: 600px;
+    width: 500px;
     height: 75%;
-    position: absolute;
+    position: fixed;
     right: 1px;
-    background-color: blue;
+    left: 1440px;
+    background-color: #f8f8f8;
 }
