@@ -64,7 +64,7 @@ def get_class_notes():
         class_id = request.args['class_id']
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_CLASS)
-    notes_from_database = [{'node_id': '1234',
+    notes_from_database = [{'note_id': '1234',
                             'class_id': class_id,
                             'user_id': user_id,
                             'note_name': 'This is the best lecture ever!',
@@ -72,3 +72,15 @@ def get_class_notes():
                             'date_updated': '10/16/2016'}]
     return json.dumps(notes_from_database)
 
+@router.route('/v1/transcript/all')
+def get_all_transcripts():
+    try:
+        user_id = request.args['user_id']
+    except KeyError:
+        return make_response(*INVALID_REQUEST_NO_USER)
+    transcripts_from_database = [{'transcript_id': 'abcd',
+                                  'user_id': user_id,
+                                  'note_id': '1234',
+                                  'text': 'This is the first transcription',
+                                  'recording_link': '/recording/usertranscript.mp3',
+                                  }]
