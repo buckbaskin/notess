@@ -5,6 +5,7 @@ import json
 from flask import make_response
 
 INVALID_REQUEST_NO_USER = ('Invalid Request. \'user_id\' not found in request.', 400,)
+INVALID_REQUEST_NO_CLASS = ('Invalid Request. \'class_id\' not found in request.', 400,)
 
 @router.route('/v1/users/one', methods=['POST'])
 def get_one_user():
@@ -42,4 +43,37 @@ def get_all_classes():
                              'date_updated': '10/16/2016'}]
     return json.dumps(classes_from_database)
 
+@router.route('/v1/note/all')
+def get_all_notes():
+    content = request.get_json()
+    try:
+        user_id = content['user_id']
+    except KeyError:
+        return make_response(*INVALID_REQUEST_NO_USER)
+    notes_from_database = [{'node_id': '1234',
+                            'class_id': 'abcdjasdf',
+                            'user_id': user_id,
+                            'note_name': 'This is the best lecture ever!',
+                            'date_created': '10/16/2016',
+                            'date_updated': '10/16/2016'}]
+    return json.dumps(notes_from_database)
+
+@router.route('/v1/note/class')
+def get_class_notes():
+    content = request.get_json()
+    try:
+        user_id = content['user_id']
+    except KeyError:
+        return make_response(*INVALID_REQUEST_NO_USER)
+    try:
+        class_id = content['class_id']
+    except KeyError:
+        return make_response(*INVALID_REQUEST_NO_CLASS)
+    notes_from_database = [{'node_id': '1234',
+                            'class_id': class_id,
+                            'user_id': user_id,
+                            'note_name': 'This is the best lecture ever!',
+                            'date_created': '10/16/2016',
+                            'date_updated': '10/16/2016'}]
+    return json.dumps(notes_from_database)
 
