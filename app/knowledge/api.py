@@ -5,7 +5,7 @@ import json
 
 from flask import make_response, request
 
-INVALID_REQUEST_NO_TEXT = ('Invalid Request. Keywords not found in request.', 400,)
+INVALID_REQUEST_NO_KEYWORDS = ('Invalid Request. Keywords not found in request.', 400,)
 
 
 @router.route('/get_descriptions', methods=['GET'])
@@ -14,7 +14,7 @@ def get_descriptions():
     try:
         keywords = request.args['keywords']
     except KeyError:
-        return make_response(*INVALID_REQUEST_NO_TEXT)
+        return make_response(*INVALID_REQUEST_NO_KEYWORDS)
     return get_descriptions_from_keywords(keywords)
 
 
