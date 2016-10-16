@@ -1,5 +1,10 @@
 from app import server
-from app.user.api.schema import user_schema, user_list, class_schema, class_list
+from app.user.api.schema import (
+    user_schema, user_list,
+    class_schema, class_list,
+    note_schema, note_list,
+    transcript_schema, transcript_list,
+    keyword_schema, keyword_list)
 
 import json
 import unittest
@@ -13,6 +18,12 @@ CLASS_ID = 'abcdefgh'
 NOTE_ID = '12345'
 TRANSCRIPT_ID = 'abcde'
 
+def myValidate(self, loaded_json, schema):
+    try:
+        validate(loaded_json, schema)
+    except ValidationError:
+        self.fail()
+
 class TestUserAPI(unittest.TestCase):
     def setUp(self):
         self.client = server.test_client()
@@ -20,10 +31,7 @@ class TestUserAPI(unittest.TestCase):
     def testOneUser(self):
         response = self.client.get('/v1/users/one?user_id=%s' % (USER_ID,))
         self.assertEqual(response.status_code, 200)
-        try:
-            validate(json.loads(response.data.decode()), user_schema)
-        except ValidationError:
-            self.fail()
+        myValidate(self, json.loads(response.data.decode()), user_schema)
 
     def testOneUserFailPath(self):
         response = self.client.get('/v1/users/one')
@@ -41,10 +49,7 @@ class TestClassAPI(unittest.TestCase):
     def testAllClass(self):
         response = self.client.get('%s?user_id=%s' % (self.all_url, USER_ID,))
         self.assertEqual(response.status_code, 200)
-        try:
-            validate(json.loads(response.data.decode()), class_list)
-        except ValidationError:
-            self.fail()
+        myValidate(self, json.loads(response.data.decode()), class_list)
 
     def testAllClassFail(self):
         response = self.client.get('%s' % (self.all_url,))
@@ -59,6 +64,7 @@ class TestNotesAPI(unittest.TestCase):
     def testAllNotes(self):
         response = self.client.get('%s?user_id=%s' % (self.all_url, USER_ID,))
         self.assertEqual(response.status_code, 200)
+        myValidate(self, json.loads(response.data.decode()), note_list)
 
     def testAllNotesFail(self):
         response = self.client.get('%s' % (self.all_url,))
@@ -67,6 +73,7 @@ class TestNotesAPI(unittest.TestCase):
     def testOneClass(self):
         response = self.client.get('%s?user_id=%s&class_id=%s' % (self.class_url, USER_ID, CLASS_ID,))
         self.assertEqual(response.status_code, 200)
+        myValidate(self, json.loads(response.data.decode()), note_list)
 
     def testOneClassFail(self):
         response = self.client.get('%s' % (self.class_url,))
@@ -79,12 +86,14 @@ class TestNotesAPI(unittest.TestCase):
 class TestTranscriptAPI(unittest.TestCase):
     def setUp(self):
         self.client = server.test_client()
-        self.all_url = '/v1/note/all'
-        self.class_url = '/v1/note/class'
+        self.all_url = '/v1/transcript/all'
+        self.class_url = '/v1/transcript/class'
+        self.note_url = '/v1/transcript/note'
 
-    def testAllNotes(self):
+    def testAllTranscripts(self):
         response = self.client.get('%s?user_id=%s' % (self.all_url, USER_ID,))
         self.assertEqual(response.status_code, 200)
+        myValidate(self, json.loads(response.data.decode()), transcript_list)
 
     def testAllNotesFail(self):
         response = self.client.get('%s' % (self.all_url,))
