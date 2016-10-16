@@ -9,9 +9,6 @@ Interface to Watson API and more specifically keyword search
 '''
 class WatsonAPI:
 
-    def __init__(self):
-        self.keywords
-
     def get_keywords(self, input):
         '''
         Given a string of text, returns a list of keywords with an associated relevance
@@ -24,4 +21,4 @@ class WatsonAPI:
           indent=2)
         parsed_json = json.loads(json_results)
         keywords = parsed_json['keywords']
-        return keywords
+        return json.dumps(keywords)

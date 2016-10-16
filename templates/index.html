@@ -83,15 +83,23 @@
 <script src="../../static/knowledge.js"></script>
 
 <script>
-keywords = $.knowledge("Custom Models: you can train your own custom model in a specific domain using " +
-    "Watson Knowledge Studio. For instance, using Watson Knowledge Studio, a subject matter expert " +
-    "could train a model to understand car manufucturer, make, and model for the purpose of analyzing " +
-    "traffic incident reports to look for underlying patterns.")
-</script>
-
-<script>
-    var testButton = $('#keywordsButton');
-    testButton.click(function() {
-       $("#box").animate({height: "300px"});
+    $(document).ready(function() {
+        var test = "Custom Models: you can train your own custom model in a specific domain using " +
+        "Watson Knowledge Studio. For instance, using Watson Knowledge Studio, a subject matter expert " +
+        "could train a model to understand car manufucturer, make, and model for the purpose of analyzing " +
+        "traffic incident reports to look for underlying patterns.";
+        var $testObject = $.knowledge();
+        var keywords;
+        $testObject.getKeywords(test, function(result) {
+            keywords = result;
+            console.log("%%%$$$$$$$$$" + keywords);
+        });
     });
 </script>
+
+<!--<script>-->
+    <!--var testButton = $('#keywordsButton');-->
+    <!--testButton.click(function() {-->
+       <!--$("#box").animate({height: "300px"});-->
+    <!--});-->
+<!--</script>-->

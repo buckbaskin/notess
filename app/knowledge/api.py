@@ -13,6 +13,7 @@ def get_keywords():
     # requires that the request content type be set to application/json
     try:
         text = request.args['text']
+        print("*****" + text)
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_TEXT)
-    return watson_api(text)
+    return watson_api.get_keywords(text)
