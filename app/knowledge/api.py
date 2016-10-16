@@ -13,7 +13,7 @@ def get_keywords():
     # requires that the request content type be set to application/json
     try:
         text = request.args['text']
-        print("*****" + text)
+        print(text)
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_TEXT)
     keywords = prune_keywords(watson_api.get_keywords(text))
@@ -30,7 +30,7 @@ def prune_keywords(keywords):
         if (float(keywords_parsed[i]['relevance']) > threshold):
             valid_keywords.append(keywords_parsed[i])
     print(json.dumps(valid_keywords))
-    return valid_keywords
+    return json.dumps(valid_keywords)
 
 def compute_threshold(keywords):
     sum_relevance = 0.0
