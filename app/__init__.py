@@ -5,5 +5,7 @@ server = Flask(__name__)
 def hello():
     return 'Hello World'
 
+from app import api
+
 if __name__ == '__main__':
     server.run()
