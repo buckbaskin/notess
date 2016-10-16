@@ -1,8 +1,12 @@
 from app import server
+from app.user.api.schema import user_schema, user_list, class_schema, class_list
 
+import json
 import unittest
 
 from nose.tools import nottest
+from jsonschema import validate
+from jsonschema.exceptions import ValidationError
 
 USER_ID = '123adf89'
 CLASS_ID = 'abcdefgh'
@@ -16,6 +20,10 @@ class TestUserAPI(unittest.TestCase):
     def testOneUser(self):
         response = self.client.get('/v1/users/one?user_id=%s' % (USER_ID,))
         self.assertEqual(response.status_code, 200)
+        try:
+            validate(json.loads(response.data.decode()), user_schema)
+        except ValidationError:
+            self.fail()
 
     def testOneUserFailPath(self):
         response = self.client.get('/v1/users/one')
@@ -33,6 +41,10 @@ class TestClassAPI(unittest.TestCase):
     def testAllClass(self):
         response = self.client.get('%s?user_id=%s' % (self.all_url, USER_ID,))
         self.assertEqual(response.status_code, 200)
+        try:
+            validate(json.loads(response.data.decode()), class_list)
+        except ValidationError:
+            self.fail()
 
     def testAllClassFail(self):
         response = self.client.get('%s' % (self.all_url,))

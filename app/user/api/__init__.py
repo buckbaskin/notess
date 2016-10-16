@@ -19,7 +19,6 @@ def get_one_user():
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_USER)
     user_from_database = {'user_id': user_id,
-                          'username': 'johndoe',
                           'email': 'johndoe@gmail.com',
                           'first_name': 'John',
                           'last_name': 'Doe'}
