@@ -1,0 +1,13 @@
+#notePanel {
+  height: 60%;
+}
+
+#results {
+  height: 60%;
+}
+
+#info {
+    font-size: 20px;
+    text-align: center;
+    visibility: hidden;
+}
