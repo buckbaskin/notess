@@ -3,10 +3,6 @@ test-warnings: true
 strictness: veryhigh
 pep8:
   full: true
-pylint:
-  run: true
-vulture:
-  run: true
 max-line-length: 100
 uses:
   - flask
