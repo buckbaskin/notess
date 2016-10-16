@@ -145,7 +145,8 @@ def get_note_keywords():
                                'link_dbpedia': 'insert dbpedia link here',
                                'link_wikipedia': 'insert wikipedia link here'}]
     if 'class_id' in request.args:
-        keywords_from_database['class_id'] = request.args['class_id']
+        for i in range(0, len(keywords_from_database)):
+            keywords_from_database[0]['class_id'] = request.args['class_id']
     return json.dumps(keywords_from_database)
 
 @router.route('/v1/keyword/transcript')
@@ -168,8 +169,10 @@ def get_transcription_keywords():
                                'link_wikipedia': 'insert wikipedia link here'}]
 
     if 'class_id' in request.args:
-        keywords_from_database['class_id'] = request.args['class_id']
+        for i in range(0, len(keywords_from_database)):
+            keywords_from_database[0]['class_id'] = request.args['class_id']
     if 'note_id' in request.args:
-        keywords_from_database['note_id'] = request.args['note_id']
+        for i in range(0, len(keywords_from_database)):
+            keywords_from_database[0]['note_id'] = request.args['note_id']
     return json.dumps(keywords_from_database)
 
