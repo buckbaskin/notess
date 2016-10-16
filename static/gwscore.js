@@ -2,6 +2,7 @@ var final_transcript = '';
 var recognizing = false;
 var ignore_onend;
 var start_timestamp;
+var keywords;
 var start_button = document.getElementById("start_button");
 
 if (!('webkitSpeechRecognition' in window)) {
@@ -69,6 +70,7 @@ if (!('webkitSpeechRecognition' in window)) {
         if (final_transcript || interim_transcript) {
             // showButtons('inline-block');
         }
+        keywords = $.knowledge(final_transcript)
     };
 }
 
