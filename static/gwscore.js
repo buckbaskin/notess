@@ -7,7 +7,7 @@ var start_button = document.getElementById("start_button");
 if (!('webkitSpeechRecognition' in window)) {
 
 } else {
-    start_button.style.display = 'inline-block';
+    // start_button.style.display = 'inline-block';
     var recognition = new webkitSpeechRecognition();
     recognition.continuous = true;
     recognition.interimResults = true;
@@ -67,7 +67,7 @@ if (!('webkitSpeechRecognition' in window)) {
         final_span.innerHTML = linebreak(final_transcript);
         interim_span.innerHTML = linebreak(interim_transcript);
         if (final_transcript || interim_transcript) {
-            showButtons('inline-block');
+            // showButtons('inline-block');
         }
     };
 }
@@ -87,17 +87,17 @@ function capitalize(s) {
 function startButton(event) {
     if (recognizing) {
         recognition.stop();
-        start_button.innerHTML = "restart recording";
+        start_button.innerHTML = "Restart Recording";
         return;
     }
-    start_button.innerHTML = "stop recording";
+    start_button.innerHTML = "Stop Recording";
     final_transcript = '';
     recognition.lang = 'en-US';
     recognition.start();
     ignore_onend = false;
     final_span.innerHTML = '';
     interim_span.innerHTML = '';
-    start_img.src = 'mic-slash.gif';
+    // start_img.src = 'mic-slash.gif';
     showInfo('info_allow');
     start_timestamp = event.timeStamp;
 }
