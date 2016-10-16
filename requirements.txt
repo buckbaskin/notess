@@ -1,6 +1,7 @@
 codecov
 coverage
 flask
+jsonschema
 nose
 nose-timer
 pylint
