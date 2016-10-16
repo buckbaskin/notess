@@ -115,9 +115,33 @@ def get_class_keywords():
     keywords_from_database = [{'keyword_id': 'qwert',
                                'transcription_id': 'abcd',
                                'user_id': user_id,
+                               'class_id': class_id,
                                'keyword': 'Waterfall Model',
                                'short_description': 'A developer horror story',
                                'long_description': 'This is a development process that requires excessive documentation',
                                'link_dbpedia': 'insert dbpedia link here',
                                'link_wikipedia': 'insert wikipedia link here'}]
+    return json.dumps(keywords_from_database)
+
+@router.route('/v1/keyword/note')
+def get_note_keywords():
+    try:
+        user_id = request.args['user_id']
+    except KeyError:
+        return make_response(*INVALID_REQUEST_NO_USER)
+    try:
+        note_id = request.args['note_id']
+    except KeyError:
+        return make_response(*INVALID_REQUEST_NO_NOTE)
+    keywords_from_database = [{'keyword_id': 'qwert',
+                               'transcription_id': 'abcd',
+                               'user_id': user_id,
+                               'note_id': note_id,
+                               'keyword': 'Waterfall Model',
+                               'short_description': 'A developer horror story',
+                               'long_description': 'This is a development process that requires excessive documentation',
+                               'link_dbpedia': 'insert dbpedia link here',
+                               'link_wikipedia': 'insert wikipedia link here'}]
+    if 'class_id' in request.args:
+        keywords_from_database['class_id'] = request.args['class_id']
     return json.dumps(keywords_from_database)
