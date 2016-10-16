@@ -13,7 +13,9 @@
 
 <body>
     <div id="test">
-        test
+        <div class="container">
+            <h2>Keywords</h2>
+        </div>
     </div>
     <div class="container-fluid">
         <h1>ANTS</h1>
@@ -97,9 +99,24 @@
     });
 </script>
 
-<!--<script>-->
-    <!--var testButton = $('#keywordsButton');-->
-    <!--testButton.click(function() {-->
-       <!--$("#box").animate({height: "300px"});-->
-    <!--});-->
-<!--</script>-->
+<script>
+    $(document).ready(function() {
+        var test = $('#test');
+         test.css('box-shadow', '10px 10px 8px #888');
+        var btn = $('#keywordsButton');
+
+        var hidden = true;
+        btn.click(function() {
+            if(hidden) {
+                // show
+                test.animate({left: '-=500'}, function(){});
+                hidden = false;
+            }
+            else {
+                // hide
+                test.animate({left: '+=500'}, function(){});
+                hidden = true;
+            }
+        });
+    });
+</script>

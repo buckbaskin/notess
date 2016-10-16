@@ -1,4 +1,4 @@
-(function ( $ ) {
+(function ($) {
     $.knowledge = function() {
 
         var plugin = this;
@@ -26,7 +26,7 @@
                    callback(result);
                  },
                  error: function () {
-                     console.log("Erorr in receiving keywords")
+                     console.log("Error in receiving keywords.")
                  }
              });
         };
