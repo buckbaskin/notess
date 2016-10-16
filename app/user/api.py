@@ -2,20 +2,18 @@ from app import server as router
 
 import json
 
-from flask import make_response
+from flask import make_response, request
 
 INVALID_REQUEST_NO_USER = ('Invalid Request. \'user_id\' not found in request.', 400,)
 INVALID_REQUEST_NO_CLASS = ('Invalid Request. \'class_id\' not found in request.', 400,)
 
-@router.route('/v1/users/one', methods=['POST'])
+@router.route('/v1/users/one', methods=['GET'])
 def get_one_user():
     # requires that the request content type be set to application/json
-    content = request.get_json()
     try:
-        user_id = content['user_id']
+        user_id = request.args['user_id']
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_USER)
-    print(content)
     user_from_database = {'user_id': user_id,
                           'username': 'johndoe',
                           'email': 'johndoe@gmail.com',
@@ -27,13 +25,12 @@ def get_one_user():
         # no password information in the dict
         pass
 
-    return json.dumps(user)
+    return json.dumps(user_from_database)
 
-@router.route('/v1/class/all')
+@router.route('/v1/class/all', methods=['GET'])
 def get_all_classes():
-    content = request.get_json()
     try:
-        user_id = content['user_id']
+        user_id = request.args['user_id']
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_USER)
     classes_from_database = [{'class_id': 'abcdjasdf',
@@ -43,11 +40,10 @@ def get_all_classes():
                              'date_updated': '10/16/2016'}]
     return json.dumps(classes_from_database)
 
-@router.route('/v1/note/all')
+@router.route('/v1/note/all', methods=['GET'])
 def get_all_notes():
-    content = request.get_json()
     try:
-        user_id = content['user_id']
+        user_id = request.args['user_id']
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_USER)
     notes_from_database = [{'node_id': '1234',
@@ -58,15 +54,14 @@ def get_all_notes():
                             'date_updated': '10/16/2016'}]
     return json.dumps(notes_from_database)
 
-@router.route('/v1/note/class')
+@router.route('/v1/note/class', methods=['GET'])
 def get_class_notes():
-    content = request.get_json()
     try:
-        user_id = content['user_id']
+        user_id = request.args['user_id']
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_USER)
     try:
-        class_id = content['class_id']
+        class_id = request.args['class_id']
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_CLASS)
     notes_from_database = [{'node_id': '1234',
