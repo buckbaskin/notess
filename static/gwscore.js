@@ -2,6 +2,7 @@ var final_transcript = '';
 var recognizing = false;
 var ignore_onend;
 var start_timestamp;
+var keywords;
 var start_button = document.getElementById("start_button");
 
 if (!('webkitSpeechRecognition' in window)) {

@@ -8,6 +8,8 @@ INVALID_REQUEST_NO_USER = ('Invalid Request. user_id not found in request.', 400
 INVALID_REQUEST_NO_CLASS = ('Invalid Request. class_id not found in request.', 400,)
 INVALID_REQUEST_NO_NOTE = ('Invalid Request. note_id not found in request.', 400,)
 INVALID_REQUEST_NO_TRANSCRIPT = ('Invalid Request. transcript_id not found in request.', 400,)
+NOTE_SAVED = ('Note Saved.', 200)
+CLASS_SAVED = ('Class Saved.', 200)
 
 @router.route('/v1/users/one', methods=['GET'])
 def get_one_user():
@@ -42,6 +44,34 @@ def get_all_classes():
                              'date_updated': '10/16/2016'}]
     return json.dumps(classes_from_database)
 
+@router.route('/v1/class/new', methods=['POST'])
+def create_new_class():
+    try:
+        user_id = request.args['user_id']
+    except KeyError:
+        return make_response(*INVALID_REQUEST_NO_USER)
+    try:
+        class_id = request.args['class_id']
+    except KeyError:
+        return make_response(*INVALID_REQUEST_NO_CLASS)
+    class_metadata = {'class_id': 'abcd'}
+    if 'class_name' in request.args:
+        class_metadata['class_name'] = request.args['class_name']
+    return json.dumps(class_metadata)
+
+@router.route('/v1/class/save', methods=['POST'])
+def save_existing_class():
+    try:
+        user_id = request.args['user_id']
+    except KeyError:
+        return make_response(*INVALID_REQUEST_NO_USER)
+    try:
+        class_id = request.args['class_id']
+    except KeyError:
+        return make_response(*INVALID_REQUEST_NO_CLASS)
+    content = request.get_json()
+    return make_response(*CLASS_SAVED)
+
 @router.route('/v1/note/all', methods=['GET'])
 def get_all_notes():
     try:
@@ -73,6 +103,38 @@ def get_class_notes():
                             'date_created': '10/16/2016',
                             'date_updated': '10/16/2016'}]
     return json.dumps(notes_from_database)
+
+@router.route('/v1/note/new', methods=['GET'])
+def create_new_note():
+    '''
+    This should be creating updating an existing note
+    '''
+    try:
+        user_id = request.args['user_id']
+    except KeyError:
+        return make_response(*INVALID_REQUEST_NO_USER)
+    note_metadata = {'note_id': '1234',
+                     'note_name': 'Untitled',
+                     'date_created': 'today',
+                     'date_updated': 'today'}
+    return json.dumps(note_metadata)
+
+@router.route('/v1/note/save', methods=['POST'])
+def save_existing_note():
+    '''
+    This should be creating updating an existing note
+    '''
+    try:
+        user_id = request.args['user_id']
+    except KeyError:
+        return make_response(*INVALID_REQUEST_NO_USER)
+    try:
+        note_id = request.args['note_id']
+    except KeyError:
+        return make_response(*INVALID_REQUEST_NO_NOTE)
+
+    content = request.get_json()
+    return make_response(*NOTE_SAVED)
 
 @router.route('/v1/transcript/all')
 def get_all_transcripts():
