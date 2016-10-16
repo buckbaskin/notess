@@ -1,14 +1,14 @@
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-<!-- Optional theme -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
 <head>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='application.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -30,8 +30,9 @@
             <div class="col-lg-6">
                 <div class="panel panel-success">
                     <div class="panel-heading">Transcription</div>
-                    <div id="transcriptionPanel" class="panel-body">
-                        This is the transcription panel.
+                    <div id="results" class="panel-body">
+                        <span id="final_span" class="final"></span>
+                        <span id="interim_span" class="interim"></span>
                     </div>
                 </div>
             </div>
@@ -42,9 +43,35 @@
 
         <div class="row">
             <div class="col-lg-4 col-lg-offset-4">
-                <button type="button" class="btn btn-block btn-success">Start</button>
+                <button id="start_button" onclick="startButton(event)" type="button" class="btn btn-block btn-success">Start</button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="center">
+            </div>
+            <div id="info">
+                <!--<p id="info_start">Click button to start.</p>-->
+                <!--<p id="info_speak_now">Recording started</p>-->
+                <p id="info_no_speech">No speech was detected. You may need to adjust your
+                    <a href="//support.google.com/chrome/bin/answer.py?hl=en&amp;answer=1407892">
+                        microphone settings</a>.</p>
+                <p id="info_no_microphone" style="display:none">
+                    No microphone was found. Ensure that a microphone is installed and that
+                    <a href="//support.google.com/chrome/bin/answer.py?hl=en&amp;answer=1407892">
+                        microphone settings</a> are configured correctly.</p>
+                <p id="info_allow">Click the "Allow" button above to enable your microphone.</p>
+                <p id="info_denied">Permission to use microphone was denied.</p>
+                <p id="info_blocked">Permission to use microphone is blocked. To change,
+                    go to chrome://settings/contentExceptions#media-stream</p>
+                <p id="info_upgrade">ANTS is not supported by this browser.
+                    Upgrade to <a href="//www.google.com/chrome">Chrome</a>
+                    version 25 or later.</p>
             </div>
         </div>
 
     </div>
 </body>
+
+
+<script src="../../static/gwscore.js"></script>

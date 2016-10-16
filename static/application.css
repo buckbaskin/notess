@@ -2,6 +2,12 @@
   height: 60%;
 }
 
-#transcriptionPanel {
+#results {
   height: 60%;
+}
+
+#info {
+    font-size: 20px;
+    text-align: center;
+    visibility: hidden;
 }
