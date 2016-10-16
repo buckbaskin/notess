@@ -11,3 +11,13 @@
     text-align: center;
     visibility: hidden;
 }
+
+#floatingPanel {
+    z-index: 5000;
+    width: 500px;
+    height: 75%;
+    position: fixed;
+    right: 1px;
+    left: 1440px;
+    background-color: #f8f8f8;
+}
