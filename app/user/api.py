@@ -4,8 +4,10 @@ import json
 
 from flask import make_response, request
 
-INVALID_REQUEST_NO_USER = ('Invalid Request. \'user_id\' not found in request.', 400,)
-INVALID_REQUEST_NO_CLASS = ('Invalid Request. \'class_id\' not found in request.', 400,)
+INVALID_REQUEST_NO_USER = ('Invalid Request. user_id not found in request.', 400,)
+INVALID_REQUEST_NO_CLASS = ('Invalid Request. class_id not found in request.', 400,)
+INVALID_REQUEST_NO_NOTE = ('Invalid Request. note_id not found in request.', 400,)
+INVALID_REQUEST_NO_TRANSCRIPT = ('Invalid Request. transcript_id not found in request.', 400,)
 
 @router.route('/v1/users/one', methods=['GET'])
 def get_one_user():
@@ -145,3 +147,29 @@ def get_note_keywords():
     if 'class_id' in request.args:
         keywords_from_database['class_id'] = request.args['class_id']
     return json.dumps(keywords_from_database)
+
+@router.route('/v1/keyword/transcript')
+def get_transcription_keywords():
+    try:
+        user_id = request.args['user_id']
+    except KeyError:
+        return make_response(*INVALID_REQUEST_NO_USER)
+    try:
+        transcript_id = request.args['transcript_id']
+    except KeyError:
+        return make_response(*INVALID_REQUEST_NO_TRANSCRIPT)
+    keywords_from_database = [{'keyword_id': 'qwert',
+                               'transcript_id': transcript_id,
+                               'user_id': user_id,
+                               'keyword': 'Waterfall Model',
+                               'short_description': 'A developer horror story',
+                               'long_description': 'This is a development process that requires excessive documentation',
+                               'link_dbpedia': 'insert dbpedia link here',
+                               'link_wikipedia': 'insert wikipedia link here'}]
+
+    if 'class_id' in request.args:
+        keywords_from_database['class_id'] = request.args['class_id']
+    if 'note_id' in request.args:
+        keywords_from_database['note_id'] = request.args['note_id']
+    return json.dumps(keywords_from_database)
+
