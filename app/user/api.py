@@ -78,9 +78,46 @@ def get_all_transcripts():
         user_id = request.args['user_id']
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_USER)
-    transcripts_from_database = [{'transcript_id': 'abcd',
+    transcripts_from_database = [{'transcription_id': 'abcd',
                                   'user_id': user_id,
                                   'note_id': '1234',
                                   'text': 'This is the first transcription',
                                   'recording_link': '/recording/usertranscript.mp3',
                                   }]
+    return json.dumps(transcripts_from_database)
+
+@router.route('/v1/keyword/all')
+def get_all_keywords():
+    try:
+        user_id = request.args['user_id']
+    except KeyError:
+        return make_response(*INVALID_REQUEST_NO_USER)
+    keywords_from_database = [{'keyword_id': 'qwert',
+                               'transcription_id': 'abcd',
+                               'user_id': user_id,
+                               'keyword': 'Waterfall Model',
+                               'short_description': 'A developer horror story',
+                               'long_description': 'This is a development process that requires excessive documentation',
+                               'link_dbpedia': 'insert dbpedia link here',
+                               'link_wikipedia': 'insert wikipedia link here'}]
+    return json.dumps(keywords_from_database)
+
+@router.route('/v1/keyword/class')
+def get_class_keywords():
+    try:
+        user_id = request.args['user_id']
+    except KeyError:
+        return make_response(*INVALID_REQUEST_NO_USER)
+    try:
+        class_id = request.args['class_id']
+    except KeyError:
+        return make_response(*INVALID_REQUEST_NO_CLASS)
+    keywords_from_database = [{'keyword_id': 'qwert',
+                               'transcription_id': 'abcd',
+                               'user_id': user_id,
+                               'keyword': 'Waterfall Model',
+                               'short_description': 'A developer horror story',
+                               'long_description': 'This is a development process that requires excessive documentation',
+                               'link_dbpedia': 'insert dbpedia link here',
+                               'link_wikipedia': 'insert wikipedia link here'}]
+    return json.dumps(keywords_from_database)
