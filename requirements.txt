@@ -3,4 +3,5 @@ coverage
 flask
 nose
 nose-timer
+pylint
 requests

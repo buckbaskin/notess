@@ -1,10 +1,13 @@
 from app import server
+
+import unittest
+
 from nose.tools import ok_
 
-def setup_module():
-    global app_client 
-    app_client = server.test_client()
+class ExampleTest(unittest.TestCase):
+    def setUp(self):
+        self.app_client = server.test_client()
 
-def test_index():
-    res = app_client.get('/')
-    ok_(res.status_code == 200)
+    def test_index(self):
+        res = self.app_client.get('/')
+        ok_(res.status_code == 200)
