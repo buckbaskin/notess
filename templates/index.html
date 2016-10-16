@@ -12,6 +12,9 @@
 </head>
 
 <body>
+    <div id="test">
+        test
+    </div>
     <div class="container-fluid">
         <h1>ANTS</h1>
 
@@ -44,6 +47,8 @@
         <div class="row">
             <div class="col-lg-4 col-lg-offset-4">
                 <button id="start_button" onclick="startButton(event)" type="button" class="btn btn-block btn-success">Start</button>
+                <br>
+                <button id="keywordsButton" class="btn btn-block btn-primary">Keywords</button>
             </div>
         </div>
 
@@ -75,3 +80,10 @@
 
 
 <script src="../../static/gwscore.js"></script>
+
+<script>
+    var testButton = $('#keywordsButton');
+    testButton.click(function() {
+       $("#box").animate({height: "300px"});
+    });
+</script>
