@@ -7,8 +7,6 @@ pylint:
   run: true
 vulture:
   run: true
-mccabe:
-  run: true
 max-line-length: 100
 uses:
   - flask
