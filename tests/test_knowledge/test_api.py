@@ -1,4 +1,3 @@
-import nose2
 import unittest
 
 class APITestCase(unittest.TestCase):
