@@ -4,6 +4,8 @@ import json
 
 from flask import make_response
 
+INVALID_REQUEST_NO_USER = ('Invalid Request. \'user_id\' not found in request.', 400,)
+
 @router.route('/v1/users/one', methods=['POST'])
 def get_one_user():
     # requires that the request content type be set to application/json
@@ -11,7 +13,7 @@ def get_one_user():
     try:
         user_id = content['user_id']
     except KeyError:
-        return make_response('Invalid Request. \'user_id\' not found in request.', 400)
+        return make_response(*INVALID_REQUEST_NO_USER)
     print(content)
     user_from_database = {'user_id': user_id,
                           'username': 'johndoe',
@@ -25,4 +27,19 @@ def get_one_user():
         pass
 
     return json.dumps(user)
+
+@router.route('/v1/class/all')
+def get_all_classes():
+    content = request.get_json()
+    try:
+        user_id = content['user_id']
+    except KeyError:
+        return make_response(*INVALID_REQUEST_NO_USER)
+    classes_from_database = [{'class_id': 'abcdjasdf',
+                             'user_id': user_id,
+                             'class_name': 'EECS393 - Software Engineering',
+                             'date_created': '10/16/2016',
+                             'date_updated': '10/16/2016'}]
+    return json.dumps(classes_from_database)
+
 
