@@ -15,6 +15,20 @@
     <div id="floatingPanel">
         <div class="container">
             <h2>Keywords</h2>
+
+            <br>
+
+            <div class="col-lg-5">
+                <div id="keywordsList" class="list-group">
+                    <a href="#" class="list-group-item">
+                        Cras justo odio
+                    </a>
+                    <a href="#" class="list-group-item">Dapibus ac facilisis in</a>
+                    <a href="#" class="list-group-item">Morbi leo risus</a>
+                    <a href="#" class="list-group-item">Porta ac consectetur ac</a>
+                    <a href="#" class="list-group-item">Vestibulum at eros</a>
+                </div>
+            </div>
         </div>
     </div>
     <div class="container-fluid">
@@ -84,24 +98,17 @@
 <script src="../../static/gwscore.js"></script>
 <script src="../../static/knowledge.js"></script>
 
-<script>
-    $(document).ready(function() {
-        var test = "Custom Models: you can train your own custom model in a specific domain using " +
-        "Watson Knowledge Studio. For instance, using Watson Knowledge Studio, a subject matter expert " +
-        "could train a model to understand car manufucturer, make, and model for the purpose of analyzing " +
-        "traffic incident reports to look for underlying patterns.";
-        var $testObject = $.knowledge();
-        var keywords;
-        $testObject.getKeywords(test, function(result) {
-            keywords = result;
-            console.log(keywords);
-        });
-    });
-</script>
+
+// ********* TESTING ******************
 
 <script>
     $(document).ready(function() {
         var $KNOWLEDGE = $.knowledge();
         $KNOWLEDGE.init();
+        var test = "Custom Models: you can train your own custom model in a specific domain using " +
+        "Watson Knowledge Studio. For instance, using Watson Knowledge Studio, a subject matter expert " +
+        "could train a model to understand car manufucturer, make, and model for the purpose of analyzing " +
+        "traffic incident reports to look for underlying patterns.";
+//        $KNOWLEDGE.populateKeywordPanel(test);
     });
 </script>

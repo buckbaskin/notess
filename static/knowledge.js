@@ -1,6 +1,7 @@
 (function ($) {
     $.knowledge = function() {
         var hidden = true;
+        var keywordsList = $('#keywordsList');
         var floatingPanel = $('#floatingPanel');
         floatingPanel.css('box-shadow', '10px 10px 8px #888');
         var keywordsButton = $('#keywordsButton');
@@ -10,6 +11,20 @@
           keywordsButton.click(function() {
                 toggleSlider();
           });
+        };
+
+        var populateKeywordPanel = function(text) {
+            getKeywords(text, keywordsCallback);
+        };
+
+        var keywordsCallback = function(keywordsJson) {
+            var keywords = [];
+            for(var i = 0; i < keywordsJson.length; i++) {
+                var obj = keywordsJson[i];
+                keywords.push(obj.text);
+                keywordsList.append('<a href="#" class="list-group-item">' + obj.text + '</a>');
+                console.log(keywords);
+            }
         };
 
         var toggleSlider = function() {
@@ -43,6 +58,7 @@
             toggleSlider: toggleSlider,
             getKeywords: getKeywords,
             init: init,
+            populateKeywordPanel: populateKeywordPanel
 
         };
     };
