@@ -9,6 +9,10 @@ INVALID_REQUEST_NO_TEXT = ('Invalid Request. Text not found in request.', 400,)
 
 @router.route('/get_keywords', methods=['GET'])
 def get_keywords():
+    """
+    Given a string, get keywords
+    :return:
+    """
     watson_api = watson.WatsonAPI();
     # requires that the request content type be set to application/json
     try:
@@ -21,6 +25,11 @@ def get_keywords():
 
 
 def prune_keywords(keywords):
+    """
+    Given json object of keywords, prune those that have a relevance below the threshold
+    :param keywords: A json object of keywords and relevances
+    :return: A json object of keywords and relevance for those that are above the threshold
+    """
     keywords_parsed = json.loads(keywords)
     threshold = compute_threshold(keywords_parsed)
     num_keywords = len(keywords_parsed)
@@ -32,7 +41,13 @@ def prune_keywords(keywords):
     print(json.dumps(valid_keywords))
     return json.dumps(valid_keywords)
 
+
 def compute_threshold(keywords):
+    """
+    Compute the threshold by averaging all keyword relevances
+    :param keywords: Json object of keywords and relevances
+    :return: the computed threshold as double
+    """
     sum_relevance = 0.0
     num_keywords = len(keywords)
     for i in range(0, num_keywords):
