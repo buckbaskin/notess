@@ -19,7 +19,7 @@ install:
   - pip install -r requirements.txt
 
 before_script:
-  - pylint app/
+  - pylint --disable=R,C,I app/
 
 script:
   - nosetests --with-timer --timer-top-n 5 --timer-ok 250ms --timer-warning 500ms --with-coverage --cover-erase --cover-html --cover-package=app --cover-branches
