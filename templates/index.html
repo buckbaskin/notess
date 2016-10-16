@@ -12,7 +12,7 @@
 </head>
 
 <body>
-    <div id="test">
+    <div id="floatingPanel">
         <div class="container">
             <h2>Keywords</h2>
         </div>
@@ -101,22 +101,7 @@
 
 <script>
     $(document).ready(function() {
-        var test = $('#test');
-         test.css('box-shadow', '10px 10px 8px #888');
-        var btn = $('#keywordsButton');
-
-        var hidden = true;
-        btn.click(function() {
-            if(hidden) {
-                // show
-                test.animate({left: '-=500'}, function(){});
-                hidden = false;
-            }
-            else {
-                // hide
-                test.animate({left: '+=500'}, function(){});
-                hidden = true;
-            }
-        });
+        var $KNOWLEDGE = $.knowledge();
+        $KNOWLEDGE.init();
     });
 </script>
