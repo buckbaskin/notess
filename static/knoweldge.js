@@ -1,11 +1,11 @@
 (function ( $ ) {
-    $.knowledge = function(text) {
+    $.knowledge = function(string_text) {
         $.ajax({
-            type: "POST",
-            url: "~/pythoncode.py",
-            data: { param: text}
-        }).done(function( o ) {
-             // do something
+            type: "GET",
+            url: "/get_keywords",
+            data: { text: string_text}
+        }).done(function( result ) {
+             console.log(result)
         });
     };
 }( jQuery ));

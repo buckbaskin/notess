@@ -70,7 +70,6 @@ if (!('webkitSpeechRecognition' in window)) {
         if (final_transcript || interim_transcript) {
             // showButtons('inline-block');
         }
-        keywords = $.knowledge(final_transcript)
     };
 }
 
