@@ -88,6 +88,43 @@ def get_all_transcripts():
                                   }]
     return json.dumps(transcripts_from_database)
 
+@router.route('/v1/transcript/class')
+def get_class_transcripts():
+    try:
+        user_id = request.args['user_id']
+    except KeyError:
+        return make_response(*INVALID_REQUEST_NO_USER)
+    try:
+        class_id = request.args['class_id']
+    except KeyError:
+        return make_response(*INVALID_REQUEST_NO_CLASS)
+    transcripts_from_database = [{'transcription_id': 'abcd',
+                                  'user_id': user_id,
+                                  'class_id': class_id,
+                                  'note_id': '1234',
+                                  'text': 'This is the first transcription',
+                                  'recording_link': '/recording/usertranscript.mp3',
+                                  }]
+    return json.dumps(transcripts_from_database)
+
+@router.route('/v1/transcript/note')
+def get_note_transcripts():
+    try:
+        user_id = request.args['user_id']
+    except KeyError:
+        return make_response(*INVALID_REQUEST_NO_USER)
+    try:
+        note_id = request.args['note_id']
+    except KeyError:
+        return make_response(*INVALID_REQUEST_NO_NOTE)
+    transcripts_from_database = [{'transcription_id': 'abcd',
+                                  'user_id': user_id,
+                                  'note_id': note_id,
+                                  'text': 'This is the first transcription',
+                                  'recording_link': '/recording/usertranscript.mp3',
+                                  }]
+    return json.dumps(transcripts_from_database)
+
 @router.route('/v1/keyword/all')
 def get_all_keywords():
     try:
