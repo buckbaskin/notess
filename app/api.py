@@ -4,4 +4,4 @@ from app.knowledge import api as knowledge_api
 
 @server.route('/')
 def hello():
-    return 'Hello World'
+    return 'Hello World ++'

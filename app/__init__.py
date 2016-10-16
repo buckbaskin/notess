@@ -1,5 +1,5 @@
 from flask import Flask
-server = Flask(__name__)
+server = Flask(__name__, static_folder='../static', template_folder='../templates')
 
 from app import api
 
