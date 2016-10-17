@@ -4,7 +4,6 @@ from app.knowledge.dbpedia import depedia
 from flask import make_response, request
 
 import json
-import multiprocessing
 
 INVALID_REQUEST_NO_KEYWORDS = ('Invalid Request. Keywords not found in request.', 400,)
 INVALID_REQUEST_NO_TEXT = ('Invalid Request. Text not found in request.', 400,)
@@ -60,29 +59,26 @@ def compute_threshold(keywords):
     return threshold
 
 
-@router.route('/get_descriptions', methods=['GET'])
+@router.route('/add_descriptions', methods=['GET'])
 def get_descriptions():
     # requires that the request content type be set to application/json
     # request should be {'keywords': [{'text': 'w1', 'relevance': '0.946172'}, {'text': 'w2', 'relevance': '0.78827'}]}
     try:
-        keywords_dict = request.args['keywords']
+        keywords_dict_str = request.args['keywords']
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_KEYWORDS)
+    keywords_dict = json.loads(keywords_dict_str)
     return add_descriptions_to_keywords_dict(keywords_dict)
 
 
 def add_descriptions_to_keywords_dict(keyword_dict_list):
-    with multiprocessing.Pool(10) as p:
-        p.map(add_description, keyword_dict_list)
+    for keyword_dict in keyword_dict_list:
+        lookup_result = depedia.DBPediaAPI.search(keyword_dict['text'])
+        if lookup_result.has_results():
+            keyword_dict['description'] = lookup_result.get_first_description()
+        else:
+            keyword_dict['description'] = "none"
     return json.dumps(keyword_dict_list)
-
-
-def add_description(keyword_dict):
-    lookup_result = depedia.DBPediaAPI.search(keyword_dict['text'])
-    if lookup_result.has_results():
-        keyword_dict['description'] = lookup_result.get_first_description()
-    else:
-        keyword_dict['description'] = ""
 
 
 if __name__ == "__main__":
