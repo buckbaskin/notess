@@ -2,6 +2,7 @@ venv/
 *__pycache__/
 .coverage
 cover/
+mypycover/
 
 # My lowly vim
 *.swp
