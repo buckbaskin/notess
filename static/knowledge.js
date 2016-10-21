@@ -54,8 +54,23 @@
              });
         };
 
+        var addDescriptions = function(keyword_list, callback) {
+            $.ajax({
+                 type: "GET",
+                 url: "/add_descriptions",
+                 data: { keywords: keyword_list},
+                 success: function (result) {
+                   callback(result);
+                 },
+                 error: function () {
+                     console.log("Error in receiving keywords.")
+                 }
+             });
+        }
+
         return {
             toggleSlider: toggleSlider,
+            addDescriptions: addDescriptions,
             getKeywords: getKeywords,
             init: init,
             populateKeywordPanel: populateKeywordPanel
