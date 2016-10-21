@@ -2,7 +2,11 @@ codecov
 coverage
 flask
 jsonschema
+
+# mypy
+lxml
 mypy-lang
+
 nose
 nose-timer
 pylint
