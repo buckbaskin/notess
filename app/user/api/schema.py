@@ -1,3 +1,7 @@
+'''
+>>> validate('json?', str)
+>>>
+'''
 from jsonschema import validate
 
 str = {'type': 'string'}
@@ -76,3 +80,7 @@ keyword_schema = {
 }
 keyword_list = {'type': 'array',
                 'items': keyword_schema}
+
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod()
