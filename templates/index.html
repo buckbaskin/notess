@@ -99,13 +99,13 @@
     $(document).ready(function() {
         var $KNOWLEDGE = $.knowledge();
         $KNOWLEDGE.init();
-        var test = "Custom Models: you can train your own custom model in a specific domain using " +
-        "Watson Knowledge Studio. For instance, using Watson Knowledge Studio, a subject matter expert " +
-        "could train a model to understand car manufucturer, make, and model for the purpose of analyzing " +
-        "traffic incident reports to look for underlying patterns.";
+{#        var test = "Custom Models: you can train your own custom model in a specific domain using " +#}
+{#        "Watson Knowledge Studio. For instance, using Watson Knowledge Studio, a subject matter expert " +#}
+{#        "could train a model to understand car manufucturer, make, and model for the purpose of analyzing " +#}
+{#        "traffic incident reports to look for underlying patterns.";#}
 {#        $KNOWLEDGE.populateKeywordPanel(test);#}
 
-{#        **** WALTER'S TESTS ****       #}
+        //**** WALTER'S TESTS ****
 {#        var test2 = "Killer whales are highly social; some populations are composed of matrilineal family groups " +#}
 {#                "(pods) which are the most stable of any animal species.[5] Their sophisticated hunting techniques " +#}
 {#                "and vocal behaviours, which are often specific to a particular group and passed across generations" +#}
@@ -118,7 +118,7 @@
 {#        $KNOWLEDGE.getKeywords(test3, function (result) {#}
 {#                    keywords = result;#}
 {#                    console.log("Keywords:\n");#}
-{#                    console.log(result);#}
+{#                    console.log(JSON.stringify(result));#}
 {#                    $KNOWLEDGE.addDescriptions(keywords, function (result){console.log(result)});#}
 {#                }#}
 {#        );#}

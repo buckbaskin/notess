@@ -65,13 +65,16 @@ def compute_threshold(keywords):
 def add_descriptions():
     # requires that the request content type be set to application/json
     # request should be {'keywords': [{'text': 'w1', 'relevance': '0.946172'}, {'text': 'w2', 'relevance': '0.78827'}]}
-    try:
-        json_from_frontend = request.get_json()
-        validate(json_from_frontend, dbpedia_schema)
-    except KeyError:
-        return make_response(*INVALID_REQUEST_NO_KEYWORDS)
-    keywords_dict = json.loads(json_from_frontend)
-    return add_descriptions_to_keywords_dict(keywords_dict)
+    print('Hello World 1')
+    print(request.get_data())
+    print('Hello World 2')
+
+    decoded_json = request.get_data().decode("utf-8")
+
+    keywords_dict = json.loads(decoded_json)
+    validate(keywords_dict, dbpedia_schema)
+    # return add_descriptions_to_keywords_dict(keywords_dict)
+    return "ok", 200
 
 
 def add_descriptions_to_keywords_dict(keyword_dict_list):

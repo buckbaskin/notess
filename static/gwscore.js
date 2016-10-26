@@ -70,6 +70,7 @@ if (!('webkitSpeechRecognition' in window)) {
         if (final_transcript || interim_transcript) {
             // showButtons('inline-block');
         }
+        console.log(final_transcript)
     };
 }
 
@@ -86,9 +87,11 @@ function capitalize(s) {
 }
 
 function startButton(event) {
+    var knowledgeEngine = $.knowledge();
     if (recognizing) {
         recognition.stop();
         start_button.innerHTML = "Restart Recording";
+        knowledgeEngine.stopRefreshingKeywords();
         return;
     }
     start_button.innerHTML = "Stop Recording";
@@ -114,4 +117,8 @@ function showInfo(s) {
     } else {
         info.style.visibility = 'hidden';
     }
+}
+
+function getTranscript() {
+    return final_transcript;
 }
