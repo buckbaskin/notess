@@ -6,12 +6,18 @@
         var keywordsButton = $('#keywordsButton');
         floatingPanel.css('box-shadow', '10px 10px 8px #888');
 
-
-
         var init = function () {
           keywordsButton.click(function() {
                 toggleSlider();
           });
+          setInterval(augmentTranscription, 10000);
+        };
+
+        var augmentTranscription = function() {
+            transcription = getTranscript();
+            if (transcription != "" || typeof transcription == 'undefined') {
+                populateKeywordPanel(transcription);
+            }
         };
 
         var populateKeywordPanel = function(text) {
