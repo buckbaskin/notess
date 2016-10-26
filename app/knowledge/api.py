@@ -59,19 +59,21 @@ def compute_threshold(keywords):
     return threshold
 
 
-@router.route('/add_descriptions', methods=['GET'])
+@router.route('/add_descriptions', methods=['POST'])
 def get_descriptions():
     # requires that the request content type be set to application/json
     # request should be {'keywords': [{'text': 'w1', 'relevance': '0.946172'}, {'text': 'w2', 'relevance': '0.78827'}]}
-    try:
-        keywords_dict_str = request.args['keywords']
-    except KeyError:
-        return make_response(*INVALID_REQUEST_NO_KEYWORDS)
-    keywords_dict = json.loads(keywords_dict_str)
-    return add_descriptions_to_keywords_dict(keywords_dict)
+    print('Hello World 1')
+    print(request.get_data())
+    print('Hello World 2')
+
+    keywords_dict = json.loads(request.get_data().decode("utf-8"))
+    # return add_descriptions_to_keywords_dict(keywords_dict)
+    return "ok", 200
 
 
 def add_descriptions_to_keywords_dict(keyword_dict_list):
+    print(keyword_dict_list)
     for keyword_dict in keyword_dict_list:
         lookup_result = depedia.DBPediaAPI.search(keyword_dict['text'])
         if lookup_result.has_results():

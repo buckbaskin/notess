@@ -4,18 +4,23 @@
         var keywordsList = $('#keywordsList');
         var floatingPanel = $('#floatingPanel');
         var keywordsButton = $('#keywordsButton');
+        var dict = {};
+        var stopAugmentRefreshID;
+
+
         floatingPanel.css('box-shadow', '10px 10px 8px #888');
 
         var init = function () {
           keywordsButton.click(function() {
                 toggleSlider();
+                augmentTranscription();
           });
-          setInterval(augmentTranscription, 10000);
+          stopAugmentRefreshID = setInterval(augmentTranscription, 10000);
         };
 
         var augmentTranscription = function() {
-            transcription = getTranscript();
-            if (transcription != "" || typeof transcription == 'undefined') {
+            var transcription = getTranscript();
+            if (transcription !== "" || typeof transcription === 'undefined') {
                 populateKeywordPanel(transcription);
             }
         };
@@ -26,13 +31,20 @@
 
         var keywordsCallback = function(keywordsJson) {
             var keywords = [];
+            console.log(keywordsJson);
             for(var i = 0; i < keywordsJson.length; i++) {
                 var obj = keywordsJson[i];
-                console.log(obj);
-                keywords.push(obj.text);
-                keywordsList.append('<a href="#" class="list-group-item">' + obj.text + '</a>');
+                var word = obj.text;
+
+                if(!isDuplicate(word)) {
+                    keywords.push(obj);
+                    keywordsList.append('<a href="#" class="list-group-item">' + obj.text + '</a>');
+                }
             }
-            console.log(keywords);
+            var keyWordObjs = {};
+            keyWordObjs['keywords'] = keywords;
+            console.log('**********' + keywords.toString());
+            addDescriptions(keywords, function(result) {console.log(result)});
         };
 
         var toggleSlider = function() {
@@ -64,25 +76,42 @@
         };
 
         var addDescriptions = function(keyword_list, callback) {
+            console.log("Received");
+            console.log('%%%%%%%%%%' + JSON.stringify(keyword_list));
             $.ajax({
-                 type: "GET",
+                 type: "POST",
                  url: "/add_descriptions",
-                 data: { keywords: keyword_list},
+                 contentType: 'application/json; charset=utf-8',
+                 data: JSON.stringify({ keywords: keyword_list}),
                  success: function (result) {
                    callback(result);
                  },
                  error: function () {
-                     console.log("Error in receiving keywords.")
+                     console.log("Error in receiving descriptions.")
                  }
              });
-        }
+        };
+
+        var isDuplicate = function (word) {
+            var retVal = true;
+            if(dict[word] === undefined) {
+                dict[word] = true;
+                retVal = false;
+            }
+            return retVal;
+        };
+
+        var stopRefreshingKeywords = function() {
+            clearInterval(stopAugmentRefreshID);
+        };
 
         return {
             toggleSlider: toggleSlider,
             addDescriptions: addDescriptions,
             getKeywords: getKeywords,
             init: init,
-            populateKeywordPanel: populateKeywordPanel
+            populateKeywordPanel: populateKeywordPanel,
+            stopRefreshingKeywords: stopRefreshingKeywords,
 
         };
     };
