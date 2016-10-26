@@ -5,7 +5,7 @@ keyword_elements = {
     'properties': {
         'text': str,
         'relevance': {'type': 'number'}
-    }
+    },
     'required': ['text', 'relevance']
 }
 
