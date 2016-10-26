@@ -4,6 +4,8 @@ from app.knowledge.dbpedia import depedia
 from flask import make_response, request
 
 import json
+from jsonschema import validate
+from app.knowledge.dbpedia.schema import dbpedia_schema
 
 INVALID_REQUEST_NO_KEYWORDS = ('Invalid Request. Keywords not found in request.', 400,)
 INVALID_REQUEST_NO_TEXT = ('Invalid Request. Text not found in request.', 400,)
@@ -59,10 +61,12 @@ def compute_threshold(keywords):
     return threshold
 
 
-@router.route('/add_descriptions', methods=['GET'])
-def get_descriptions():
+@router.route('/add_descriptions', methods=['GET', 'POST'])
+def add_descriptions():
     # requires that the request content type be set to application/json
     # request should be {'keywords': [{'text': 'w1', 'relevance': '0.946172'}, {'text': 'w2', 'relevance': '0.78827'}]}
+    json_from_frontend = request.get_json()
+    validate(json_from_frontend, dbpedia_schema)
     try:
         keywords_dict_str = request.args['keywords']
     except KeyError:
