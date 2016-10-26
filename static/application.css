@@ -21,3 +21,7 @@
     left: 1440px;
     background-color: #f8f8f8;
 }
+
+textArea {
+    resize: none;
+}
