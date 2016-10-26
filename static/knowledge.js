@@ -3,8 +3,9 @@
         var hidden = true;
         var keywordsList = $('#keywordsList');
         var floatingPanel = $('#floatingPanel');
-        floatingPanel.css('box-shadow', '10px 10px 8px #888');
         var keywordsButton = $('#keywordsButton');
+        floatingPanel.css('box-shadow', '10px 10px 8px #888');
+
 
 
         var init = function () {
@@ -21,10 +22,11 @@
             var keywords = [];
             for(var i = 0; i < keywordsJson.length; i++) {
                 var obj = keywordsJson[i];
+                console.log(obj);
                 keywords.push(obj.text);
                 keywordsList.append('<a href="#" class="list-group-item">' + obj.text + '</a>');
-                console.log(keywords);
             }
+            console.log(keywords);
         };
 
         var toggleSlider = function() {
@@ -43,10 +45,11 @@
         var getKeywords = function(string_text, callback) {
              $.ajax({
                  type: "GET",
+                 dataType: "json",
                  url: "/get_keywords",
                  data: { text: string_text},
                  success: function (result) {
-                   callback(result);
+                    callback(result);
                  },
                  error: function () {
                      console.log("Error in receiving keywords.")

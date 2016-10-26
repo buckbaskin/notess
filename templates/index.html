@@ -20,13 +20,7 @@
 
             <div class="col-lg-5">
                 <div id="keywordsList" class="list-group">
-                    <a href="#" class="list-group-item">
-                        Cras justo odio
-                    </a>
-                    <a href="#" class="list-group-item">Dapibus ac facilisis in</a>
-                    <a href="#" class="list-group-item">Morbi leo risus</a>
-                    <a href="#" class="list-group-item">Porta ac consectetur ac</a>
-                    <a href="#" class="list-group-item">Vestibulum at eros</a>
+                    {# KEYWORDS WILL POPULATE HERE #}
                 </div>
             </div>
         </div>
@@ -99,7 +93,7 @@
 <script src="../../static/knowledge.js"></script>
 
 
-// ********* TESTING ******************
+{#********* TESTING ******************#}
 
 <script>
     $(document).ready(function() {
@@ -109,22 +103,25 @@
         "Watson Knowledge Studio. For instance, using Watson Knowledge Studio, a subject matter expert " +
         "could train a model to understand car manufucturer, make, and model for the purpose of analyzing " +
         "traffic incident reports to look for underlying patterns.";
-        var test2 = "Killer whales are highly social; some populations are composed of matrilineal family groups " +
-                "(pods) which are the most stable of any animal species.[5] Their sophisticated hunting techniques " +
-                "and vocal behaviours, which are often specific to a particular group and passed across generations" +
-                ", have been described as manifestations of animal culture."
-        var test3 = "The ridge sits atop a geologic feature known as the Mid-Atlantic Rise, which is a progressive " +
-                "bulge that runs the length of the Atlantic Ocean, with the ridge resting on the highest point of " +
-                "this linear bulge. This bulge is thought to be caused by upward convective forces in the " +
-                "asthenosphere pushing the oceanic crust and lithosphere. "
-        var keywords;
-        $KNOWLEDGE.getKeywords(test3, function (result) {
-                    keywords = result;
-                    console.log("Keywords:\n");
-                    console.log(result);
-                    $KNOWLEDGE.addDescriptions(keywords, function (result){console.log(result)});
-                }
-        );
+{#        $KNOWLEDGE.populateKeywordPanel(test);#}
+
+{#        **** WALTER'S TESTS ****       #}
+{#        var test2 = "Killer whales are highly social; some populations are composed of matrilineal family groups " +#}
+{#                "(pods) which are the most stable of any animal species.[5] Their sophisticated hunting techniques " +#}
+{#                "and vocal behaviours, which are often specific to a particular group and passed across generations" +#}
+{#                ", have been described as manifestations of animal culture."#}
+{#        var test3 = "The ridge sits atop a geologic feature known as the Mid-Atlantic Rise, which is a progressive " +#}
+{#                "bulge that runs the length of the Atlantic Ocean, with the ridge resting on the highest point of " +#}
+{#                "this linear bulge. This bulge is thought to be caused by upward convective forces in the " +#}
+{#                "asthenosphere pushing the oceanic crust and lithosphere. "#}
+{#        var keywords;#}
+{#        $KNOWLEDGE.getKeywords(test3, function (result) {#}
+{#                    keywords = result;#}
+{#                    console.log("Keywords:\n");#}
+{#                    console.log(result);#}
+{#                    $KNOWLEDGE.addDescriptions(keywords, function (result){console.log(result)});#}
+{#                }#}
+{#        );#}
 //        $KNOWLEDGE.populateKeywordPanel(test);
     });
 </script>
