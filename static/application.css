@@ -22,6 +22,6 @@
     background-color: #f8f8f8;
 }
 
-textArea {
+#noteTextarea {
     resize: none;
 }
