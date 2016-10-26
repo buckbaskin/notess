@@ -70,6 +70,7 @@ if (!('webkitSpeechRecognition' in window)) {
         if (final_transcript || interim_transcript) {
             // showButtons('inline-block');
         }
+        console.log(final_transcript)
     };
 }
 
@@ -114,4 +115,8 @@ function showInfo(s) {
     } else {
         info.style.visibility = 'hidden';
     }
+}
+
+function getTranscript() {
+    return final_transcript;
 }
