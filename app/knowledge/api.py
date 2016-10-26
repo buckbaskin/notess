@@ -70,8 +70,9 @@ def add_descriptions():
     print('Hello World 2')
 
     decoded_json = request.get_data().decode("utf-8")
-    validate(decoded_json, dbpedia_schema)
+
     keywords_dict = json.loads(decoded_json)
+    validate(keywords_dict, dbpedia_schema)
     # return add_descriptions_to_keywords_dict(keywords_dict)
     return "ok", 200
 

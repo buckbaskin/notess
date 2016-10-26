@@ -78,6 +78,11 @@
         var addDescriptions = function(keyword_list, callback) {
             console.log("Received");
             console.log('%%%%%%%%%%' + JSON.stringify(keyword_list));
+
+            if(keyword_list.length === 0) {
+                return;
+            }
+
             $.ajax({
                  type: "POST",
                  url: "/add_descriptions",
