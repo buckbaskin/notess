@@ -60,4 +60,4 @@ class DBPediaAPI:
 
 if __name__ == "__main__":
     d = DBPediaAPI()
-    print(d.search("waterfall").get_responses())
+    print(d.search("blahblahblah").get_responses())
