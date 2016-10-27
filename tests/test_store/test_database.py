@@ -21,6 +21,6 @@ class TestBasicDB(unittest.TestCase):
     def setUp(self):
         self.db = Database()
 
-    def testDatabaseExists():
+    def testDatabaseExists(self):
         self.assertNotEqual(self.db, None)
 

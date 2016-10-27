@@ -1,3 +1,4 @@
+import pymongo
 from pymongo import MongoClient
 from pymongo.collection import ReturnDocument
 from bson.objectid import ObjectId
@@ -8,23 +9,24 @@ import datetime
 class Database(object):
     def __init__(self):
         self._client = MongoClient('localhost', 27017)
-        self._db = self._client('user')
+        self._db = self._client['user']
 
         self._user_collection = self._db.user
         self._user_collection.create_index('username', unique=True)
 
         self._class_collection = self._db['class']
-        self._class_collection.create_index(['username', 'class_name'], unique=True)
+        self._class_collection.create_index([('username', pymongo.ASCENDING,), ('class_name', pymongo.ASCENDING,)], unique=True)
 
         self._note_collection = self._db.note
-        self._note_collection.create_index(['_id', 'username'])
+        self._note_collection.create_index([('_id', pymongo.ASCENDING), ('username', pymongo.ASCENDING)])
         
         self._transcript_collection = self._db.transcript
-        self._transcript_collection.create_index(['_id', 'username'])
+        self._transcript_collection.create_index([('_id', pymongo.ASCENDING), ('username', pymongo.ASCENDING)])
 
         self._keyword_collection = self._db.keyword_forward
-        self._keyword_collection.create_index(['_id', 'username'])
+        self._keyword_collection.create_index([('_id', pymongo.ASCENDING), ('username', pymongo.ASCENDING)])
         self._keyword_rev_index = self._db.keyword_index
+        self._keyword_rev_index.create_index('text', unique=True)
 
         self._fileclient = gridfs.GridFS(self._client['gridfs'])
 
