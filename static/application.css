@@ -24,4 +24,5 @@
 
 #noteTextarea {
     resize: none;
+    height: 100%;
 }

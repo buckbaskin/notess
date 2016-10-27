@@ -1,54 +1,80 @@
 (function ($) {
     $.knowledge = function() {
+        var recording = false;
         var hidden = true;
         var keywordsList = $('#keywordsList');
         var floatingPanel = $('#floatingPanel');
         var keywordsButton = $('#keywordsButton');
         var dict = {};
         var stopAugmentRefreshID;
+        var $recordButton = $('#start_button');
+        var transcription;
+        var GWS_CORE;
 
+        var recordButtonHandler = function() {
+          $recordButton.click(function(){
+            if(recording) {
+                // switch flag state to no recording
+                recording = false;
+                stopRefreshingKeywords(stopAugmentRefreshID);
+            }
+            else {
+                recording = true;
+            }
+          });
+        };
 
-        floatingPanel.css('box-shadow', '10px 10px 8px #888');
-
-        var init = function () {
+        var init = function (gws_core) {
+          GWS_CORE = gws_core;
+          recordButtonHandler();
+          floatingPanel.css('box-shadow', '10px 10px 8px #888');
           keywordsButton.click(function() {
                 toggleSlider();
                 augmentTranscription();
           });
-          stopAugmentRefreshID = setInterval(augmentTranscription, 10000);
+            stopAugmentRefreshID = setInterval(augmentTranscription, 5000);
+            console.log(stopAugmentRefreshID);
         };
 
         var augmentTranscription = function() {
-            var transcription = getTranscript();
+            transcription = GWS_CORE.getTranscript();
             if (transcription !== "" || typeof transcription === 'undefined') {
                 populateKeywordPanel(transcription);
             }
         };
 
         var populateKeywordPanel = function(text) {
-            getKeywords(text, keywordsCallback);
+            if (text !== "" || typeof text === 'undefined') {
+                getKeywords(text, keywordsCallback);
+            }
+            else {
+                console.log('Text for populate keywords is empty.');
+            }
         };
 
         var keywordsCallback = function(keywordsJson) {
-            var keywords = [];
-            console.log(keywordsJson);
+            // stores the 'text' field of each JSON object
+            keywords = [];
+            // stores the entire JSON object
+            var keywordsJsonObjects = [];
+
             for(var i = 0; i < keywordsJson.length; i++) {
                 var obj = keywordsJson[i];
                 var word = obj.text;
 
                 if(!isDuplicate(word)) {
-                    keywords.push(obj);
+                    keywords.push(word);
+                    keywordsJsonObjects.push(obj);
                     keywordsList.append('<a href="#" class="list-group-item">' + obj.text + '</a>');
                 }
             }
-            var keyWordObjs = {};
-            keyWordObjs['keywords'] = keywords;
-            console.log('**********' + keywords.toString());
-            addDescriptions(keywords, function(result) {console.log(result)});
+            addDescriptions(keywordsJsonObjects, function(result) {console.log(result)});
+            GWS_CORE.addKeywords(keywords);
         };
 
         var toggleSlider = function() {
             if(hidden) {
+                populateKeywordPanel(GWS_CORE.getTranscript());
                 // show
                 floatingPanel.animate({left: '-=500'}, 200, function(){});
                 hidden = false;
@@ -76,9 +102,6 @@
         };
 
         var addDescriptions = function(keyword_list, callback) {
-            console.log("Received");
-            console.log('%%%%%%%%%%' + JSON.stringify(keyword_list));
-
             if(keyword_list.length === 0) {
                 return;
             }
