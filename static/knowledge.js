@@ -1,16 +1,30 @@
 (function ($) {
     $.knowledge = function() {
+        var recording = false;
         var hidden = true;
         var keywordsList = $('#keywordsList');
         var floatingPanel = $('#floatingPanel');
         var keywordsButton = $('#keywordsButton');
         var dict = {};
         var stopAugmentRefreshID;
+        var $recordButton = $('#start_button');
 
-
-        floatingPanel.css('box-shadow', '10px 10px 8px #888');
+        var recordButtonHandler = function() {
+          $recordButton.click(function(){
+            if(recording) {
+                // switch flag state to no recording
+                recording = false;
+                stopRefreshingKeywords(stopAugmentRefreshID);
+            }
+            else {
+                recording = true;
+            }
+          });
+        };
 
         var init = function () {
+          recordButtonHandler();
+          floatingPanel.css('box-shadow', '10px 10px 8px #888');
           keywordsButton.click(function() {
                 toggleSlider();
                 augmentTranscription();
@@ -105,9 +119,7 @@
         };
 
         var stopRefreshingKeywords = function() {
-            console.log("STOPPING");
             clearInterval(stopAugmentRefreshID);
-            console.log(stopAugmentRefreshID);
         };
 
         return {

@@ -8,7 +8,6 @@ var start_button = document.getElementById("start_button");
 if (!('webkitSpeechRecognition' in window)) {
 
 } else {
-    // start_button.style.display = 'inline-block';
     var recognition = new webkitSpeechRecognition();
     recognition.continuous = true;
     recognition.interimResults = true;
@@ -87,11 +86,9 @@ function capitalize(s) {
 }
 
 function startButton(event) {
-    var knowledgeEngine = $.knowledge();
     if (recognizing) {
         recognition.stop();
         start_button.innerHTML = "Restart Recording";
-        knowledgeEngine.stopRefreshingKeywords();
         return;
     }
     start_button.innerHTML = "Stop Recording";
