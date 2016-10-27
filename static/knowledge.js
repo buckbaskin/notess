@@ -9,6 +9,7 @@
         var stopAugmentRefreshID;
         var $recordButton = $('#start_button');
         var transcription;
+        var keywords;
 
         var recordButtonHandler = function() {
           $recordButton.click(function(){
@@ -52,7 +53,7 @@
 
         var keywordsCallback = function(keywordsJson) {
             // stores the 'text' field of each JSON object
-            var keywords = [];
+            keywords = [];
             // stores the entire JSON object
             var keywordsJsonObjects = [];
 
@@ -71,12 +72,12 @@
         };
 
         var showKeywordHyperlinks = function() {
-            str = document.getElementById("final_span") ;
+            var str = document.getElementById("final_span") ;
             for (var i = 0; i < keywords.length; i++) {
-                word = keywords[i];
+                var word = keywords[i];
                 var reg = new RegExp(word, "g");
                 str.innerHTML = str.innerHTML.replace(reg, function(s, theWord) {
-                    return "<a href='" + 'http://www.google.com/' + "'>" + word + "</a>";
+                    return "<mark><a href='" + 'http://www.google.com/' + "'>" + word + "</a></mark>";
                 });
             }
         };
