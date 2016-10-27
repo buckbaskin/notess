@@ -1,4 +1,5 @@
-from pymongo import MongoClient, Connection, ObjectId
+from pymongo import MongoClient
+from bson.objectid import ObjectId
 import gridfs
 
 import datetime
@@ -11,7 +12,7 @@ class Database(object):
         self._user_collection = self._db.user
         self._user_collection.create_index('username', unique=True)
 
-        self._class_collection = self._db.class
+        self._class_collection = self._db['class']
         self._class_collection.create_index(['username', 'class_name'], unique=True)
 
         self._note_collection = self._db.note
@@ -24,15 +25,14 @@ class Database(object):
         self._keyword_collection.create_index(['_id', 'username'])
         self._keyword_rev_index = self._db.keyword_index
 
-        self._connection = Connection()
-        self._fileclient = gridfs.GridFS(self._connection.gridfs)
+        self._fileclient = gridfs.GridFS(self._client['gridfs'])
 
     ### User Database ###
 
     def add_user(self, username):
         user = {
             'username': username,
-            'created': datetime.datetime.utcnow()
+            'created': datetime.datetime.utcnow(),
             'updated': datetime.datetime.utcnow()
         }
         user_id = self._user_collection.insert_one(user).inserted_id
