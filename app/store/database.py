@@ -57,7 +57,11 @@ class Database(object):
     ### Class Database ###
 
     def add_class(self, username, class_name):
-        # TODO
+        class_ = {
+            'username': username,
+            'class_name': class_name
+        }
+        class_id = self._class_collection.insert_one(class_).inserted_id
         return self.get_class(username, class_name)
 
     def update_class(self, username, class_name):
@@ -82,8 +86,13 @@ class Database(object):
 
     ### Notes Database ###
 
-    def add_note(self, username, class_name, note_name):
-        # TODO
+    def add_note(self, username: str, class_name: str, note_name: str):
+        note = {
+            'username': username,
+            'class_name': class_name,
+            'note_name': note_name
+        }
+        note_id = self._note_collection.insert_one(note).inserted_id
         return self.get_note(username, note_id)
 
     def update_note(self, username, note_id):
@@ -109,8 +118,13 @@ class Database(object):
 
     ### Transcript Database ###
 
-    def add_transcript(self, username, note_id):
-        # TODO
+    def add_transcript(self, username: str, note_id: str, text: str):
+        transcript = {
+            'username': username,
+            'note_id': ObjectId(note_id),
+            'text': text
+        }
+        transcript_id = self._transcript_collection.insert_one(transcript).inserted_id
         return self.get_transcript(username, transcript_id)
 
     def update_transcript(self, username, transcript_id):
@@ -145,7 +159,7 @@ class Database(object):
             'relevance': relevance,
             'description': description
         }
-        self._keyword_collection.insert_one(keyword)
+        keyword_id = self._keyword_collection.insert_one(keyword).inserted_id
         self._keyword_rev_index.find_one_and_update(
             {'text': text},
             {'$addToSet': {'instances': [note_id]}},
