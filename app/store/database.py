@@ -11,6 +11,9 @@ class Database(object):
         self._user_collection = self._db.user
         self._user_collection.create_index('username', unique=True)
 
+        self._class_collection = self._db.class
+        self._class_collection.create_index(['username', 'class_name'], unique=True)
+
         self._connection = Connection()
         self._fileclient = gridfs.GridFS(self._connection.gridfs)
 
@@ -36,7 +39,30 @@ class Database(object):
         return user_result
 
     def delete_user(self, username):
-        result = self._user_collection.delete_one({'username': username})
+        user_result = self._user_collection.delete_one({'username': username})
+        class_result = self.delete_all_classes(username)
+        return user_result.deleted_count
+
+    ### Class Database ###
+
+    def add_class(self, username, class_name):
+        # TODO
+        return self.get_class(username, class_name)
+
+    def update_class(self, username, class_name):
+        # TODO
+        return self.get_class(username, class_name)
+
+    def get_class(self, username, class_name):
+        class_result = self._class_collection.find_one({'username': username, 'class_name': class_name})
+        return class_result
+
+    def delete_class(self, username, class_name):
+        result = self._class_collection.delete_one({'username': username, 'class_name': class_name})
+        return result.deleted_count
+
+    def delete_all_classes(self, username):
+        result = self._class_collection.delete_many({'username': username})
         return result.deleted_count
 
     ### Audio Database ###
