@@ -10,6 +10,7 @@
         var $recordButton = $('#start_button');
         var transcription;
         var keywords;
+        var GWS_CORE;
 
         var recordButtonHandler = function() {
           $recordButton.click(function(){
@@ -24,7 +25,8 @@
           });
         };
 
-        var init = function () {
+        var init = function (gws_core) {
+          GWS_CORE = gws_core;
           recordButtonHandler();
           floatingPanel.css('box-shadow', '10px 10px 8px #888');
           keywordsButton.click(function() {
@@ -36,7 +38,7 @@
         };
 
         var augmentTranscription = function() {
-            transcription = getTranscript();
+            transcription = GWS_CORE.getTranscript();
             if (transcription !== "" || typeof transcription === 'undefined') {
                 populateKeywordPanel(transcription);
             }
@@ -68,7 +70,7 @@
                 }
             }
             addDescriptions(keywordsJsonObjects, function(result) {console.log(result)});
-            showKeywordHyperlinks()
+            showKeywordHyperlinks();
         };
 
         var showKeywordHyperlinks = function() {
@@ -84,7 +86,7 @@
 
         var toggleSlider = function() {
             if(hidden) {
-                populateKeywordPanel(getTranscript());
+                populateKeywordPanel(GWS_CORE.getTranscript());
                 // show
                 floatingPanel.animate({left: '-=500'}, 200, function(){});
                 hidden = false;
