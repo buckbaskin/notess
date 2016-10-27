@@ -45,21 +45,22 @@
         };
 
         var keywordsCallback = function(keywordsJson) {
+            // stores the 'text' field of each JSON object
             var keywords = [];
-            console.log(keywordsJson);
+            // stores the entire JSON object
+            var keywordsJsonObjects = [];
+
             for(var i = 0; i < keywordsJson.length; i++) {
                 var obj = keywordsJson[i];
                 var word = obj.text;
 
                 if(!isDuplicate(word)) {
-                    keywords.push(obj);
+                    keywords.push(word);
+                    keywordsJsonObjects.push(obj);
                     keywordsList.append('<a href="#" class="list-group-item">' + obj.text + '</a>');
                 }
             }
-            var keyWordObjs = {};
-            keyWordObjs['keywords'] = keywords;
-            console.log('**********' + keywords.toString());
-            addDescriptions(keywords, function(result) {console.log(result)});
+            addDescriptions(keywordsJsonObjects, function(result) {console.log(result)});
         };
 
         var toggleSlider = function() {
