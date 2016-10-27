@@ -51,7 +51,4 @@ class TestWatson(unittest.TestCase):
                              {"text": "Initiation", "relevance": "0.5"}]
         mock_incoming_request_returned = json.dumps(mock_keyword_list_returned);
         self.assertEqual(mock_incoming_request_returned, prune_keywords(mock_incoming_request));
-
-if __name__ == "__main__":
-    d = TestWatson()
-    d.testComputeThreshold();
+        
