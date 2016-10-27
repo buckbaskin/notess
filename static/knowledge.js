@@ -8,6 +8,7 @@
         var dict = {};
         var stopAugmentRefreshID;
         var $recordButton = $('#start_button');
+        var transcription;
 
         var recordButtonHandler = function() {
           $recordButton.click(function(){
@@ -34,7 +35,7 @@
         };
 
         var augmentTranscription = function() {
-            var transcription = getTranscript();
+            transcription = getTranscript();
             if (transcription !== "" || typeof transcription === 'undefined') {
                 populateKeywordPanel(transcription);
             }
@@ -61,6 +62,18 @@
                 }
             }
             addDescriptions(keywordsJsonObjects, function(result) {console.log(result)});
+            showKeywordHyperlinks()
+        };
+
+        var showKeywordHyperlinks = function() {
+            str = document.getElementById("final_span") ;
+            for (var i = 0; i < keywords.length; i++) {
+                word = keywords[i];
+                var reg = new RegExp(word, "g");
+                str.innerHTML = str.innerHTML.replace(reg, function(s, theWord) {
+                    return "<a href='" + 'http://www.google.com/' + "'>" + word + "</a>";
+                });
+            }
         };
 
         var toggleSlider = function() {
