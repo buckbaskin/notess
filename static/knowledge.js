@@ -77,7 +77,7 @@
                 var word = keywords[i];
                 var reg = new RegExp(word, "g");
                 str.innerHTML = str.innerHTML.replace(reg, function(s, theWord) {
-                    return "<mark><a href='" + 'http://www.google.com/' + "'>" + word + "</a></mark>";
+                    return "<mark><a href='" + 'http://www.google.com/' + "'" + 'target="_blank"' +">" + word + "</a></mark>";
                 });
             }
         };
