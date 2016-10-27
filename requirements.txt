@@ -12,3 +12,5 @@ nose-timer
 pylint
 requests
 watson-developer-cloud
+
+pymongo

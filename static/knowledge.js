@@ -9,7 +9,6 @@
         var stopAugmentRefreshID;
         var $recordButton = $('#start_button');
         var transcription;
-        var keywords;
         var GWS_CORE;
 
         var recordButtonHandler = function() {
@@ -33,7 +32,7 @@
                 toggleSlider();
                 augmentTranscription();
           });
-            stopAugmentRefreshID = setInterval(augmentTranscription, 10000);
+            stopAugmentRefreshID = setInterval(augmentTranscription, 5000);
             console.log(stopAugmentRefreshID);
         };
 
@@ -70,18 +69,7 @@
                 }
             }
             addDescriptions(keywordsJsonObjects, function(result) {console.log(result)});
-            showKeywordHyperlinks();
-        };
-
-        var showKeywordHyperlinks = function() {
-            var str = document.getElementById("final_span") ;
-            for (var i = 0; i < keywords.length; i++) {
-                var word = keywords[i];
-                var reg = new RegExp(word, "g");
-                str.innerHTML = str.innerHTML.replace(reg, function(s, theWord) {
-                    return "<mark><a href='" + 'http://www.google.com/' + "'" + 'target="_blank"' +">" + word + "</a></mark>";
-                });
-            }
+            GWS_CORE.addKeywords(keywords);
         };
 
         var toggleSlider = function() {
