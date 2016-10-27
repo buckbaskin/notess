@@ -66,8 +66,9 @@ def add_descriptions():
     # requires that the request content type be set to application/json
     # request should be {'keywords': [{'text': 'w1', 'relevance': '0.946172'}, {'text': 'w2', 'relevance': '0.78827'}]}
     decoded_json = request.get_data().decode("utf-8")
-    keywords_dict = json.loads(decoded_json)['keywords']
-    validate(keywords_dict, dbpedia_schema)
+    data_object = json.loads(decoded_json)
+    validate(data_object, dbpedia_schema)
+    keywords_dict = data_object['keywords']
     return json.dump(add_descriptions_to_keywords_dict(keywords_dict))
 
 
