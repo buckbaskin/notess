@@ -42,7 +42,12 @@
         };
 
         var populateKeywordPanel = function(text) {
-            getKeywords(text, keywordsCallback);
+            if (text !== "" || typeof text === 'undefined') {
+                getKeywords(text, keywordsCallback);
+            }
+            else {
+                console.log('Text for populate keywords is empty.');
+            }
         };
 
         var keywordsCallback = function(keywordsJson) {
@@ -78,6 +83,7 @@
 
         var toggleSlider = function() {
             if(hidden) {
+                populateKeywordPanel(getTranscript());
                 // show
                 floatingPanel.animate({left: '-=500'}, 200, function(){});
                 hidden = false;
