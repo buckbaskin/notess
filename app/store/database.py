@@ -1,4 +1,5 @@
 from pymongo import MongoClient
+from pymongo.collection import ReturnDocument
 from bson.objectid import ObjectId
 import gridfs
 
@@ -109,7 +110,7 @@ class Database(object):
         return result
 
     def delete_note(self, username, note_id) -> int:
-        result = self._note_collection.delete_one({'_id': ObjectID(note_id), 'username': username})
+        result = self._note_collection.delete_one({'_id': ObjectId(note_id), 'username': username})
         return result.deleted_count
 
     def delete_all_notes(self, username) -> int:
@@ -141,7 +142,7 @@ class Database(object):
         return result
 
     def delete_transcript(self, username, transcript_id) -> int:
-        result = self._transcript_collection.delete_one({'_id': ObjectID(transcript_id), 'username': username})
+        result = self._transcript_collection.delete_one({'_id': ObjectId(transcript_id), 'username': username})
         return result.deleted_count
 
     def delete_all_transcripts(self, username) -> int:
@@ -182,7 +183,7 @@ class Database(object):
         return result
 
     def delete_keyword(self, username, keyword_id) -> int:
-        result = self._keyword_collection.delete_one({'_id': ObjectID(keyword_id), 'username': username})
+        result = self._keyword_collection.delete_one({'_id': ObjectId(keyword_id), 'username': username})
         return result.deleted_count
 
     def delete_all_keywords(self, username) -> int:
@@ -196,6 +197,6 @@ class Database(object):
         return file_id
 
     def read_audio(self, file_id):
-        with fs.get(file_id) as f:
+        with self._fileclient.get(file_id) as f:
             return f.read()
 
