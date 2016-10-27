@@ -15,7 +15,8 @@
                 toggleSlider();
                 augmentTranscription();
           });
-          stopAugmentRefreshID = setInterval(augmentTranscription, 10000);
+            stopAugmentRefreshID = setInterval(augmentTranscription, 10000);
+            console.log(stopAugmentRefreshID);
         };
 
         var augmentTranscription = function() {
@@ -76,9 +77,6 @@
         };
 
         var addDescriptions = function(keyword_list, callback) {
-            console.log("Received");
-            console.log('%%%%%%%%%%' + JSON.stringify(keyword_list));
-
             if(keyword_list.length === 0) {
                 return;
             }
@@ -107,7 +105,9 @@
         };
 
         var stopRefreshingKeywords = function() {
+            console.log("STOPPING");
             clearInterval(stopAugmentRefreshID);
+            console.log(stopAugmentRefreshID);
         };
 
         return {
