@@ -32,7 +32,7 @@
                 toggleSlider();
                 augmentTranscription();
           });
-            stopAugmentRefreshID = setInterval(augmentTranscription, 1000);
+            stopAugmentRefreshID = setInterval(augmentTranscription, 5000);
             console.log(stopAugmentRefreshID);
         };
 
