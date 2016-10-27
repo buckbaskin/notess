@@ -4,7 +4,7 @@ var GWS_CORE = (function(knowledgeModule) {
     var recognizing = false;
     var ignore_onend;
     var start_timestamp;
-    var keywords;
+    var keywords = [];
     var start_button = document.getElementById("start_button");
 
     if (!('webkitSpeechRecognition' in window)) {
@@ -71,9 +71,25 @@ var GWS_CORE = (function(knowledgeModule) {
             if (final_transcript || interim_transcript) {
                 // showButtons('inline-block');
             }
-            console.log(final_transcript)
+            showKeywordHyperlinks();
         };
     }
+
+    var showKeywordHyperlinks = function() {
+        keywords = getKeywords();
+        //console.log(keywords);
+        var str = document.getElementById("final_span") ;
+        keywords.sort(function(a, b){
+            return b.length - a.length;
+        });
+        for (var i = 0; i < keywords.length; i++) {
+            var word = keywords[i];
+            var reg = new RegExp(word, "g");
+            str.innerHTML = str.innerHTML.replace(reg, function(s) {
+                return "<mark><a href='" + 'http://www.google.com/' + "'" + 'target="_blank"' +">" + word + "</a></mark>";
+            });
+        }
+    };
 
 
     var two_line = /\n\n/g;
@@ -126,10 +142,25 @@ var GWS_CORE = (function(knowledgeModule) {
         return interim_transcript;
     }
 
+    function getKeywords() {
+        return keywords;
+    }
+
+    function addKeywords(words) {
+        keywords = keywords.concat(words);
+        console.log("*** SET: " + keywords);
+    }
+
+    function setKeywords(words) {
+        keywords = words;
+    }
+
     return {
         getTranscript: getTranscript,
         getInterimTranscript: getInterimTranscript,
         startButton: startButton,
         showInfo: showInfo,
+        getKeywords: getKeywords,
+        addKeywords: addKeywords,
     };
 })();
