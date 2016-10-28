@@ -6,7 +6,7 @@ describe("Testing javascript gwscore.", function() {
     var wordArray = ['word1', 'word2', 'word3'];
     GWS_CORE.setKeywords(wordArray);
     receivedWordArray = GWS_CORE.getKeywords();
-    expect(wordArray).toBe(receivedWordArray);
+    expect(wordArray).toEqual(receivedWordArray);
   });
 
   it("Test getKeywords and setKeywords w/ no keywords", function() {
@@ -14,7 +14,7 @@ describe("Testing javascript gwscore.", function() {
     var wordArray = [];
     GWS_CORE.setKeywords(wordArray);
     var receivedWordArray = GWS_CORE.getKeywords();
-    expect(wordArray).toBe(receivedWordArray);
+    expect(wordArray).toEqual(receivedWordArray);
   });
 
   it("Test setKeywords w/ already set keywords", function() {
@@ -24,7 +24,7 @@ describe("Testing javascript gwscore.", function() {
     var wordArray2 = ['newtest1', 'newtest2'];
     GWS_CORE.setKeywords(wordArray2);
     var receivedWordArray = GWS_CORE.getKeywords();
-    expect(wordArray2).toBe(receivedWordArray);
+    expect(wordArray2).toEqual(receivedWordArray);
   });
 
   it("Test addKeywords, adding 1 keyword", function() {
@@ -32,7 +32,7 @@ describe("Testing javascript gwscore.", function() {
     GWS_CORE.setKeywords(['word1', 'word2', 'word3']);
     GWS_CORE.addKeywords(['word4']);
     receivedWordArray = GWS_CORE.getKeywords()
-    expect(receivedWordArray).toBe(['word1', 'word2', 'word3', 'word4']);
+    expect(receivedWordArray).toEqual(['word1', 'word2', 'word3', 'word4']);
   });
 
   it("Test addKeywords, adding multiple keywords", function() {
@@ -40,7 +40,7 @@ describe("Testing javascript gwscore.", function() {
     GWS_CORE.setKeywords(['word1', 'word2', 'word3']);
     GWS_CORE.addKeywords(['word4', 'word5', 'word6']);
     receivedWordArray = GWS_CORE.getKeywords()
-    expect(receivedWordArray).toBe(['word1', 'word2', 'word3', 'word4', 'word5', 'word6']);
+    expect(receivedWordArray).toEqual(['word1', 'word2', 'word3', 'word4', 'word5', 'word6']);
   });
   
 });
