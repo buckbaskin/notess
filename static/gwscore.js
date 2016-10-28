@@ -155,7 +155,6 @@ var GWS_CORE = (function(knowledgeModule) {
 
     function addKeywords(words) {
         keywords = keywords.concat(words);
-        console.log("*** SET: " + keywords);
     }
 
     function setKeywords(words) {
@@ -169,5 +168,6 @@ var GWS_CORE = (function(knowledgeModule) {
         showInfo: showInfo,
         getKeywords: getKeywords,
         addKeywords: addKeywords,
+        setKeywords: setKeywords,
     };
 })();
