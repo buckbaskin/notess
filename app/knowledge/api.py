@@ -40,7 +40,7 @@ def prune_keywords(keywords):
     valid_keywords = []
     print(keywords_parsed)
     for i in range(0, num_keywords):
-        if (float(keywords_parsed[i]['relevance']) > threshold):
+        if (float(keywords_parsed[i]['relevance']) >= threshold):
             valid_keywords.append(keywords_parsed[i])
     print(json.dumps(valid_keywords))
     return json.dumps(valid_keywords)
@@ -54,12 +54,13 @@ def compute_threshold(keywords):
     """
     sum_relevance = 0.0
     num_keywords = len(keywords)
+    if (num_keywords == 0):
+        return 0;
     for i in range(0, num_keywords):
         print(keywords[i]['relevance'])
         sum_relevance = float(keywords[i]['relevance']) + sum_relevance
     threshold = sum_relevance / num_keywords
     return threshold
-
 
 @router.route('/add_descriptions', methods=['POST'])
 def add_descriptions():
