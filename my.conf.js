@@ -23,9 +23,7 @@ module.exports = function(config) {
       '**/mock-ajax.js',
       '**/spec/javascripts/*.js',
       'lib/jquery-3.1.1.min.js',
-      'notess/lib/jquery-3.1.1.min.js',
       '**/lib/jquery-3.1.1.min.js',
-      'notess/static/*.js',
       '**/static/*.js'
     ],
 
