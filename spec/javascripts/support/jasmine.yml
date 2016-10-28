@@ -13,6 +13,7 @@
 #
 src_files:
   - spec/helpers/mock-ajax.js
+  - static/*.js
 
 # stylesheets
 #
