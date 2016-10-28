@@ -21,7 +21,6 @@ module.exports = function(config) {
       'notess/spec/helpers/mock-ajax.js',
       '"notess/spec/helpers/mock-ajax.js"',
       '**/mock-ajax.js',
-      '**/spec/javascripts/8.js',
       '**/spec/javascripts/*.js'
     ],
 
