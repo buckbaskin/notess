@@ -18,6 +18,12 @@ services:
 # command to install dependencies
 install: 
   - pip install -r requirements.txt
+  - nvm install 0.10
+  - npm install
+
+before_install:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
 
 before_script:
   - ./lint.sh
@@ -26,3 +32,4 @@ script:
   - mypy --silent-imports --linecoverage-report mypycover --html-report mypycover --check-untyped-defs app/
   - nosetests --with-timer --timer-top-n 5 --timer-ok 250ms --timer-warning 500ms --with-coverage --cover-erase --cover-html --cover-package=app --cover-branches
   - codecov
+  - node_modules/karma/bin/karma start my.conf.js --single-run
