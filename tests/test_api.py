@@ -55,4 +55,4 @@ class TestAPI(unittest.TestCase):
         processed_keyword_dict_list = knowledge.add_descriptions_to_keywords_dict(mock_keyword_dict_list)
 
         for processed_keyword_dict in processed_keyword_dict_list:
-            self.assertTrue('description' in processed_keyword_dict, error_message_not_added)
+            self.assertTrue('description' in processed_keyword_dict, ERROR_MESSAGE_DESCRIPTION_ABSENT)
