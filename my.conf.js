@@ -24,7 +24,8 @@ module.exports = function(config) {
       '**/spec/javascripts/*.js',
       'lib/jquery-3.1.1.min.js',
       '**/lib/jquery-3.1.1.min.js',
-      '**/static/*.js'
+      '**/static/*.js',
+      'http://localhost:8080/socket.io/socket.io.js'
     ],
 
 
