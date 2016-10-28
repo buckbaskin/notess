@@ -1,6 +1,6 @@
 
 describe("Testing javascript knowledge engine.", function() {
-  
+
   var k = $.knowledge();
   k.init();
 
