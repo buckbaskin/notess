@@ -40,7 +40,7 @@ def prune_keywords(keywords):
     valid_keywords = []
     print(keywords_parsed)
     for i in range(0, num_keywords):
-        if (float(keywords_parsed[i]['relevance']) > threshold):
+        if (float(keywords_parsed[i]['relevance']) >= threshold):
             valid_keywords.append(keywords_parsed[i])
     print(json.dumps(valid_keywords))
     return json.dumps(valid_keywords)
@@ -54,27 +54,25 @@ def compute_threshold(keywords):
     """
     sum_relevance = 0.0
     num_keywords = len(keywords)
+    if (num_keywords == 0):
+        return 0;
     for i in range(0, num_keywords):
         print(keywords[i]['relevance'])
         sum_relevance = float(keywords[i]['relevance']) + sum_relevance
     threshold = sum_relevance / num_keywords
     return threshold
 
-
 @router.route('/add_descriptions', methods=['POST'])
 def add_descriptions():
     # requires that the request content type be set to application/json
     # request should be {'keywords': [{'text': 'w1', 'relevance': '0.946172'}, {'text': 'w2', 'relevance': '0.78827'}]}
-    print('Hello World 1')
-    print(request.get_data())
-    print('Hello World 2')
-
     decoded_json = request.get_data().decode("utf-8")
-
-    keywords_dict = json.loads(decoded_json)
-    validate(keywords_dict, dbpedia_schema)
-    # return add_descriptions_to_keywords_dict(keywords_dict)
-    return "ok", 200
+    data_object = json.loads(decoded_json)
+    validate(data_object, dbpedia_schema)
+    keywords_dict_list = data_object['keywords']
+    processed_keywords_dict_list = add_descriptions_to_keywords_dict(keywords_dict_list)
+    return_data = {'keywords': processed_keywords_dict_list}
+    return json.dumps(return_data)
 
 
 def add_descriptions_to_keywords_dict(keyword_dict_list):
@@ -84,18 +82,12 @@ def add_descriptions_to_keywords_dict(keyword_dict_list):
             keyword_dict['description'] = lookup_result.get_first_description()
         else:
             keyword_dict['description'] = "none"
-    return json.dumps(keyword_dict_list)
+    return keyword_dict_list
 
 
 if __name__ == "__main__":
-    mock_keyword_list = [{'text': 'sequential design process', 'relevance': '0.946172'},
-                         {'text': 'software development processes', 'relevance': '0.78827'},
-                         {'text': 'waterfall model', 'relevance': '0.645009'},
-                         {'text': 'downwards', 'relevance': '0.347695'},
-                         {'text': 'Initiation', 'relevance': '0.282907'}]
-    mock_keyword_request_arg = {'keywords': mock_keyword_list}
-    mock_incoming_request = json.dumps(mock_keyword_request_arg)
-    print(mock_incoming_request)
-    parsed_request = json.loads(mock_incoming_request)
-    parsed_keywords_list = parsed_request['keywords']
-    print(add_descriptions_to_keywords_dict(parsed_keywords_list))
+    mock_keyword_dict_list = [{'text': 'blahblahnonsense', 'relevance': '0.90001'},
+                              {'text': 'bigtable', 'relevance': '0.90002'}]
+    mock_keyword_request_arg = {'keywords': mock_keyword_dict_list}
+    mock_incoming_request_data = json.dumps(mock_keyword_request_arg).encode("utf-8")
+    print(mock_incoming_request_data)
