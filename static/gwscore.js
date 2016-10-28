@@ -86,11 +86,18 @@ var GWS_CORE = (function(knowledgeModule) {
             var word = keywords[i];
             var reg = new RegExp(word, "g");
             str.innerHTML = str.innerHTML.replace(reg, function(s) {
-                return "<mark><a href='" + 'http://www.google.com/' + "'" + 'target="_blank"' +">" + word + "</a></mark>";
+                return "<mark><a href='" + generateGoogleSearchURL(keywords[i]) + "'" + 'target="_blank"' +">" + word + "</a></mark>";
             });
         }
     };
-
+    
+    var generateGoogleSearchURL = function (keywords) {
+        var url = "https://www.google.com/#q=";
+        keywords_list = keywords.split(" ");
+        for (var i = 0; i < keywords_list.length; i++)
+            url = url + "+" + keywords_list[i];
+        return url;
+    }
 
     var two_line = /\n\n/g;
     var one_line = /\n/g;
@@ -148,7 +155,6 @@ var GWS_CORE = (function(knowledgeModule) {
 
     function addKeywords(words) {
         keywords = keywords.concat(words);
-        console.log("*** SET: " + keywords);
     }
 
     function setKeywords(words) {
@@ -162,5 +168,6 @@ var GWS_CORE = (function(knowledgeModule) {
         showInfo: showInfo,
         getKeywords: getKeywords,
         addKeywords: addKeywords,
+        setKeywords: setKeywords,
     };
 })();
