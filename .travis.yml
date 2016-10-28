@@ -6,9 +6,6 @@ python:
   - "3.5"
 #  - "nightly"
 
-node_js:
-  - "0.10"
-
 # save pip installs between runs
 cache: "pip"
 
@@ -21,6 +18,8 @@ services:
 # command to install dependencies
 install: 
   - pip install -r requirements.txt
+  - nvm install 0.10
+  - npm install
 
 before_install:
   - export DISPLAY=:99.0
@@ -28,7 +27,6 @@ before_install:
 
 before_script:
   - ./lint.sh
-  - npm install
 
 script:
   - mypy --silent-imports --linecoverage-report mypycover --html-report mypycover --check-untyped-defs app/
