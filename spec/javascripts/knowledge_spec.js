@@ -1,7 +1,6 @@
 
 describe("Testing javascript knowledge engine.", function() {
-
-  var gws_core = GWS_CORE;
+  
   var k = $.knowledge();
   k.init();
 
@@ -9,6 +8,10 @@ describe("Testing javascript knowledge engine.", function() {
     expect(k.isDuplicate('foo')).toBe(false);
     expect(k.isDuplicate('bar')).toBe(false);
     expect(k.isDuplicate('baz')).toBe(false);
+
+    expect(k.isDuplicate('foo')).toBe(true);
+    expect(k.isDuplicate('bar')).toBe(true);
+    expect(k.isDuplicate('baz')).toBe(true);
   });
 
 });
