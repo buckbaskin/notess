@@ -15,11 +15,12 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'spec/helpers/mock-ajax.js , spec/javascripts',
-      '"spec/helpers/mock-ajax.js" , "spec/javascripts"',
-      '/spec/helpers/mock-ajax.js , /spec/javascripts',
+      'spec/helpers/mock-ajax.js',
+      'spec/helpers/mock-ajax.js',
       '/spec/helpers/mock-ajax.js',
-      '"/spec/helpers/mock-ajax.js"',
+      '/spec/javascripts',
+      '/spec/helpers/mock-ajax.js',
+      '/spec/helpers/mock-ajax.js',
       '**/mock-ajax.js',
       '**/spec/javascripts/*.js',
       'lib/jquery-3.1.1.min.js',
