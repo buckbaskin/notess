@@ -31,7 +31,7 @@ describe("Testing javascript gwscore.", function() {
     //Empty keywords array
     GWS_CORE.setKeywords(['word1', 'word2', 'word3']);
     GWS_CORE.addKeywords(['word4']);
-    receivedWordArray = GWS_CORE.getKeywords()
+    receivedWordArray = GWS_CORE.getKeywords();
     expect(receivedWordArray).toEqual(['word1', 'word2', 'word3', 'word4']);
   });
 
@@ -39,7 +39,7 @@ describe("Testing javascript gwscore.", function() {
     //Empty keywords array
     GWS_CORE.setKeywords(['word1', 'word2', 'word3']);
     GWS_CORE.addKeywords(['word4', 'word5', 'word6']);
-    receivedWordArray = GWS_CORE.getKeywords()
+    receivedWordArray = GWS_CORE.getKeywords();
     expect(receivedWordArray).toEqual(['word1', 'word2', 'word3', 'word4', 'word5', 'word6']);
   });
   
