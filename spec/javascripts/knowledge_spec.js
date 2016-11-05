@@ -16,7 +16,7 @@ describe("Testing javascript knowledge engine.", function() {
 
   it("Checks that words are not duplicates", function() {
     var f = false;
-     expect(f.toBe(false);
+     expect(f.toBe(false));
   });
 
 });
