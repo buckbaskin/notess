@@ -19,7 +19,7 @@ module.exports = function(config) {
       '**/spec/javascripts/*.js',
       '**/lib/jquery-3.1.1.min.js',
       '**/static/knowledge.js',
-      '**/static/GWS_CORE_Test.js'
+      '**/static/gwscoretest.js'
     ],
 
 
