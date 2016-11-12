@@ -15,13 +15,11 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'spec/helpers/mock-ajax.js , spec/javascripts',
-      '"spec/helpers/mock-ajax.js" , "spec/javascripts"',
-      'notess/spec/helpers/mock-ajax.js , notess/spec/javascripts',
-      'notess/spec/helpers/mock-ajax.js',
-      '"notess/spec/helpers/mock-ajax.js"',
-      '**/mock-ajax.js',
-      '**/spec/javascripts/*.js'
+      '**/spec/helpers/mock-ajax.js',
+      '**/spec/javascripts/*.js',
+      '**/lib/jquery-3.1.1.min.js',
+      '**/static/knowledge.js',
+      '**/static/gwscoretest.js'
     ],
 
 
@@ -52,11 +50,11 @@ module.exports = function(config) {
 
     // level of logging
     // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_INFO,
+    logLevel: config.LOG_DEBUG,
 
 
     // enable / disable watching file and executing tests whenever any file changes
-    autoWatch: false,
+    autoWatch: true,
 
 
     // start these browsers
