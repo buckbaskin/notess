@@ -57,33 +57,31 @@ def get_one_user():
 
     return mongo_json.dumps(user_from_database)
 
-@router.route('/v1/class/all', methods=['GET'])
+@router.route('/v1/class/all', methods=['GET', 'POST'])
 def get_all_classes():
     try:
-        user_id = request.args['user_id']
+        username = request.args['username']
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_USER)
-    classes_from_database = [{'class_id': 'abcdjasdf',
-                             'user_id': user_id,
-                             'class_name': 'EECS393 - Software Engineering',
-                             'date_created': '10/16/2016',
-                             'date_updated': '10/16/2016'}]
-    return json.dumps(classes_from_database)
+    classes_from_database = db.get_all_classes(username)
+    return mongo_json.dumps(classes_from_database)
 
 @router.route('/v1/class/new', methods=['POST'])
 def create_new_class():
     try:
-        user_id = request.args['user_id']
+        username = request.args['username']
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_USER)
     try:
-        class_id = request.args['class_id']
+        class_name = request.args['class_name']
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_CLASS)
-    class_metadata = {'class_id': 'abcd'}
+    class_metadata = request.get_json()
     if 'class_name' in request.args:
         class_metadata['class_name'] = request.args['class_name']
-    return json.dumps(class_metadata)
+
+    created_class = db.add_class(username, class_name)
+    return mongo_json.dumps(created_class)
 
 @router.route('/v1/class/save', methods=['POST'])
 def save_existing_class():
