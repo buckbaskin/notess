@@ -1,8 +1,11 @@
 from app import server as router
 
 import json
+import bson.json_util as mongo_json
 
 from flask import make_response, request
+
+from app.store.database import Database
 
 INVALID_REQUEST_NO_USER = ('Invalid Request. user_id not found in request.', 400,)
 INVALID_REQUEST_NO_CLASS = ('Invalid Request. class_id not found in request.', 400,)
@@ -11,17 +14,29 @@ INVALID_REQUEST_NO_TRANSCRIPT = ('Invalid Request. transcript_id not found in re
 NOTE_SAVED = ('Note Saved.', 200)
 CLASS_SAVED = ('Class Saved.', 200)
 
+db = Database()
+
+@router.route('/v1/users/create', methods=['POST'])
+def create_one_user():
+    try:
+        json_dict = request.get_json()
+        # json_dict = json.loads(json_string)
+        username = json_dict['username']
+        password = json_dict['password']
+    except KeyError:
+        return make_response(*INVALID_REQUEST_NO_USER)
+    proposed_response = db.add_user(username)
+    return mongo_json.dumps(proposed_response)
+
+
 @router.route('/v1/users/one', methods=['GET'])
 def get_one_user():
     # requires that the request content type be set to application/json
     try:
-        user_id = request.args['user_id']
+        username = request.args['username']
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_USER)
-    user_from_database = {'user_id': user_id,
-                          'email': 'johndoe@gmail.com',
-                          'first_name': 'John',
-                          'last_name': 'Doe'}
+    user_from_database = db.get_user(username)
     try:
         del user_from_database['password']
     except KeyError:

@@ -38,7 +38,10 @@ class Database(object):
             'created': datetime.datetime.utcnow(),
             'updated': datetime.datetime.utcnow()
         }
-        user_id = self._user_collection.insert_one(user).inserted_id
+        try:
+            user_id = self._user_collection.insert_one(user).inserted_id
+        except pymongo.errors.DuplicateKeyError:
+            pass
         return self.get_user(username)
 
     def update_user(self, username):
@@ -48,7 +51,7 @@ class Database(object):
         return self.get_user(username)
 
     def get_user(self, username):
-        user_result = self._user_collection.find_one({'username': username})
+        user_result = self._user_collection.find_one({'username': username}, {'password': 0, '_id': 0})
         return user_result
 
     def delete_user(self, username):
