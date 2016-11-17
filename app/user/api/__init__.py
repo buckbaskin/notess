@@ -37,7 +37,7 @@ def create_one_user():
         return make_response(*INVALID_REQUEST_NO_USER)
     content = request.get_json()
     save_this = {}
-    for key in ['email']:
+    for key in ['email', 'first_name', 'last_name']:
         if key in content:
             save_this[key] = content[key]
         else:

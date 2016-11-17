@@ -32,7 +32,7 @@ class Database(object):
 
     ### User Database ###
 
-    def add_user(self, username, email):
+    def add_user(self, username, first_name, last_name, email):
         user = {
             'username': username,
             'email': email,
