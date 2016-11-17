@@ -12,41 +12,39 @@
 </head>
 
 <body>
-    {#Setup Facebok API: Reference: https://developers.facebook.com/docs/facebook-login/web#}
-    <script>
-      window.fbAsyncInit = function() {
-        FB.init({
-          appId      : '1441716825857085',
-          xfbml      : true,
-          version    : 'v2.8'
-        });
-      };
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">ANTS</a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Editor<span class="sr-only">(current)</span></a></li>
+            <li><a href="#">Classes</a></li>
+            <li><a href="#">Notes</a></li>
+          </ul>
 
-      (function(d, s, id){
-         var js, fjs = d.getElementsByTagName(s)[0];
-         if (d.getElementById(id)) {return;}
-         js = d.createElement(s); js.id = id;
-         js.src = "//connect.facebook.net/en_US/sdk.js";
-         fjs.parentNode.insertBefore(js, fjs);
-       }(document, 'script', 'facebook-jssdk'));
-    </script>
-    <script>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a id="status"></a></li>
+          </ul>
+          <form class="nav navbar-nav navbar-form navbar-right">
+            <fb:login-button scope="public_profile,email" auto_logout_link="true" size = "medium" onlogin="checkLoginState();">
+            </fb:login-button>
+          </form>
+        </div>
+      </div>
+    </nav>
+{#     <div id="status">#}
+{#     </div>#}
 
-    </script>
-
-    <!--
-      Below we include the Login Button social plugin. This button uses
-      the JavaScript SDK to present a graphical Login button that triggers
-      the FB.login() function when clicked.
-    -->
-{#    <fb:login-button scope="public_profile,email" auto_logout_link="true" size = "medium" onlogin="checkLoginState();">#}
-{#    </fb:login-button>#}
-{##}
-{#    <div id="status">#}
-{#    </div>#}
-</body>
-
-<body>
     <div id="floatingPanel">
         <div class="container">
             <h2>Keywords</h2>
@@ -55,7 +53,7 @@
 
             <div class="col-lg-5">
                 <div id="keywordsList" class="list-group">
-{#                     KEYWORDS WILL POPULATE HERE#}
+                    {# KEYWORDS WILL POPULATE HERE #}
                 </div>
             </div>
         </div>
@@ -135,4 +133,23 @@
         $KNOWLEDGE.init(GWS_CORE);
         FB_AUTH();
     });
+</script>
+
+{#Setup Facebok API: Reference: https://developers.facebook.com/docs/facebook-login/web#}
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '1441716825857085',
+      xfbml      : true,
+      version    : 'v2.8'
+    });
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
 </script>
