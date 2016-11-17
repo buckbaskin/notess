@@ -175,7 +175,7 @@ def save_existing_note():
     db.update_note(username, note_id, content)
     return make_response(*NOTE_SAVED)
 
-@router.toute('/v1/transcript/new', methods=['POST'])
+@router.route('/v1/transcript/new', methods=['POST'])
 def create_transcript():
     try:
         username = request.args['transcript']
