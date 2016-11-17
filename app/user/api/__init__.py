@@ -115,6 +115,7 @@ def save_existing_class():
 
 @router.route('/v1/note/all', methods=['GET'])
 def get_all_notes():
+    # TODO
     try:
         user_id = request.args['user_id']
     except KeyError:
@@ -129,6 +130,7 @@ def get_all_notes():
 
 @router.route('/v1/note/class', methods=['GET'])
 def get_class_notes():
+    # TODO
     try:
         user_id = request.args['user_id']
     except KeyError:
@@ -147,8 +149,9 @@ def get_class_notes():
 
 @router.route('/v1/note/new', methods=['GET'])
 def create_new_note():
+    # TODO
     '''
-    This should be creating updating an existing note
+    This should be creating a new note
     '''
     try:
         user_id = request.args['user_id']
@@ -162,8 +165,9 @@ def create_new_note():
 
 @router.route('/v1/note/save', methods=['POST'])
 def save_existing_note():
+    # TODO
     '''
-    This should be creating updating an existing note
+    This should be updating an existing note
     '''
     try:
         user_id = request.args['user_id']
@@ -179,6 +183,7 @@ def save_existing_note():
 
 @router.route('/v1/transcript/all')
 def get_all_transcripts():
+    # TODO
     try:
         user_id = request.args['user_id']
     except KeyError:
@@ -193,6 +198,7 @@ def get_all_transcripts():
 
 @router.route('/v1/transcript/class')
 def get_class_transcripts():
+    # TODO
     try:
         user_id = request.args['user_id']
     except KeyError:
@@ -212,6 +218,7 @@ def get_class_transcripts():
 
 @router.route('/v1/transcript/note')
 def get_note_transcripts():
+    # TODO
     try:
         user_id = request.args['user_id']
     except KeyError:
@@ -242,6 +249,7 @@ def get_all_keywords():
                                'long_description': 'This is a development process that requires excessive documentation',
                                'link_dbpedia': 'insert dbpedia link here',
                                'link_wikipedia': 'insert wikipedia link here'}]
+    # TODO
     return json.dumps(keywords_from_database)
 
 @router.route('/v1/keyword/class')
@@ -263,6 +271,7 @@ def get_class_keywords():
                                'long_description': 'This is a development process that requires excessive documentation',
                                'link_dbpedia': 'insert dbpedia link here',
                                'link_wikipedia': 'insert wikipedia link here'}]
+    # TODO
     return json.dumps(keywords_from_database)
 
 @router.route('/v1/keyword/note')
@@ -287,6 +296,7 @@ def get_note_keywords():
     if 'class_id' in request.args:
         for i in range(0, len(keywords_from_database)):
             keywords_from_database[0]['class_id'] = request.args['class_id']
+    # TODO
     return json.dumps(keywords_from_database)
 
 @router.route('/v1/keyword/transcript')
@@ -314,5 +324,6 @@ def get_transcript_keywords():
     if 'note_id' in request.args:
         for i in range(0, len(keywords_from_database)):
             keywords_from_database[0]['note_id'] = request.args['note_id']
+    # TODO
     return json.dumps(keywords_from_database)
 
