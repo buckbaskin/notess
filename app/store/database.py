@@ -32,9 +32,10 @@ class Database(object):
 
     ### User Database ###
 
-    def add_user(self, username):
+    def add_user(self, username, email):
         user = {
             'username': username,
+            'email': email,
             'created': datetime.datetime.utcnow(),
             'updated': datetime.datetime.utcnow()
         }

@@ -13,10 +13,12 @@ from nose.tools import nottest
 from jsonschema import validate
 from jsonschema.exceptions import ValidationError
 
+from bson.objectid import ObjectId
+
 USERNAME = 'johndoe'
 CLASS_NAME = 'EECS393'
-NOTE_ID = '12345'
-TRANSCRIPT_ID = 'abcde'
+NOTE_ID = ObjectId('123456789012345678901234')
+TRANSCRIPT_ID = ObjectId('abcdef0123456789abcdef01')
 
 def myValidate(self, loaded_json, schema):
     try:
@@ -97,18 +99,6 @@ class TestTranscriptAPI(unittest.TestCase):
 
     def testAllNotesFail(self):
         response = self.client.get('%s' % (self.all_url,))
-        self.assertEqual(response.status_code, 400)
-
-    def testOneClass(self):
-        response = self.client.get('%s?username=%s&class_name=%s' % (self.class_url, USERNAME, CLASS_NAME,))
-        self.assertEqual(response.status_code, 200)
-
-    def testOneClassFail(self):
-        response = self.client.get('%s' % (self.class_url,))
-        self.assertEqual(response.status_code, 400)
-
-    def testOneClassFail2(self):
-        response = self.client.get('%s?username=%s' % (self.class_url, USERNAME,))
         self.assertEqual(response.status_code, 400)
 
 @nottest
