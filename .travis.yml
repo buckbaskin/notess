@@ -33,4 +33,4 @@ script:
   - mypy --silent-imports --linecoverage-report mypycover --html-report mypycover --check-untyped-defs app/
   - nosetests --with-timer --timer-top-n 5 --timer-ok 250ms --timer-warning 500ms --with-coverage --cover-erase --cover-html --cover-package=app --cover-branches
   - node_modules/karma/bin/karma start my.conf.js --single-run
-  - codecov
+  - codecov --token=bfdd86e4-0ff7-4bab-89bb-24009edea6f7
