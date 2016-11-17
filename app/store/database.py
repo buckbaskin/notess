@@ -36,6 +36,8 @@ class Database(object):
         user = {
             'username': username,
             'email': email,
+            'first_name': first_name,
+            'last_name': last_name,
             'created': datetime.datetime.utcnow(),
             'updated': datetime.datetime.utcnow()
         }
