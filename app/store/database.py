@@ -64,18 +64,21 @@ class Database(object):
 
     def add_class(self, username, class_name):
         class_ = {
+            'version': 0,
             'username': username,
             'class_name': class_name
         }
         class_id = self._class_collection.insert_one(class_).inserted_id
         return self.get_class(username, class_name)
 
-    def update_class(self, username, class_name):
-        # TODO
-        return self.get_class(username, class_name)
+    def update_class(self, username, class_id, content):
+        if 'version' in content:
+            del content['version']
+        self._class_collection.update_one({'_id': ObjectId(str(class_id))}, {'$set': content, '$inc': {'version': 1}})
+        return self.get_class(username, class_id)
 
-    def get_class(self, username, class_name):
-        class_result = self._class_collection.find_one({'username': username, 'class_name': class_name})
+    def get_class(self, username, class_id):
+        class_result = self._class_collection.find_one({'username': username, '_id': ObjectId(str(class_id))})
         return class_result
 
     def get_all_classes(self, username):

@@ -57,6 +57,19 @@ def get_one_user():
 
     return mongo_json.dumps(user_from_database)
 
+@router.route('/v1/class/one', methods=['GET', 'POST'])
+def get_one_class():
+    try:
+        username = request.args['username']
+    except KeyError:
+        return make_response(*INVALID_REQUEST_NO_USER)
+    try:
+        class_id = request.args['class_id']
+    except KeyError:
+        return make_response(*INVALID_REQUEST_NO_CLASS)
+    classes_from_database = db.get_class(username, class_id)
+    return mongo_json.dumps(classes_from_database)
+
 @router.route('/v1/class/all', methods=['GET', 'POST'])
 def get_all_classes():
     try:
@@ -86,7 +99,7 @@ def create_new_class():
 @router.route('/v1/class/save', methods=['POST'])
 def save_existing_class():
     try:
-        user_id = request.args['user_id']
+        username = request.args['username']
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_USER)
     try:
@@ -94,7 +107,11 @@ def save_existing_class():
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_CLASS)
     content = request.get_json()
-    return make_response(*CLASS_SAVED)
+    if content is None:
+        return mongo_json.dumps(db.get_class(username, class_id))
+    print('update with new content %s' % (content,))
+    updated_class = db.update_class(username, class_id, content)
+    return mongo_json.dumps(updated_class)
 
 @router.route('/v1/note/all', methods=['GET'])
 def get_all_notes():
