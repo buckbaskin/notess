@@ -35,7 +35,12 @@ def create_one_user():
         password = json_dict['password']
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_USER)
-    proposed_response = db.add_user(username)
+    content = request.get_json()
+    save_this = {}
+    for key in ['email']:
+        if key in content:
+            save_this[key] = content[key]
+    proposed_response = db.add_user(username, **save_this)
     return mongo_json.dumps(proposed_response)
 
 
