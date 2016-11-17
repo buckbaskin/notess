@@ -27,6 +27,7 @@ before_install:
 
 before_script:
   - ./lint.sh
+  - python setup_mongo_for_test.py
 
 script:
   - mypy --silent-imports --linecoverage-report mypycover --html-report mypycover --check-untyped-defs app/
