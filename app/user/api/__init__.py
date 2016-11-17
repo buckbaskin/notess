@@ -12,6 +12,8 @@ INVALID_REQUEST_NO_CLASS = ('Invalid Request. class_id not found in request.', 4
 INVALID_REQUEST_NO_NOTE = ('Invalid Request. note_id not found in request.', 400,)
 INVALID_REQUEST_NO_TRANSCRIPT = ('Invalid Request. transcript_id not found in request.', 400,)
 USER_NOT_FOUND = ('User not found', 404)
+CLASS_NOT_FOUND = ('Class not found', 404)
+NOTE_NOT_FOUND = ('Note not found', 404)
 NOTE_SAVED = ('Note Saved.', 200)
 CLASS_SAVED = ('Class Saved.', 200)
 
@@ -115,18 +117,14 @@ def save_existing_class():
 
 @router.route('/v1/note/all', methods=['GET'])
 def get_all_notes():
-    # TODO
     try:
-        user_id = request.args['user_id']
+        username = request.args['username']
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_USER)
-    notes_from_database = [{'note_id': 'a1234',
-                            'class_id': 'abcdjasdf',
-                            'user_id': user_id,
-                            'note_name': 'This is the best lecture ever!',
-                            'date_created': '10/16/2016',
-                            'date_updated': '10/16/2016'}]
-    return json.dumps(notes_from_database)
+    results = db.get_all_notes(username)
+    if results is None:
+        return make_response(*INVALID_REQUEST_NO_NOTE)
+    return mongo_json.dumps(results)
 
 @router.route('/v1/note/class', methods=['GET'])
 def get_class_notes():

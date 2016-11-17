@@ -113,8 +113,11 @@ class Database(object):
         result = self._note_collection.find_one({'_id': ObjectId(note_id)})
         return result
 
-    def get_all_notes(self, username, class_name):
-        result = self._note_collection.find({'username': username, 'class_name': class_name})
+    def get_all_notes(self, username, class_name=None):
+        if class_name is None:
+            result = self._note_collection.find({'username': username})
+        else:
+            result = self._note_collection.find({'username': username, 'class_name': class_name})
         return result
 
     def delete_note(self, username, note_id) -> int:
