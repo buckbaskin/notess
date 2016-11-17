@@ -140,8 +140,8 @@
             init: init,
             populateKeywordPanel: populateKeywordPanel,
             stopRefreshingKeywords: stopRefreshingKeywords,
-
+            isDuplicate: isDuplicate
         };
     };
 
-}( jQuery ));
+}(jQuery));
