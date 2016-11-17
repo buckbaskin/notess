@@ -40,6 +40,8 @@ def create_one_user():
     for key in ['email']:
         if key in content:
             save_this[key] = content[key]
+        else:
+            return make_response('Could not create user. Missing key %s' % (key,))
     proposed_response = db.add_user(username, **save_this)
     return mongo_json.dumps(proposed_response)
 
