@@ -19,7 +19,7 @@ CLASS_SAVED = ('Class Saved.', 200)
 
 db = Database()
 
-@router.route('/v1/users/create', methods=['POST'])
+@router.route('/v1/users/new', methods=['POST'])
 def create_one_user():
     '''
     Required: indicate the user as a url parameter, but the password must be
@@ -39,7 +39,7 @@ def create_one_user():
     return mongo_json.dumps(proposed_response)
 
 
-@router.route('/v1/users/one', methods=['GET', 'POST'])
+@router.route('/v1/users/one', methods=['GET'])
 def get_one_user():
     # requires that the request content type be set to application/json
     try:
@@ -59,7 +59,7 @@ def get_one_user():
 
     return mongo_json.dumps(user_from_database)
 
-@router.route('/v1/class/one', methods=['GET', 'POST'])
+@router.route('/v1/class/one', methods=['GET'])
 def get_one_class():
     try:
         username = request.args['username']
@@ -72,7 +72,7 @@ def get_one_class():
     classes_from_database = db.get_class(username, class_name)
     return mongo_json.dumps(classes_from_database)
 
-@router.route('/v1/class/all', methods=['GET', 'POST'])
+@router.route('/v1/class/all', methods=['GET'])
 def get_all_classes():
     try:
         username = request.args['username']
@@ -98,7 +98,7 @@ def create_new_class():
     created_class = db.add_class(username, class_name)
     return mongo_json.dumps(created_class)
 
-@router.route('/v1/class/save', methods=['POST'])
+@router.route('/v1/class/update', methods=['POST'])
 def save_existing_class():
     try:
         username = request.args['username']
@@ -139,7 +139,7 @@ def get_class_notes():
     notes_from_database = db.get_all_notes(username, class_name)
     return mongo_json.dumps(notes_from_database)
 
-@router.route('/v1/note/new', methods=['GET'])
+@router.route('/v1/note/new', methods=['POST'])
 def create_new_note():
     '''
     This should be creating a new note
@@ -148,9 +148,16 @@ def create_new_note():
         username = request.args['username']
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_USER)
-    return db.add_note(username)
+    content = request.get_json()
+    save_this = {}
+    for key in ['class_name', 'note_name']:
+        if key in content:
+            save_this[key] = content[key]
+        else:
+            make_response('New note could not be created, missing field %s' % (key,), 400)
+    return db.add_note(username, **save_this)
 
-@router.route('/v1/note/save', methods=['POST'])
+@router.route('/v1/note/update', methods=['POST'])
 def save_existing_note():
     '''
     This should be updating an existing note
@@ -168,7 +175,27 @@ def save_existing_note():
     db.update_note(username, note_id, content)
     return make_response(*NOTE_SAVED)
 
-@router.route('/v1/transcript/all')
+@router.toute('/v1/transcript/new', methods=['POST'])
+def create_transcript():
+    try:
+        username = request.args['transcript']
+    except KeyError:
+        return make_response(*INVALID_REQUEST_NO_USER)
+    try:
+        note_id = request.args['note_id']
+    except KeyError:
+        return make_response(*INVALID_REQUEST_NO_NOTE)
+    content = request.get_json()
+    save_this = {}
+    for key in ['text']:
+        if key in content:
+            save_this[key] = content[key]
+        else:
+            return make_response('Could not create transcript. Key %s not found in POST' % (key,), 400)
+    
+    return db.add_transcript(username, **save_this)
+
+@router.route('/v1/transcript/all', methods=['GET'])
 def get_all_transcripts():
     try:
         username = request.args['username']
@@ -177,7 +204,7 @@ def get_all_transcripts():
     transcripts_from_database = db.get_all_transcripts(username)
     return mongo_json.dumps(transcripts_from_database)
 
-@router.route('/v1/transcript/note')
+@router.route('/v1/transcript/note', methods=['GET'])
 def get_note_transcripts():
     try:
         username = request.args['username']
@@ -187,27 +214,36 @@ def get_note_transcripts():
         note_id = request.args['note_id']
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_NOTE)
-    transcripts_from_database = db.get_all_transcripts(username, note_id)
+    transcripts_from_database = db.get_all_transcripts(username, note_id=note_id)
     return mongo_json.dumps(transcripts_from_database)
 
-@router.route('/v1/keyword/all')
+@router.route('/v1/keyword/new', methods=['POST'])
+def add_keyword():
+    try:
+        username = request.args['username']
+    except KeyError:
+        return make_response(*INVALID_REQUEST_NO_USER)
+    # username: str, note_id: str, transcript_id: str, text: str, relevance: float, description: str
+    content = request.get_json()
+    save_these_fields = {}
+    for key in ['node_id', 'transcript_id', 'text', 'relevance', 'description']:
+        if key in content:
+            save_these_fields[key] = content[key]
+        else:
+            return make_response('Could not create keyword, missing field %s' % key, 400)
+
+    keyword = db.add_keyword(username, **content)
+
+@router.route('/v1/keyword/all', methods=['GET'])
 def get_all_keywords():
     try:
         username = request.args['username']
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_USER)
-    keywords_from_database = [{'keyword_id': 'qwert',
-                               'transcript_id': 'abcd',
-                               'username': username,
-                               'keyword': 'Waterfall Model',
-                               'short_description': 'A developer horror story',
-                               'long_description': 'This is a development process that requires excessive documentation',
-                               'link_dbpedia': 'insert dbpedia link here',
-                               'link_wikipedia': 'insert wikipedia link here'}]
-    # TODO
+    keywords_from_database = db.get_all_keywords(username)
     return mongo_json.dumps(keywords_from_database)
 
-@router.route('/v1/keyword/class')
+@router.route('/v1/keyword/class', methods=['GET'])
 def get_class_keywords():
     try:
         username = request.args['username']
@@ -217,19 +253,10 @@ def get_class_keywords():
         class_name = request.args['class_name']
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_CLASS)
-    keywords_from_database = [{'keyword_id': 'qwert',
-                               'transcript_id': 'abcd',
-                               'username': username,
-                               'class_name': class_name,
-                               'keyword': 'Waterfall Model',
-                               'short_description': 'A developer horror story',
-                               'long_description': 'This is a development process that requires excessive documentation',
-                               'link_dbpedia': 'insert dbpedia link here',
-                               'link_wikipedia': 'insert wikipedia link here'}]
-    # TODO
+    keywords_from_database = db.get_all_keywords(username, class_name=class_name)
     return mongo_json.dumps(keywords_from_database)
 
-@router.route('/v1/keyword/note')
+@router.route('/v1/keyword/note', methods=['GET'])
 def get_note_keywords():
     try:
         username = request.args['username']
@@ -239,22 +266,10 @@ def get_note_keywords():
         note_id = request.args['note_id']
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_NOTE)
-    keywords_from_database = [{'keyword_id': 'qwert',
-                               'transcript_id': 'abcd',
-                               'username': username,
-                               'note_id': note_id,
-                               'keyword': 'Waterfall Model',
-                               'short_description': 'A developer horror story',
-                               'long_description': 'This is a development process that requires excessive documentation',
-                               'link_dbpedia': 'insert dbpedia link here',
-                               'link_wikipedia': 'insert wikipedia link here'}]
-    if 'class_name' in request.args:
-        for i in range(0, len(keywords_from_database)):
-            keywords_from_database[0]['class_name'] = request.args['class_name']
-    # TODO
+    keywords_from_database = db.get_all_keywords(username, note_id=note_id)
     return mongo_json.dumps(keywords_from_database)
 
-@router.route('/v1/keyword/transcript')
+@router.route('/v1/keyword/transcript', methods=['GET'])
 def get_transcript_keywords():
     try:
         username = request.args['username']
@@ -264,21 +279,6 @@ def get_transcript_keywords():
         transcript_id = request.args['transcript_id']
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_TRANSCRIPT)
-    keywords_from_database = [{'keyword_id': 'qwert',
-                               'transcript_id': transcript_id,
-                               'username': username,
-                               'keyword': 'Waterfall Model',
-                               'short_description': 'A developer horror story',
-                               'long_description': 'This is a development process that requires excessive documentation',
-                               'link_dbpedia': 'insert dbpedia link here',
-                               'link_wikipedia': 'insert wikipedia link here'}]
-
-    if 'class_name' in request.args:
-        for i in range(0, len(keywords_from_database)):
-            keywords_from_database[i]['class_name'] = request.args['class_name']
-    if 'note_id' in request.args:
-        for i in range(0, len(keywords_from_database)):
-            keywords_from_database[i]['note_id'] = request.args['note_id']
-    # TODO
+    keywords_from_database = db.get_all_keywords(username, transcript_id=transcript_id)
     return mongo_json.dumps(keywords_from_database)
 

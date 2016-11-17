@@ -192,8 +192,15 @@ class Database(object):
         result = self._keyword_collection.find_one({'_id': ObjectId(keyword_id), 'username': username})
         return result
 
-    def get_all_keywords(self, username, note_id):
-        result = self._keyword_collection.find({'username': username, 'note_id': ObjectId(note_id)})
+    def get_all_keywords(self, username, class_name=None, note_id=None, transcript_id=None):
+        if class_name is not None:
+            result = self._keyword_collection.find({'username': username, 'class_name': class_name})
+        if note_id is not None:
+            result = self._keyword_collection.find({'username': username, 'note_id': ObjectId(note_id)})
+        if transcript_id is not None:
+            result = self._keyword_collection.find({'username': username, 'note_id': ObjectId(note_id)})
+        else:
+            result = self._keyword_collection.find({'username': username})
         return result
 
     def delete_keyword(self, username, keyword_id) -> int:
