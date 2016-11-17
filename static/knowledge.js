@@ -40,6 +40,7 @@
             transcription = GWS_CORE.getTranscript();
             if (transcription !== "" || typeof transcription === 'undefined') {
                 populateKeywordPanel(transcription);
+                showSnackBar();
             }
         };
 
@@ -51,6 +52,17 @@
                 console.log('Text for populate keywords is empty.');
             }
         };
+
+        var showSnackBar = function() {
+            // Get the snackbar DIV
+            var x = document.getElementById("snackbar")
+
+            // Add the "show" class to DIV
+            x.className = "show";
+
+            // After 3 seconds, remove the show class from DIV
+            setTimeout(function(){ x.className = x.className.replace("show", ""); }, 4500);
+        }
 
         var keywordsCallback = function(keywordsJson) {
             // stores the 'text' field of each JSON object
