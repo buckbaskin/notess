@@ -1,13 +1,10 @@
 # ANTS
 
 ## Continuous Integration Build
-[![Build Status](https://travis-ci.org/buckbaskin/notess.svg?branch=master)](https://travis-ci.org/buckbaskin/notess)
+[![Build Status](https://travis-ci.com/buckbaskin/notess.svg?token=ASNKRRcpZXw2vpqjSCDX&branch=master)](https://travis-ci.com/buckbaskin/notess)
 
 ## Code Coverage
-[![codecov](https://codecov.io/gh/buckbaskin/notess/branch/master/graph/badge.svg)](https://codecov.io/gh/buckbaskin/notess)
-
-## Code Health
-[![Code Health](https://landscape.io/github/buckbaskin/notess/master/landscape.svg?style=flat)](https://landscape.io/github/buckbaskin/notess/master)
+[![codecov](https://codecov.io/gh/buckbaskin/notess/branch/master/graph/badge.svg?token=vZ02TTtbOA)](https://codecov.io/gh/buckbaskin/notess)
 
 
 ## Dependencies

@@ -14,12 +14,15 @@
 
 #floatingPanel {
     z-index: 5000;
-    width: 500px;
     height: 100%;
     position: fixed;
-    right: 1px;
-    left: 1440px;
     background-color: #f8f8f8;
+    width: 0; /* 0 width - change this with JavaScript */
+    top: 0;
+    left: 0;
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 60px; /* Place content 60px from the top */
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
 }
 
 #noteTextarea {
