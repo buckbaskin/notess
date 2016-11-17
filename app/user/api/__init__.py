@@ -170,42 +170,15 @@ def save_existing_note():
 
 @router.route('/v1/transcript/all')
 def get_all_transcripts():
-    # TODO
     try:
         username = request.args['username']
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_USER)
-    transcripts_from_database = [{'transcript_id': 'abcd',
-                                  'username': username,
-                                  'note_id': 'a1234',
-                                  'text': 'This is the first transcript',
-                                  'recording_link': '/recording/usertranscript.mp3',
-                                  }]
-    return mongo_json.dumps(transcripts_from_database)
-
-@router.route('/v1/transcript/class')
-def get_class_transcripts():
-    # TODO
-    try:
-        username = request.args['username']
-    except KeyError:
-        return make_response(*INVALID_REQUEST_NO_USER)
-    try:
-        class_name = request.args['class_name']
-    except KeyError:
-        return make_response(*INVALID_REQUEST_NO_CLASS)
-    transcripts_from_database = [{'transcript_id': 'abcd',
-                                  'username': username,
-                                  'class_name': class_name,
-                                  'note_id': 'a1234',
-                                  'text': 'This is the first transcript',
-                                  'recording_link': '/recording/usertranscript.mp3',
-                                  }]
+    transcripts_from_database = db.get_all_transcripts(username)
     return mongo_json.dumps(transcripts_from_database)
 
 @router.route('/v1/transcript/note')
 def get_note_transcripts():
-    # TODO
     try:
         username = request.args['username']
     except KeyError:
@@ -214,12 +187,7 @@ def get_note_transcripts():
         note_id = request.args['note_id']
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_NOTE)
-    transcripts_from_database = [{'transcript_id': 'abcd',
-                                  'username': username,
-                                  'note_id': note_id,
-                                  'text': 'This is the first transcript',
-                                  'recording_link': '/recording/usertranscript.mp3',
-                                  }]
+    transcripts_from_database = db.get_all_transcripts(username, note_id)
     return mongo_json.dumps(transcripts_from_database)
 
 @router.route('/v1/keyword/all')
