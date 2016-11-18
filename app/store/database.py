@@ -81,7 +81,7 @@ class Database(object):
         return self.get_class(username, class_name)
 
     def get_class(self, username, class_name):
-        class_result = self._class_collection.find_one({'username': username, '_id': ObjectId(str(class_name))})
+        class_result = self._class_collection.find_one({'username': username, 'class_name': class_name})
         return class_result
 
     def get_all_classes(self, username):
