@@ -29,6 +29,14 @@
     transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
 }
 
+#closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
 #noteTextarea {
     resize: none;
     height: 100%;

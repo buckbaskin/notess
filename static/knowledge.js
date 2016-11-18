@@ -2,9 +2,11 @@
     $.knowledge = function () {
         var recording = false;
         var hidden = true;
+        var tutorial = $('#tutorial');
         var keywordsList = $('#keywordsList');
         var floatingPanel = $('#floatingPanel');
         var keywordsButton = $('#keywordsButton');
+        var closeButton = $('#closebtn');
         var knowledge_cards = [];
         var dict = {};
         var stopAugmentRefreshID;
@@ -35,12 +37,16 @@
 
         var init = function (gws_core) {
             GWS_CORE = gws_core;
+            tutorial.modal('toggle')
             recordButtonHandler();
             refreshButtonHandler();
             floatingPanel.css('box-shadow', '10px 10px 8px #888');
             keywordsButton.click(function () {
                 toggleSlider();
                 augmentTranscription();
+            });
+            closeButton.click(function () {
+                toggleSlider();
             });
             //stopAugmentRefreshID = setInterval(augmentTranscription, 5000);
             console.log(stopAugmentRefreshID);
@@ -133,13 +139,11 @@
             if (hidden) {
                 populateKeywordPanel(GWS_CORE.getTranscript());
                 // show
-                // floatingPanel.animate({left: '-=500'}, 200, function(){});
-                document.getElementById("floatingPanel").style.width = "30%";
+                document.getElementById("floatingPanel").style.width = "40%";
                 hidden = false;
             }
             else {
                 // hide
-                // floatingPanel.animate({left: '+=500'}, 200, function(){});
                 document.getElementById("floatingPanel").style.width = "0";
                 hidden = true;
             }
