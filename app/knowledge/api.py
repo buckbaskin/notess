@@ -76,8 +76,9 @@ def add_descriptions():
 
 
 def add_descriptions_to_keywords_dict(keyword_dict_list):
+    api_object = depedia.DBPediaAPI()
     for keyword_dict in keyword_dict_list:
-        lookup_result = depedia.DBPediaAPI.search(keyword_dict['text'])
+        lookup_result = api_object.search(keyword_dict['text'])
         if lookup_result.has_results():
             keyword_dict['description'] = lookup_result.get_first_description()
         else:
