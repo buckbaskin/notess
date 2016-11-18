@@ -1,6 +1,6 @@
 import unittest
 import json
-import app.knowledge.dbpedia.depedia as DBPedia
+import app.knowledge.dbpedia.dbpedia as DBPedia
 from unittest.mock import MagicMock
 
 class TestDBPedia(unittest.TestCase):

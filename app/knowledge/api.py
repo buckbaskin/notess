@@ -1,6 +1,6 @@
 from app import server as router
 from app.knowledge.watson import watson
-from app.knowledge.dbpedia import depedia
+from app.knowledge.dbpedia import dbpedia
 from flask import make_response, request
 
 import json
@@ -76,7 +76,7 @@ def add_descriptions():
 
 
 def add_descriptions_to_keywords_dict(keyword_dict_list):
-    api_object = depedia.DBPediaAPI()
+    api_object = dbpedia.DBPediaAPI()
     for keyword_dict in keyword_dict_list:
         lookup_result = api_object.search(keyword_dict['text'])
         if lookup_result.has_results():
