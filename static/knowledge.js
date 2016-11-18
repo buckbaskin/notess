@@ -140,13 +140,11 @@
             if (hidden) {
                 populateKeywordPanel(GWS_CORE.getTranscript());
                 // show
-                // floatingPanel.animate({left: '-=500'}, 200, function(){});
-                document.getElementById("floatingPanel").style.width = "30%";
+                document.getElementById("floatingPanel").style.width = "40%";
                 hidden = false;
             }
             else {
                 // hide
-                // floatingPanel.animate({left: '+=500'}, 200, function(){});
                 document.getElementById("floatingPanel").style.width = "0";
                 hidden = true;
             }
