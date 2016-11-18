@@ -115,7 +115,9 @@
         var updateKnowledgeCard = function () {
             for (var key in knowledge_cards) {
                 var card = knowledge_cards[key];
-                keywordsList.append(generateDisplayableCard(card));
+                if (!card.displayed){
+                    keywordsList.append(generateDisplayableCard(card));
+                }
             }
         };
 

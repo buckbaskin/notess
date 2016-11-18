@@ -4,12 +4,12 @@ import json
 
 class DBPediaAPI:
 
-    @staticmethod
-    def search(keyword):  # => json_response
+    def search(self, keyword):  # => json_response
         uri_string = "http://lookup.dbpedia.org/api/search.asmx/KeywordSearch?QueryString=" + keyword
         headers = {'Accept': 'application/json'}
         response = requests.get(url=uri_string, headers=headers)
         result = DBPediaAPI.QueryResult(keyword=keyword, json_string=response.text)
+        print("searched")
         return result
 
     class QueryResult:
