@@ -5,6 +5,7 @@
         var keywordsList = $('#keywordsList');
         var floatingPanel = $('#floatingPanel');
         var keywordsButton = $('#keywordsButton');
+        var closeButton = $('#closebtn');
         var knowledge_cards = [];
         var dict = {};
         var stopAugmentRefreshID;
@@ -41,6 +42,9 @@
             keywordsButton.click(function () {
                 toggleSlider();
                 augmentTranscription();
+            });
+            closeButton.click(function () {
+                toggleSlider();
             });
             //stopAugmentRefreshID = setInterval(augmentTranscription, 5000);
             console.log(stopAugmentRefreshID);
