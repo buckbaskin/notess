@@ -125,6 +125,7 @@
                 var card = knowledge_cards[key];
                 if (!card.displayed){
                     keywordsList.append(generateDisplayableCard(card));
+                    card.displayed = true;
                 }
             }
         };
@@ -188,8 +189,8 @@
         };
 
         var add_knowledge_card = function (knowledge_card) {
-            if (!(knowledge_card in knowledge_cards)) {
-                knowledge_cards[knowledge_card.keyword] = knowledge_card;
+            if (!((knowledge_card.keyword.toUpperCase()) in knowledge_cards)) {
+                knowledge_cards[knowledge_card.keyword.toUpperCase()] = knowledge_card;
             }
         };
 
