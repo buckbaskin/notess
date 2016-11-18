@@ -84,10 +84,3 @@ def add_descriptions_to_keywords_dict(keyword_dict_list):
             keyword_dict['description'] = "none"
     return keyword_dict_list
 
-
-if __name__ == "__main__":
-    mock_keyword_dict_list = [{'text': 'blahblahnonsense', 'relevance': '0.90001'},
-                              {'text': 'bigtable', 'relevance': '0.90002'}]
-    mock_keyword_request_arg = {'keywords': mock_keyword_dict_list}
-    mock_incoming_request_data = json.dumps(mock_keyword_request_arg).encode("utf-8")
-    print(mock_incoming_request_data)
