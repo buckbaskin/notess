@@ -19,6 +19,8 @@ CLASS_SAVED = ('Class Saved.', 200)
 
 db = Database()
 
+### User API ###
+
 @router.route('/v1/users/new', methods=['POST'])
 def create_one_user():
     '''
@@ -45,7 +47,6 @@ def create_one_user():
     proposed_response = db.add_user(username, **save_this)
     return mongo_json.dumps(proposed_response)
 
-
 @router.route('/v1/users/one', methods=['GET'])
 def get_one_user():
     # requires that the request content type be set to application/json
@@ -66,6 +67,8 @@ def get_one_user():
         pass
 
     return mongo_json.dumps(user_from_database)
+
+### Class API ###
 
 @router.route('/v1/class/one', methods=['GET'])
 def get_one_class():

@@ -65,6 +65,11 @@ class TestClassAPI(unittest.TestCase):
     def setUp(self):
         self.client = server.test_client()
         self.all_url = '/v1/class/all'
+        self.one_url = '/v1/class/one'
+
+    def testOneClass(self):
+        response = self.client.get('%s?username=%s' % (self.one_url, USERNAME))
+        self.assertEqual(response.status_code, 200)
 
     def testAllClass(self):
         response = self.client.get('%s?username=%s' % (self.all_url, USERNAME,))
