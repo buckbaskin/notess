@@ -66,6 +66,8 @@ class TestClassAPI(unittest.TestCase):
         self.client = server.test_client()
         self.all_url = '/v1/class/all'
         self.one_url = '/v1/class/one'
+        self.new_url = '/v1/class/new'
+        self.update_url = '/v1/class/update'
 
     def testOneClass(self):
         response = self.client.get('%s?username=%s&class_name=%s' % (self.one_url, USERNAME, CLASS_NAME,))
@@ -81,6 +83,12 @@ class TestClassAPI(unittest.TestCase):
     def testAllClassFail(self):
         response = self.client.get('%s' % (self.all_url,))
         self.assertEqual(response.status_code, 400)
+
+    def testNewClass(self):
+        response = self.client.post('%s?username=%s&class_name=%s' % (self.new_url, USERNAME, CLASS_NAME,))
+        if response.status_code != 200:
+            print(response.data.decode('utf-8'))
+        self.assertEqual(response.status_code, 200)
 
 class TestNotesAPI(unittest.TestCase):
     def setUp(self):

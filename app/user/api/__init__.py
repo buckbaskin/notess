@@ -103,6 +103,8 @@ def create_new_class():
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_CLASS)
     class_metadata = request.get_json()
+    if class_metadata is None:
+        class_metadata = {}
     if 'class_name' in request.args:
         class_metadata['class_name'] = request.args['class_name']
 
@@ -125,6 +127,8 @@ def save_existing_class():
     print('update with new content %s' % (content,))
     updated_class = db.update_class(username, class_name, content)
     return mongo_json.dumps(updated_class)
+
+### Note API ###
 
 @router.route('/v1/note/all', methods=['GET'])
 def get_all_notes():

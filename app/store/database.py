@@ -71,13 +71,17 @@ class Database(object):
             'username': username,
             'class_name': class_name
         }
-        class_id = self._class_collection.insert_one(class_).inserted_id
+        try:
+            class_id = self._class_collection.insert_one(class_).inserted_id
+        except pymongo.errors.DuplicateKeyError:
+            # self.update_class(username, class_name, {})
+            pass
         return self.get_class(username, class_name)
 
     def update_class(self, username, class_name, content):
         if 'version' in content:
             del content['version']
-        self._class_collection.update_one({'_id': ObjectId(str(class_name))}, {'$set': content, '$inc': {'version': 1}})
+        self._class_collection.update_one({'class_name': class_name}, {'$set': content, '$inc': {'version': 1}})
         return self.get_class(username, class_name)
 
     def get_class(self, username, class_name):
