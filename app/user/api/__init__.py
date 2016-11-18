@@ -56,7 +56,7 @@ def get_one_user():
     user_from_database = db.get_user(username)
  
     if not isinstance(user_from_database, dict):
-        print('user_from_database: %s' % (user_from_database,))
+        print('user %s from_database: %s' % (username, user_from_database,))
         return make_response(*USER_NOT_FOUND)
 
     try:

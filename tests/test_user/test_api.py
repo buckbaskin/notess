@@ -15,7 +15,10 @@ from jsonschema.exceptions import ValidationError
 
 from bson.objectid import ObjectId
 
-USERNAME = 'johndoe'
+import json
+
+FACEBOOK_USER_ID = '1234567890'
+USERNAME = FACEBOOK_USER_ID
 CLASS_NAME = 'EECS393'
 NOTE_ID = ObjectId('123456789012345678901234')
 TRANSCRIPT_ID = ObjectId('abcdef0123456789abcdef01')
@@ -29,6 +32,21 @@ def myValidate(self, loaded_json, schema):
 class TestUserAPI(unittest.TestCase):
     def setUp(self):
         self.client = server.test_client()
+
+    def createUser(self):
+        data = {
+            'password': 'SuperFancyPassword',
+            'first_name': 'John',
+            'last_name': 'Doe',
+            'email': 'johndoe@gmail.com'
+        }
+        username_info = {'FACEBOOK_USER_ID': FACEBOOK_USER_ID}
+        response = self.client.post('/v1/users/new?username=%(FACEBOOK_USER_ID)s' % username_info, data=data)
+        self.assertEqual(response.status_code, 200)
+        json_dict = json.loads(response.data.decode())
+        self.assertEqual(json_dict['email'], data['email'])
+        self.assertEqual(json_dict['last_name'], data['last_name'])
+        self.assertEqual(json_dict['first_name'], data['first_name'])
 
     def testOneUser(self):
         response = self.client.get('/v1/users/one?username=%s' % (USERNAME,))
