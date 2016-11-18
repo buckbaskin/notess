@@ -90,6 +90,31 @@ class TestClassAPI(unittest.TestCase):
             print(response.data.decode('utf-8'))
         self.assertEqual(response.status_code, 200)
 
+    def testNewClassWithData(self):
+        data = {
+            'metadata': 'metadata'
+        }
+        response = self.client.post('%s?username=%s&class_name=%s' % (self.new_url, USERNAME, CLASS_NAME,), data=data)
+        if response.status_code != 200:
+            print(response.data.decode('utf-8'))
+        self.assertEqual(response.status_code, 200)
+
+    def testUpdateClass(self):
+        data = {
+            'metadata': 'Set this as metadata'
+        }
+        response = self.client.post('%s?username=%s&class_name=%s' % (self.update_url, USERNAME, CLASS_NAME,), data=data)
+        if response.status_code != 200:
+            print(response.data.decode('utf-8'))
+        self.assertEqual(response.status_code, 200)
+
+    def testUpdateClassNoData(self):
+        data = {}
+        response = self.client.post('%s?username=%s&class_name=%s' % (self.update_url, USERNAME, CLASS_NAME,), data=data)
+        if response.status_code != 200:
+            print(response.data.decode('utf-8'))
+        self.assertEqual(response.status_code, 200)
+
 class TestNotesAPI(unittest.TestCase):
     def setUp(self):
         self.client = server.test_client()
