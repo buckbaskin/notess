@@ -4,8 +4,7 @@ import json
 
 class DBPediaAPI:
 
-    @staticmethod
-    def search(keyword):  # => json_response
+    def search(self, keyword):  # => json_response
         uri_string = "http://lookup.dbpedia.org/api/search.asmx/KeywordSearch?QueryString=" + keyword
         headers = {'Accept': 'application/json'}
         response = requests.get(url=uri_string, headers=headers)
@@ -56,3 +55,8 @@ class DBPediaAPI:
 
         def __repr__(self):
             return self.__str__()
+
+
+if __name__ == "__main__":
+    d = DBPediaAPI()
+    print(d.search("bigtable"))
