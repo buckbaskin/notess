@@ -68,7 +68,9 @@ class TestClassAPI(unittest.TestCase):
         self.one_url = '/v1/class/one'
 
     def testOneClass(self):
-        response = self.client.get('%s?username=%s' % (self.one_url, USERNAME))
+        response = self.client.get('%s?username=%s&class_name=%s' % (self.one_url, USERNAME, CLASS_NAME,))
+        if response.status_code != 200:
+            print(response.data.decode('utf-8'))
         self.assertEqual(response.status_code, 200)
 
     def testAllClass(self):
