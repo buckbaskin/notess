@@ -37,19 +37,7 @@
 {#        glyphicon glyphicon-refresh#}
 {#        glyphicon glyphicon-arrow-right#}
 
-        <div class="row controlButtons">
-            <div class="col-lg-6"></div>
-            <div class="col-lg-2">
-                <button id="simulateTranscription" onclick="GWS_CORE.simulateTranscription(event)" class="btn btn-block btn-default">Simulate Transcription
-                    <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
-                </button>
-            </div>
-            <div class="col-lg-2">
-                <button id="refresh_button" class="btn btn-block btn-default">Refresh keyword
-                    <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
-                </button>
-            </div>
-        </div>
+        {% include "control_buttons.html" %}
         <br>
         <div class="row">
 
