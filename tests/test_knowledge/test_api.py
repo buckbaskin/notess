@@ -2,6 +2,7 @@ from app import server
 
 import app.knowledge.api as knowledge
 import app.knowledge.dbpedia.dbpedia as dbpedia
+from app.knowledge.watson import watson
 from unittest.mock import Mock, patch
 import json
 import unittest
@@ -13,9 +14,25 @@ class TestAPI(unittest.TestCase):
     def setUp(self):
         self.client = server.test_client()
         self.add_descriptions_url = '/add_descriptions'
+        self.get_keywords_url = '/get_keywords'
 
     def tearDown(self):
         pass
+
+    @patch('app.knowledge.watson.watson.WatsonAPI.get_keywords')
+    def testAPIGetKeywords(self, mock_get_keywords):
+        mock_keyword_list = [{"text": "sequential design process", "relevance": "0.946172"},
+                             {"text": "software development processes", "relevance": "0.78827"},
+                             {"text": "waterfall model", "relevance": "0.645009"},
+                             {"text": "downwards", "relevance": "0.347695"},
+                             {"text": "Initiation", "relevance": "0.282907"}]
+        mock_keyword_request_arg = {"keywords": mock_keyword_list}
+        mock_incoming_request = json.dumps(mock_keyword_request_arg)
+        parsed_json = json.loads(mock_incoming_request)
+        keywords = json.dumps(parsed_json["keywords"])
+        mock_get_keywords.return_value=keywords
+        response = self.client.get(self.get_keywords_url, query_string='text=Test string of bayesian')
+        self.assertEqual(response.status_code, 200)
 
     @patch('app.knowledge.dbpedia.dbpedia.DBPediaAPI.search')
     def test_add_descriptions(self, mock_api_search):
