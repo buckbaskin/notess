@@ -1,6 +1,6 @@
 from app import server as router
 from app.knowledge.watson import watson
-from app.knowledge.dbpedia import depedia
+from app.knowledge.dbpedia import dbpedia
 from flask import make_response, request
 
 import json
@@ -76,18 +76,12 @@ def add_descriptions():
 
 
 def add_descriptions_to_keywords_dict(keyword_dict_list):
+    api_object = dbpedia.DBPediaAPI()
     for keyword_dict in keyword_dict_list:
-        lookup_result = depedia.DBPediaAPI.search(keyword_dict['text'])
+        lookup_result = api_object.search(keyword_dict['text'])
         if lookup_result.has_results():
             keyword_dict['description'] = lookup_result.get_first_description()
         else:
             keyword_dict['description'] = "none"
     return keyword_dict_list
 
-
-if __name__ == "__main__":
-    mock_keyword_dict_list = [{'text': 'blahblahnonsense', 'relevance': '0.90001'},
-                              {'text': 'bigtable', 'relevance': '0.90002'}]
-    mock_keyword_request_arg = {'keywords': mock_keyword_dict_list}
-    mock_incoming_request_data = json.dumps(mock_keyword_request_arg).encode("utf-8")
-    print(mock_incoming_request_data)

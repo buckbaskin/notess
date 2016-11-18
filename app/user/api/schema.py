@@ -5,12 +5,14 @@ str = {'type': 'string'}
 user_schema = {
     'type': 'object',
     'properties': {
-        'user_id': str,
+        'username': str,
         'email': str,
         'first_name': str,
-        'last_name': str
+        'last_name': str,
+        'created': {},
+        'updated': {}
     },
-    'required': ['user_id', 'email', 'first_name', 'last_name']
+    'required': ['username', 'email', 'first_name', 'last_name']
 }
 user_list = {'type': 'array',
              'items': user_schema}
@@ -18,12 +20,13 @@ user_list = {'type': 'array',
 class_schema = {
     'type': 'object',
     'properties': {
-        'class_id': str,
-        'date_created': str,
-        'date_modified': str,
-        'user_id': str
+        'class_name': str,
+        'created': str,
+        'modified': str,
+        'username': str,
+        'metadata': {}
     },
-    'required': ['class_id', 'user_id']
+    'required': ['class_name', 'username']
 }
 class_list = {'type': 'array',
              'items': class_schema}

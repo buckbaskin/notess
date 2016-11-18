@@ -28,6 +28,11 @@
     </div>
     <div class="container-fluid">
         <h1>ANTS</h1>
+        <div id="title">
+            <label class="pull-left">Untitled Note</label>
+            <input class="clickedit" type="text" />
+            <div class="clearfix"></div>
+        </div>
 
         <div class="row">
 
@@ -60,6 +65,8 @@
                 <button id="start_button" onclick="GWS_CORE.startButton(event)" type="button" class="btn btn-block btn-success">Start</button>
                 <br>
                 <button id="keywordsButton" class="btn btn-block btn-primary">Keywords</button>
+                <button id="simulateTranscription" onclick="GWS_CORE.simulateTranscription(event)" class="btn btn-block btn-primary">Simulate Transcription -></button>
+                <button id="refresh_button" class="btn btn-block btn-primary">Refresh keyword</button>
             </div>
         </div>
 
@@ -87,6 +94,8 @@
         </div>
 
     </div>
+
+    <div id="snackbar">Keyword updated</div>
 </body>
 
 
