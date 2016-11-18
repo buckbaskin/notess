@@ -12,53 +12,8 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-default">
-      <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">ANTS</a>
-        </div>
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Editor<span class="sr-only">(current)</span></a></li>
-            <li><a href="#">Classes</a></li>
-            <li><a href="#">Notes</a></li>
-          </ul>
-
-          <ul class="nav navbar-nav navbar-right">
-            <li><a id="status"></a></li>
-          </ul>
-          <form class="nav navbar-nav navbar-form navbar-right">
-            <fb:login-button scope="public_profile,email" auto_logout_link="true" size = "medium" onlogin="checkLoginState();">
-            </fb:login-button>
-          </form>
-        </div>
-      </div>
-    </nav>
-
-{#     <div id="status">#}
-{#     </div>#}
-
-    <div id="floatingPanel">
-        <div class="container">
-            <h2>Keywords</h2>
-
-            <br>
-
-            <div class="col-lg-5">
-                <div id="keywordsList" class="list-group">
-                    {# KEYWORDS WILL POPULATE HERE #}
-                </div>
-            </div>
-        </div>
-    </div>
+    {% include "navbar.html" %}
+    {%  include "slidePanel.html" %}
     <div class="container-fluid">
         <h1>ANTS</h1>
         <div id="title">
@@ -67,70 +22,22 @@
             <div class="clearfix"></div>
         </div>
 
-        <div class="row">
+        {% include "control_buttons.html" %}
 
-            <div class="col-lg-6">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">Notes</div>
-                    <div id="notePanel" class="panel-body">
-                        <textarea id="noteTextarea" class="form-control" rows="18" placeholder="Start taking notes here!"></textarea>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="col-lg-6">
-                <div class="panel panel-success">
-                    <div class="panel-heading">Transcription</div>
-                    <div id="results" class="panel-body">
-                        <span id="final_span" class="final"></span>
-                        <span id="interim_span" class="interim"></span>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
+        <br>
+        {% include "note_panels.html" %}
         <br>
 
         <div class="row">
             <div class="col-lg-4 col-lg-offset-4">
                 <button id="start_button" onclick="GWS_CORE.startButton(event)" type="button" class="btn btn-block btn-success">Start</button>
-                <br>
-                <button id="keywordsButton" class="btn btn-block btn-primary">Keywords</button>
-                <button id="simulateTranscription" onclick="GWS_CORE.simulateTranscription(event)" class="btn btn-block btn-primary">Simulate Transcription -></button>
-                <button id="refresh_button" class="btn btn-block btn-primary">Refresh keyword</button>
             </div>
         </div>
-
-        <div class="row">
-            <div class="center">
-            </div>
-            <div id="info">
-                <!--<p id="info_start">Click button to start.</p>-->
-                <!--<p id="info_speak_now">Recording started</p>-->
-                <p id="info_no_speech">No speech was detected. You may need to adjust your
-                    <a href="//support.google.com/chrome/bin/answer.py?hl=en&amp;answer=1407892">
-                        microphone settings</a>.</p>
-                <p id="info_no_microphone" style="display:none">
-                    No microphone was found. Ensure that a microphone is installed and that
-                    <a href="//support.google.com/chrome/bin/answer.py?hl=en&amp;answer=1407892">
-                        microphone settings</a> are configured correctly.</p>
-                <p id="info_allow">Click the "Allow" button above to enable your microphone.</p>
-                <p id="info_denied">Permission to use microphone was denied.</p>
-                <p id="info_blocked">Permission to use microphone is blocked. To change,
-                    go to chrome://settings/contentExceptions#media-stream</p>
-                <p id="info_upgrade">ANTS is not supported by this browser.
-                    Upgrade to <a href="//www.google.com/chrome">Chrome</a>
-                    version 25 or later.</p>
-            </div>
-        </div>
-
+        {% include "google_gws_info.html" %}
     </div>
 
     <div id="snackbar">Keyword updated</div>
 </body>
-
 
 
 <script src="../../static/gwscore.js"></script>
@@ -147,20 +54,4 @@
 </script>
 
 {#Setup Facebok API: Reference: https://developers.facebook.com/docs/facebook-login/web#}
-<script>
-  window.fbAsyncInit = function() {
-    FB.init({
-      appId      : '1441716825857085',
-      xfbml      : true,
-      version    : 'v2.8'
-    });
-  };
-
-  (function(d, s, id){
-     var js, fjs = d.getElementsByTagName(s)[0];
-     if (d.getElementById(id)) {return;}
-     js = d.createElement(s); js.id = id;
-     js.src = "//connect.facebook.net/en_US/sdk.js";
-     fjs.parentNode.insertBefore(js, fjs);
-   }(document, 'script', 'facebook-jssdk'));
-</script>
+{% include 'fb_auth_script.html' %}
