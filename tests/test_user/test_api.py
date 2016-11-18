@@ -20,6 +20,7 @@ import json
 FACEBOOK_USER_ID = '1234567890'
 USERNAME = FACEBOOK_USER_ID
 CLASS_NAME = 'EECS393'
+NOTE_NAME = 'Design Patterns for Practical Use'
 NOTE_ID = ObjectId('123456789012345678901234')
 TRANSCRIPT_ID = ObjectId('abcdef0123456789abcdef01')
 
@@ -120,6 +121,16 @@ class TestNotesAPI(unittest.TestCase):
         self.client = server.test_client()
         self.all_url = '/v1/note/all'
         self.class_url = '/v1/note/class'
+        self.update_url = '/v1/note/update'
+        self.new_url = '/v1/note/new'
+
+    def testNewNote(self):
+        data = {
+            'class_name': CLASS_NAME,
+            'note_name': NOTE_NAME
+        }
+        response = self.client.post('%s?username=%s' % (self.new_url, USERNAME,), data=data)
+        self.assertEqual(response.status_code, 200)
 
     def testAllNotes(self):
         response = self.client.get('%s?username=%s' % (self.all_url, USERNAME,))
