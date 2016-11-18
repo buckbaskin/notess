@@ -13,10 +13,12 @@ from nose.tools import nottest
 from jsonschema import validate
 from jsonschema.exceptions import ValidationError
 
-USER_ID = '123adf89'
-CLASS_ID = 'abcdefgh'
-NOTE_ID = '12345'
-TRANSCRIPT_ID = 'abcde'
+from bson.objectid import ObjectId
+
+USERNAME = 'johndoe'
+CLASS_NAME = 'EECS393'
+NOTE_ID = ObjectId('123456789012345678901234')
+TRANSCRIPT_ID = ObjectId('abcdef0123456789abcdef01')
 
 def myValidate(self, loaded_json, schema):
     try:
@@ -29,7 +31,7 @@ class TestUserAPI(unittest.TestCase):
         self.client = server.test_client()
 
     def testOneUser(self):
-        response = self.client.get('/v1/users/one?user_id=%s' % (USER_ID,))
+        response = self.client.get('/v1/users/one?username=%s' % (USERNAME,))
         self.assertEqual(response.status_code, 200)
         myValidate(self, json.loads(response.data.decode()), user_schema)
 
@@ -47,7 +49,7 @@ class TestClassAPI(unittest.TestCase):
         self.all_url = '/v1/class/all'
 
     def testAllClass(self):
-        response = self.client.get('%s?user_id=%s' % (self.all_url, USER_ID,))
+        response = self.client.get('%s?username=%s' % (self.all_url, USERNAME,))
         self.assertEqual(response.status_code, 200)
         myValidate(self, json.loads(response.data.decode()), class_list)
 
@@ -62,7 +64,7 @@ class TestNotesAPI(unittest.TestCase):
         self.class_url = '/v1/note/class'
 
     def testAllNotes(self):
-        response = self.client.get('%s?user_id=%s' % (self.all_url, USER_ID,))
+        response = self.client.get('%s?username=%s' % (self.all_url, USERNAME,))
         self.assertEqual(response.status_code, 200)
         myValidate(self, json.loads(response.data.decode()), note_list)
 
@@ -71,7 +73,7 @@ class TestNotesAPI(unittest.TestCase):
         self.assertEqual(response.status_code, 400)
 
     def testOneClass(self):
-        response = self.client.get('%s?user_id=%s&class_id=%s' % (self.class_url, USER_ID, CLASS_ID,))
+        response = self.client.get('%s?username=%s&class_name=%s' % (self.class_url, USERNAME, CLASS_NAME,))
         self.assertEqual(response.status_code, 200)
         myValidate(self, json.loads(response.data.decode()), note_list)
 
@@ -80,7 +82,7 @@ class TestNotesAPI(unittest.TestCase):
         self.assertEqual(response.status_code, 400)
 
     def testOneClassFail2(self):
-        response = self.client.get('%s?user_id=%s' % (self.class_url, USER_ID,))
+        response = self.client.get('%s?username=%s' % (self.class_url, USERNAME,))
         self.assertEqual(response.status_code, 400)
 
 class TestTranscriptAPI(unittest.TestCase):
@@ -91,24 +93,12 @@ class TestTranscriptAPI(unittest.TestCase):
         self.note_url = '/v1/transcript/note'
 
     def testAllTranscripts(self):
-        response = self.client.get('%s?user_id=%s' % (self.all_url, USER_ID,))
+        response = self.client.get('%s?username=%s' % (self.all_url, USERNAME,))
         self.assertEqual(response.status_code, 200)
         myValidate(self, json.loads(response.data.decode()), transcript_list)
 
     def testAllNotesFail(self):
         response = self.client.get('%s' % (self.all_url,))
-        self.assertEqual(response.status_code, 400)
-
-    def testOneClass(self):
-        response = self.client.get('%s?user_id=%s&class_id=%s' % (self.class_url, USER_ID, CLASS_ID,))
-        self.assertEqual(response.status_code, 200)
-
-    def testOneClassFail(self):
-        response = self.client.get('%s' % (self.class_url,))
-        self.assertEqual(response.status_code, 400)
-
-    def testOneClassFail2(self):
-        response = self.client.get('%s?user_id=%s' % (self.class_url, USER_ID,))
         self.assertEqual(response.status_code, 400)
 
 @nottest
@@ -130,7 +120,7 @@ class TestKeywordAPI(unittest.TestCase):
         self.transcript_url = '/v1/keyword/transcript'
 
     def testAllKeywords(self):
-        response = self.client.get('%s?user_id=%s' % (self.all_url, USER_ID,))
+        response = self.client.get('%s?username=%s' % (self.all_url, USERNAME,))
         self.assertEqual(response.status_code, 200)
 
     def testAllKeywordsFail(self):
@@ -138,7 +128,7 @@ class TestKeywordAPI(unittest.TestCase):
         self.assertEqual(response.status_code, 400)
 
     def testClassKeyword(self):
-        response = self.client.get('%s?user_id=%s&class_id=%s' % (self.class_url, USER_ID, CLASS_ID,))
+        response = self.client.get('%s?username=%s&class_name=%s' % (self.class_url, USERNAME, CLASS_NAME,))
         self.assertEqual(response.status_code, 200)
 
     def testClassKeywordFail(self):
@@ -146,7 +136,7 @@ class TestKeywordAPI(unittest.TestCase):
         self.assertEqual(response.status_code, 400)
 
     def testNoteKeyword(self):
-        response = self.client.get('%s?user_id=%s&note_id=%s' % (self.note_url, USER_ID, NOTE_ID))
+        response = self.client.get('%s?username=%s&note_id=%s' % (self.note_url, USERNAME, NOTE_ID))
         self.assertEqual(response.status_code, 200)
 
     def testNoteKeywordFail(self):
@@ -154,7 +144,7 @@ class TestKeywordAPI(unittest.TestCase):
         self.assertEqual(response.status_code, 400)
 
     def testTranscriptKeyword(self):
-        response = self.client.get('%s?user_id=%s&transcript_id=%s' % (self.transcript_url, USER_ID, TRANSCRIPT_ID))
+        response = self.client.get('%s?username=%s&transcript_id=%s' % (self.transcript_url, USERNAME, TRANSCRIPT_ID))
         self.assertEqual(response.status_code, 200)
 
     def testTranscriptKeywordsFail(self):
