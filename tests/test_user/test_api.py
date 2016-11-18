@@ -85,7 +85,7 @@ class TestClassAPI(unittest.TestCase):
         self.assertEqual(response.status_code, 400)
 
     def testNewClass(self):
-        response = self.client.post('%s?username=%s&class_name=%s' % (self.new_url, USERNAME, CLASS_NAME,))
+        response = self.client.post('%s?username=%s&class_name=%s' % (self.new_url, USERNAME, CLASS_NAME,), data={})
         if response.status_code != 200:
             print(response.data.decode('utf-8'))
         self.assertEqual(response.status_code, 200)
