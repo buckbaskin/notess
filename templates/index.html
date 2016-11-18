@@ -34,6 +34,23 @@
             <div class="clearfix"></div>
         </div>
 
+{#        glyphicon glyphicon-refresh#}
+{#        glyphicon glyphicon-arrow-right#}
+
+        <div class="row controlButtons">
+            <div class="col-lg-6"></div>
+            <div class="col-lg-2">
+                <button id="simulateTranscription" onclick="GWS_CORE.simulateTranscription(event)" class="btn btn-block btn-default">Simulate Transcription
+                    <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="col-lg-2">
+                <button id="refresh_button" class="btn btn-block btn-default">Refresh keyword
+                    <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+                </button>
+            </div>
+        </div>
+        <br>
         <div class="row">
 
             <div class="col-lg-6">
@@ -65,8 +82,6 @@
                 <button id="start_button" onclick="GWS_CORE.startButton(event)" type="button" class="btn btn-block btn-success">Start</button>
                 <br>
                 <button id="keywordsButton" class="btn btn-block btn-primary">Keywords</button>
-                <button id="simulateTranscription" onclick="GWS_CORE.simulateTranscription(event)" class="btn btn-block btn-primary">Simulate Transcription -></button>
-                <button id="refresh_button" class="btn btn-block btn-primary">Refresh keyword</button>
             </div>
         </div>
 
