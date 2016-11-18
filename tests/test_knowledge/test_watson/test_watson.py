@@ -1,9 +1,10 @@
 import unittest
 import json
 from unittest.mock import Mock, patch
-from app.knowledge.api import compute_threshold, prune_keywords
+from app.knowledge.api import compute_threshold, prune_keywords, get_keywords
 from app.knowledge.watson import watson
 from watson_developer_cloud import AlchemyLanguageV1
+from unittest.mock import MagicMock
 
 class TestWatson(unittest.TestCase):
     def setUp(self):
