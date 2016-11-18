@@ -2,6 +2,7 @@
     $.knowledge = function () {
         var recording = false;
         var hidden = true;
+        var tutorial = $('#tutorial');
         var keywordsList = $('#keywordsList');
         var floatingPanel = $('#floatingPanel');
         var keywordsButton = $('#keywordsButton');
@@ -35,6 +36,7 @@
 
         var init = function (gws_core) {
             GWS_CORE = gws_core;
+            tutorial.modal('toggle')
             recordButtonHandler();
             refreshButtonHandler();
             floatingPanel.css('box-shadow', '10px 10px 8px #888');
