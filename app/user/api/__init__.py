@@ -164,6 +164,8 @@ def create_new_note():
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_USER)
     content = request.get_json()
+    if content is None:
+        return make_response('Could not create new note. No note information was POSTed', 400)
     save_this = {}
     for key in ['class_name', 'note_name']:
         if key in content:
