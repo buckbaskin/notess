@@ -113,8 +113,8 @@
         };
 
         function generateDisplayableCard(card) {
-            var title = '<a href="' + GWS_CORE.generateGoogleSearchURL(card.keyword) +
-                '"><div class="list-group-item"><b><div class="knowledge-card-title">' +
+            var title = '<a href="' + GWS_CORE.generateGoogleSearchURL(card.keyword) + '" target="_blank"' +
+                '><div class="list-group-item"><b><div class="knowledge-card-title">' +
                 card.keyword + '</div></b></div></a>';
             var description = '<div class="knowledge-card-description"><div class="list-group-item">' + card.description + '</div>';
             return title + description;
