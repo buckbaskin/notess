@@ -9,6 +9,7 @@
         var dict = {};
         var stopAugmentRefreshID;
         var $recordButton = $('#start_button');
+        var $refreshButton = $('#refresh_button');
         var transcription;
         var GWS_CORE;
         var defaultTitle = "Untitled Note"
@@ -26,15 +27,22 @@
             });
         };
 
+        var refreshButtonHandler = function () {
+            $refreshButton.click(function () {
+                augmentTranscription();
+            });
+        };
+
         var init = function (gws_core) {
             GWS_CORE = gws_core;
             recordButtonHandler();
+            refreshButtonHandler();
             floatingPanel.css('box-shadow', '10px 10px 8px #888');
             keywordsButton.click(function () {
                 toggleSlider();
                 augmentTranscription();
             });
-            stopAugmentRefreshID = setInterval(augmentTranscription, 5000);
+            //stopAugmentRefreshID = setInterval(augmentTranscription, 5000);
             console.log(stopAugmentRefreshID);
         };
 
