@@ -93,11 +93,11 @@ var GWS_CORE = (function(knowledgeModule) {
 
     var generateGoogleSearchURL = function (keywords) {
         var url = "https://www.google.com/#q=";
-        keywords_list = keywords.split(" ");
+        var keywords_list = keywords.split(" ");
         for (var i = 0; i < keywords_list.length; i++)
             url = url + "+" + keywords_list[i];
         return url;
-    }
+    };
 
     var two_line = /\n\n/g;
     var one_line = /\n/g;
@@ -162,13 +162,31 @@ var GWS_CORE = (function(knowledgeModule) {
         keywords = words;
     }
 
+    function simulateTranscription(event){
+        var textArea = document.getElementById("noteTextarea") ;
+        var simulated_transcript = textArea.value;
+        if (simulated_transcript.length < 10)
+            simulated_transcript = "Bayesian inference is largely based on the principles of Bayes' theorem.";
+        final_transcript = simulated_transcript;
+        final_span.innerHTML = linebreak(final_transcript);
+        refresher = setInterval(highlightSimulation, 1500);
+    }
+
+    function highlightSimulation(){
+        var final_span = document.getElementById("final_span") ;
+        final_span.innerHTML = linebreak(final_transcript);
+        showKeywordHyperlinks()
+    }
+
     return {
         getTranscript: getTranscript,
         getInterimTranscript: getInterimTranscript,
         startButton: startButton,
         showInfo: showInfo,
         getKeywords: getKeywords,
+        generateGoogleSearchURL: generateGoogleSearchURL,
         addKeywords: addKeywords,
         setKeywords: setKeywords,
+        simulateTranscription: simulateTranscription,
     };
 })();
