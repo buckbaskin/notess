@@ -132,6 +132,11 @@ class TestNotesAPI(unittest.TestCase):
         response = self.client.post('%s?username=%s' % (self.new_url, USERNAME,), data=data)
         self.assertEqual(response.status_code, 200)
 
+    def testNewNote(self):
+        data = {}
+        response = self.client.post('%s?username=%s' % (self.new_url, USERNAME,), data=data)
+        self.assertEqual(response.status_code, 400)
+
     def testAllNotes(self):
         response = self.client.get('%s?username=%s' % (self.all_url, USERNAME,))
         self.assertEqual(response.status_code, 200)
