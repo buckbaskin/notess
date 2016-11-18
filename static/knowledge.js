@@ -11,6 +11,7 @@
         var $recordButton = $('#start_button');
         var transcription;
         var GWS_CORE;
+        var defaultTitle = "Untitled Note"
 
         var recordButtonHandler = function () {
             $recordButton.click(function () {
@@ -194,6 +195,31 @@
         var stopRefreshingKeywords = function () {
             clearInterval(stopAugmentRefreshID);
         };
+
+        // Handle Title Editing
+        // TODO: Get title from database if opening existing note
+        var endEdit = function(e) {
+            var input = $(e.target),
+                label = input && input.prev();
+            label.text(input.val() === '' ? defaultTitle : input.val());
+            input.hide();
+            label.show();
+        };
+
+        $('.clickedit').hide()
+        .focusout(endEdit)
+        .keyup(function (e) {
+            if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+                endEdit(e);
+                return false;
+            } else {
+                return true;
+            }
+        })
+        .prev().click(function () {
+            $(this).hide();
+            $(this).next().show().focus();
+        });
 
         return {
             toggleSlider: toggleSlider,
