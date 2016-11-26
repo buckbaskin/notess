@@ -1,6 +1,12 @@
 from jsonschema import validate
 
 str = {'type': 'string'}
+id = {'type': 'object',
+      'properties': {
+          '$oid': str
+      },
+      'required': ['$oid']
+}
 
 user_schema = {
     'type': 'object',
@@ -34,14 +40,14 @@ class_list = {'type': 'array',
 note_schema = {
     'type': 'object',
     'properties': {
-        'note_id': str,
+        '_id': id,
         'note_name': str,
         'date_created': str,
         'date_modified': str,
-        'class_id': str,
+        'class_name': str,
         'user_id': str
     },
-    'required': ['note_id', 'note_name', 'class_id']
+    'required': ['_id', 'note_name', 'class_name']
 }
 note_list = {'type': 'array',
              'items': note_schema}
@@ -50,9 +56,9 @@ transcript_schema = {
     'type': 'object',
     'properties': {
         'transcript_id': str,
-        'note_id': str,
-        'class_id': str,
-        'user_id': str,
+        'note_id': id,
+        'class_name': str,
+        'username': str,
         'text': str,
         'recording_link': str
     },
