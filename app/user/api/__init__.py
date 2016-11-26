@@ -165,14 +165,14 @@ def create_new_note():
         return make_response(*INVALID_REQUEST_NO_USER)
     content = request.get_json()
     if content is None:
-        return make_response('Could not create new note. No note information was POSTed', 400)
+        return make_response('Could not create new note. No JSON note information was POSTed', 400)
     save_this = {}
     for key in ['class_name', 'note_name']:
         if key in content:
             save_this[key] = content[key]
         else:
             make_response('New note could not be created, missing field %s' % (key,), 400)
-    return db.add_note(username, **save_this)
+    return mongo_json.dumps(db.add_note(username, **save_this))
 
 @router.route('/v1/note/update', methods=['POST'])
 def save_existing_note():
@@ -189,6 +189,9 @@ def save_existing_note():
         return make_response(*INVALID_REQUEST_NO_NOTE)
 
     content = request.get_json()
+    if content is None:
+        return make_response('Could not update note. No JSON note information was POSTed', 400)
+
     db.update_note(username, note_id, content)
     return make_response(*NOTE_SAVED)
 
