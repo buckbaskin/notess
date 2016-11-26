@@ -202,7 +202,7 @@ def save_existing_note():
 @router.route('/v1/transcript/new', methods=['POST'])
 def create_transcript():
     try:
-        username = request.args['transcript']
+        username = request.args['username']
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_USER)
     try:
@@ -219,7 +219,7 @@ def create_transcript():
         else:
             return make_response('Could not create transcript. Key %s not found in POST' % (key,), 400)
     
-    return db.add_transcript(username, **save_this)
+    return mongo_json.dumps(db.add_transcript(username, note_id, **save_this))
 
 @router.route('/v1/transcript/all', methods=['GET'])
 def get_all_transcripts():

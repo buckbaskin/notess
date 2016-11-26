@@ -193,9 +193,16 @@ class TestTranscriptAPI(unittest.TestCase):
         self.all_url = '/v1/transcript/all'
         self.class_url = '/v1/transcript/class'
         self.note_url = '/v1/transcript/note'
+        self.headers = [('Content-Type', 'application/json')]
 
     def testNewTranscript(self):
-        response = self.client.post('%s?username=%s' % (self.new_url, USERNAME,))
+        data = {
+            'text': 'This is a beautiful transcript.'
+        }
+        data_str = json.dumps(data)
+        response = self.client.post('%s?username=%s&note_id=%s' % (self.new_url, USERNAME, NOTE_ID,), data=data_str, headers=self.headers)
+        if response.status_code != 200:
+            print(response.data.decode())
         self.assertEqual(response.status_code, 200)
         myValidate(self, json.loads(response.data.decode()), transcript_schema)
 
