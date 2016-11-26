@@ -34,10 +34,14 @@ def create_one_user():
         return make_response(*INVALID_REQUEST_NO_USER)
     try:
         json_dict = request.get_json()
+        if not json_dict:
+            raise KeyError()
         password = json_dict['password']
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_USER)
     content = request.get_json()
+    if not content:
+        content = {}
     save_this = {}
     for key in ['email', 'first_name', 'last_name']:
         if key in content:
@@ -103,7 +107,7 @@ def create_new_class():
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_CLASS)
     class_metadata = request.get_json()
-    if class_metadata is None:
+    if not class_metadata:
         class_metadata = {}
     if 'class_name' in request.args:
         class_metadata['class_name'] = request.args['class_name']
@@ -164,7 +168,7 @@ def create_new_note():
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_USER)
     content = request.get_json()
-    if content is None:
+    if not content:
         return make_response('Could not create new note. No JSON note information was POSTed', 400)
     save_this = {}
     for key in ['class_name', 'note_name']:
@@ -189,7 +193,7 @@ def save_existing_note():
         return make_response(*INVALID_REQUEST_NO_NOTE)
 
     content = request.get_json()
-    if content is None:
+    if not content:
         return make_response('Could not update note. No JSON note information was POSTed', 400)
 
     db.update_note(username, note_id, content)
@@ -206,6 +210,8 @@ def create_transcript():
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_NOTE)
     content = request.get_json()
+    if not content:
+        content = {}
     save_this = {}
     for key in ['text']:
         if key in content:
@@ -245,6 +251,8 @@ def add_keyword():
         return make_response(*INVALID_REQUEST_NO_USER)
     # username: str, note_id: str, transcript_id: str, text: str, relevance: float, description: str
     content = request.get_json()
+    if not content:
+        content = {}
     save_these_fields = {}
     for key in ['node_id', 'transcript_id', 'text', 'relevance', 'description']:
         if key in content:
