@@ -189,9 +189,15 @@ class TestNotesAPI(unittest.TestCase):
 class TestTranscriptAPI(unittest.TestCase):
     def setUp(self):
         self.client = server.test_client()
+        self.new_url = '/v1/transcript/new'
         self.all_url = '/v1/transcript/all'
         self.class_url = '/v1/transcript/class'
         self.note_url = '/v1/transcript/note'
+
+    def testNewTranscript(self):
+        response = self.client.post('%s?username=%s' % (self.new_url, USERNAME,))
+        self.assertEqual(response.status_code, 200)
+        myValidate(self, json.loads(response.data.decode()), transcript_schema)
 
     def testAllTranscripts(self):
         response = self.client.get('%s?username=%s' % (self.all_url, USERNAME,))
