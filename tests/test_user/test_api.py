@@ -34,7 +34,7 @@ class TestUserAPI(unittest.TestCase):
     def setUp(self):
         self.client = server.test_client()
 
-    def createUser(self):
+    def testCreateUser(self):
         data = {
             'password': 'SuperFancyPassword',
             'first_name': 'John',
@@ -42,7 +42,10 @@ class TestUserAPI(unittest.TestCase):
             'email': 'johndoe@gmail.com'
         }
         username_info = {'FACEBOOK_USER_ID': FACEBOOK_USER_ID}
-        response = self.client.post('/v1/users/new?username=%(FACEBOOK_USER_ID)s' % username_info, data=data)
+        data_str = json.dumps(data)
+        headers = [('Content-type', 'application/json')]
+        response = self.client.post('/v1/users/new?username=%(FACEBOOK_USER_ID)s' % username_info, data=data_str, headers=headers)
+
         self.assertEqual(response.status_code, 200)
         json_dict = json.loads(response.data.decode())
         self.assertEqual(json_dict['email'], data['email'])
