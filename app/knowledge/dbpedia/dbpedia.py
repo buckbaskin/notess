@@ -21,7 +21,7 @@ class DBPediaAPI:
             self.json_dict = json.loads(json_string)
 
         def has_results(self):
-            return len(self.json_dict['results']) > 0
+            return len(self.json_dict['results']) > 0 and (self.get_first_description() is not None)
 
         def __bool__(self):
             return self.has_results()
@@ -56,3 +56,7 @@ class DBPediaAPI:
 
         def __repr__(self):
             return self.__str__()
+
+if __name__ == "__main__":
+    res = DBPediaAPI().search('polynomial')
+    print(res.has_results())
