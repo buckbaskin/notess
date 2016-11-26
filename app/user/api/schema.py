@@ -55,14 +55,14 @@ note_list = {'type': 'array',
 transcript_schema = {
     'type': 'object',
     'properties': {
-        'transcript_id': str,
+        '_id': id,
         'note_id': id,
         'class_name': str,
         'username': str,
         'text': str,
         'recording_link': str
     },
-    'required': ['transcript_id', 'note_id', 'text', 'recording_link']
+    'required': ['_id', 'note_id', 'text', 'recording_link']
 }
 transcript_list = {'type': 'array',
              'items': transcript_schema}

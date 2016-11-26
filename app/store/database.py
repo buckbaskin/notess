@@ -137,11 +137,12 @@ class Database(object):
 
     ### Transcript Database ###
 
-    def add_transcript(self, username: str, note_id: str, text: str):
+    def add_transcript(self, username: str, note_id: str, text: str, recording_link: str):
         transcript = {
             'username': username,
             'note_id': ObjectId(note_id),
-            'text': text
+            'text': text,
+            'recording_link': recording_link
         }
         transcript_id = self._transcript_collection.insert_one(transcript).inserted_id
         return self.get_transcript(username, transcript_id)

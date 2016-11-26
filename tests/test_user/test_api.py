@@ -197,7 +197,8 @@ class TestTranscriptAPI(unittest.TestCase):
 
     def testNewTranscript(self):
         data = {
-            'text': 'This is a beautiful transcript.'
+            'text': 'This is a beautiful transcript.',
+            'recording_link': '/userfiles/%s/transcript.wav' % (USERNAME)
         }
         data_str = json.dumps(data)
         response = self.client.post('%s?username=%s&note_id=%s' % (self.new_url, USERNAME, NOTE_ID,), data=data_str, headers=self.headers)

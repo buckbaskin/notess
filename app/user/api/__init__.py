@@ -213,7 +213,7 @@ def create_transcript():
     if not content:
         content = {}
     save_this = {}
-    for key in ['text']:
+    for key in ['text', 'recording_link']:
         if key in content:
             save_this[key] = content[key]
         else:
