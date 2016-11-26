@@ -68,17 +68,23 @@
             }
         };
 
-        var showSnackBar = function () {
+        var showSnackBar = function (hasNewKeyword) {
             // Get the snackbar DIV
-            var x = document.getElementById("snackbar")
+            var x = document.getElementById("snackbar");
 
             // Add the "show" class to DIV
             x.className = "show";
 
+            if (hasNewKeyword){
+                x.innerHTML = "New keywords added";
+            }else{
+                x.innerHTML = "Refreshed, no new keywords found";
+            }
+
             // After 3 seconds, remove the show class from DIV
             setTimeout(function () {
                 x.className = x.className.replace("show", "");
-            }, 4500);
+            }, 3000);
         }
 
         var keywordsCallback = function (keywordsJson) {
@@ -100,9 +106,8 @@
             }
             addDescriptions(keywordsJsonObjects, descriptionCallback);
             GWS_CORE.addKeywords(keywords);
-            if (updated) {
-                showSnackBar();
-            }
+            showSnackBar(updated);
+            GWS_CORE.highlightSimulation();
             console.log("breakpoint")
         };
 
@@ -119,10 +124,10 @@
         };
 
         function generateDisplayableCard(card) {
-            var title = '<a href="#" class="list-group-item"><b><div class="knowledge-card-title">' +
-                card.keyword + '</div></b></a>';
-            var description = '<div class="knowledge-card-description"><a href="' + GWS_CORE.generateGoogleSearchURL(card.keyword) +
-                '" class="list-group-item">' + card.description + '</a></div>';
+            var title = '<a href="' + GWS_CORE.generateGoogleSearchURL(card.keyword) + '" target="_blank"' +
+                '><div class="list-group-item"><b><div class="knowledge-card-title">' +
+                card.keyword + '</div></b></div></a>';
+            var description = '<div class="knowledge-card-description"><div class="list-group-item">' + card.description + '</div>';
             return title + description;
         }
 
@@ -131,6 +136,7 @@
                 var card = knowledge_cards[key];
                 if (!card.displayed){
                     keywordsList.append(generateDisplayableCard(card));
+                    card.displayed = true;
                 }
             }
         };
@@ -192,8 +198,8 @@
         };
 
         var add_knowledge_card = function (knowledge_card) {
-            if (!(knowledge_card in knowledge_cards)) {
-                knowledge_cards[knowledge_card.keyword] = knowledge_card;
+            if (!((knowledge_card.keyword.toUpperCase()) in knowledge_cards)) {
+                knowledge_cards[knowledge_card.keyword.toUpperCase()] = knowledge_card;
             }
         };
 
