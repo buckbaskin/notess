@@ -122,7 +122,7 @@ def save_existing_class():
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_CLASS)
     content = request.get_json()
-    if content is None:
+    if not content:
         return make_response('Could note update class. No content provided', 400)
     print('update with new content %s' % (content,))
     updated_class = db.update_class(username, class_name, content)
