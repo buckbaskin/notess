@@ -2,6 +2,7 @@ from app import server as router
 
 import json
 import bson.json_util as mongo_json
+from bson.objectid import ObjectId
 
 from flask import make_response, request
 
@@ -254,13 +255,17 @@ def add_keyword():
     if not content:
         content = {}
     save_these_fields = {}
-    for key in ['node_id', 'transcript_id', 'text', 'relevance', 'description']:
-        if key in content:
+    for key in ['note_id', 'transcript_id', 'text', 'relevance', 'description', 'link_dbpedia', 'link_wikipedia']:
+        print('%s and %s' % (key, content[key],))
+        if key in content and key[-3:] == '_id' and isinstance(content[key], dict):
+            if '$oid' in content[key]:
+                save_these_fields[key] = ObjectId(content[key]['$oid'])
+        elif key in content:
             save_these_fields[key] = content[key]
         else:
-            return make_response('Could not create keyword, missing field %s' % key, 400)
+            return make_response('Could not create keyword, missing field %s in POSTed JSON' % key, 400)
 
-    keyword = db.add_keyword(username, **content)
+    return mongo_json.dumps(db.add_keyword(username, **save_these_fields))
 
 @router.route('/v1/keyword/all', methods=['GET'])
 def get_all_keywords():

@@ -45,7 +45,7 @@ note_schema = {
         'date_created': str,
         'date_modified': str,
         'class_name': str,
-        'user_id': str
+        'username': str
     },
     'required': ['_id', 'note_name', 'class_name']
 }
@@ -70,18 +70,18 @@ transcript_list = {'type': 'array',
 keyword_schema = {
     'type': 'object',
     'properties': {
-        'keyword_id': str,
-        'transcript_id': str,
-        'class_id': str,
-        'note_id': str,
-        'user_id': str,
-        'keyword': str,
+        '_id': id,
+        'transcript_id': id,
+        'class_name': str,
+        'note_id': id,
+        'username': str,
+        'text': str,
         'short_description': str,
         'long_description': str,
         'link_dbpedia': str,
         'link_wikipedia': str
     },
-    'required': ['keyword_id', 'transcript_id', 'keyword', 'link_dbpedia', 'link_wikipedia']
+    'required': ['_id', 'transcript_id', 'text', 'link_dbpedia', 'link_wikipedia']
 }
 keyword_list = {'type': 'array',
                 'items': keyword_schema}

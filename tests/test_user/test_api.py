@@ -16,6 +16,7 @@ from jsonschema.exceptions import ValidationError
 from bson.objectid import ObjectId
 
 import json
+import bson.json_util as mongo_json
 
 FACEBOOK_USER_ID = '1234567890'
 USERNAME = FACEBOOK_USER_ID
@@ -23,11 +24,14 @@ CLASS_NAME = 'EECS393'
 NOTE_NAME = 'Design Patterns for Practical Use'
 NOTE_ID = ObjectId('123456789012345678901234')
 TRANSCRIPT_ID = ObjectId('abcdef0123456789abcdef01')
+DBPEDIA_LINK = 'DBpedia.com'
+WIKIPEDIA_LINK = 'wikipedia.com'
 
 def myValidate(self, loaded_json, schema):
     try:
         validate(loaded_json, schema)
     except ValidationError:
+        raise
         self.fail()
 
 class TestUserAPI(unittest.TestCase):
@@ -248,10 +252,29 @@ def generate_test_keyword_variant(variant: str, getstr: str, get: bool = True, s
 class TestKeywordAPI(unittest.TestCase):
     def setUp(self):
         self.client = server.test_client()
+        self.new_url = '/v1/keyword/new'
         self.all_url = '/v1/keyword/all'
         self.class_url = '/v1/keyword/class'
         self.note_url = '/v1/keyword/note'
         self.transcript_url = '/v1/keyword/transcript'
+        self.headers = [('Content-Type', 'application/json')]
+
+    def testNewKeyword(self):
+        data = {
+            'text': 'analytical geometry',
+            'relevance': 0.93,
+            'description': 'The field of analytical geometry is a complex field squarely delimited by a number of obtuse factors.',
+            'note_id': NOTE_ID,
+            'transcript_id': TRANSCRIPT_ID,
+            'link_dbpedia': DBPEDIA_LINK,
+            'link_wikipedia': WIKIPEDIA_LINK
+        }
+        data_str = mongo_json.dumps(data)
+        response = self.client.post('%s?username=%s' % (self.new_url, USERNAME), data=data_str, headers=self.headers)
+        if response.status_code != 200:
+            print(response.data.decode())
+        self.assertEqual(response.status_code, 200)
+        myValidate(self, json.loads(response.data.decode()), keyword_schema)
 
     def testAllKeywords(self):
         response = self.client.get('%s?username=%s' % (self.all_url, USERNAME,))

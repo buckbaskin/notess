@@ -173,14 +173,19 @@ class Database(object):
 
     ### Keyword Database ###
 
-    def add_keyword(self, username: str, note_id: str, transcript_id: str, text: str, relevance: float, description: str):
+    def add_keyword(self,
+                    username: str, note_id: str, transcript_id: str, text: str,
+                    relevance: float, description: str, link_dbpedia: str,
+                    link_wikipedia: str):
         keyword = {
             'username': username,
             'note_id': note_id,
             'transcript_id': transcript_id,
             'text': text,
             'relevance': relevance,
-            'description': description
+            'description': description,
+            'link_dbpedia': link_dbpedia,
+            'link_wikipedia': link_wikipedia
         }
         keyword_id = self._keyword_collection.insert_one(keyword).inserted_id
         self._keyword_rev_index.find_one_and_update(
