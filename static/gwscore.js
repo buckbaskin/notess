@@ -169,7 +169,7 @@ var GWS_CORE = (function(knowledgeModule) {
             simulated_transcript = "Bayesian inference is largely based on the principles of Bayes' theorem.";
         final_transcript = simulated_transcript;
         final_span.innerHTML = linebreak(final_transcript);
-        refresher = setInterval(highlightSimulation, 1500);
+        //refresher = setInterval(highlightSimulation, 1500);
     }
 
     function highlightSimulation(){
@@ -181,6 +181,7 @@ var GWS_CORE = (function(knowledgeModule) {
     return {
         getTranscript: getTranscript,
         getInterimTranscript: getInterimTranscript,
+        highlightSimulation: highlightSimulation,
         startButton: startButton,
         showInfo: showInfo,
         getKeywords: getKeywords,
