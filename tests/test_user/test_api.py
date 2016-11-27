@@ -146,12 +146,12 @@ class TestNotesAPI(unittest.TestCase):
         if response.status_code != 200:
             print(response.data)
         self.assertEqual(response.status_code, 200)
+        myValidate(self, json.loads(response.data.decode()), note_schema)
 
     def testNewNoteEmpty(self):
         data = {}
         response = self.client.post('%s?username=%s' % (self.new_url, USERNAME,), data=data)
         self.assertEqual(response.status_code, 400)
-        myValidate(self, json.loads(response.data.decode()), note_schema)
 
     def testUpdateNote(self):
         data = {
