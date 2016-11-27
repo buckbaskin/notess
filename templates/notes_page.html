@@ -33,5 +33,10 @@
         var $KNOWLEDGE = $.knowledge();
         $KNOWLEDGE.init(GWS_CORE);
         FB_AUTH();
+
+        var noteTab = $('#noteTab');
+        var editorTab = $('#editorTab');
+        noteTab.addClass('active');
+        editorTab.removeClass('active');
     });
 </script>
