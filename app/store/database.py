@@ -187,8 +187,8 @@ class Database(object):
                     link_wikipedia: str):
         keyword = {
             'username': username,
-            'note_id': note_id,
-            'transcript_id': transcript_id,
+            'note_id': ObjectId(note_id),
+            'transcript_id': ObjectId(transcript_id),
             'text': text,
             'relevance': relevance,
             'description': description,
@@ -206,6 +206,8 @@ class Database(object):
 
     def update_keyword(self, username, keyword_id):
         # TODO
+        import sys
+        sys.exit(1)
         return self.get_keyword(username, keyword_id)
 
     def get_keyword(self, username, keyword_id):

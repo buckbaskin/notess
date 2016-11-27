@@ -20,6 +20,13 @@ CLASS_SAVED = ('Class Saved.', 200)
 
 db = Database()
 
+def fix_oid(potential_oid):
+    if isinstance(potential_oid, str):
+        return potential_oid
+    if isinstance(potential_oid, dict):
+        return potential_oid['$oid']
+    return str(potential_oid)
+
 ### User API ###
 
 @router.route('/v1/users/new', methods=['POST'])
@@ -197,7 +204,19 @@ def save_existing_note():
     if not content:
         return make_response('Could not update note. No JSON note information was POSTed', 400)
 
-    update_result = db.update_note(username, note_id, content)
+    save_this = {}
+
+    print('content as loaded: %s' % (content,))
+    print('content keys: %s' % (content.keys()))
+    for key in content:
+        if len(key) >= 2 and key[-2:] == 'id':
+            print('fix this: %s' % (key,))
+            save_this[key] = fix_oid(content[key])
+        else:
+            print('keep this the same %s' % (key,))
+            save_this[key] = content[key]
+
+    update_result = db.update_note(username, note_id, save_this)
     if update_result is None:
         return make_response('Note_id not found in database for this user', 404)
     # if not isinstance(update_result, dict):
@@ -220,7 +239,9 @@ def create_transcript():
         content = {}
     save_this = {}
     for key in ['text', 'recording_link']:
-        if key in content:
+        if key in content and key[-3:] == '_id':
+            save_this[key] = fix_oid(content[key])
+        elif key in content:
             save_this[key] = content[key]
         else:
             return make_response('Could not create transcript. Key %s not found in POST' % (key,), 400)
@@ -259,18 +280,16 @@ def add_keyword():
     content = request.get_json()
     if not content:
         content = {}
-    save_these_fields = {}
+    save_this = {}
     for key in ['note_id', 'transcript_id', 'text', 'relevance', 'description', 'link_dbpedia', 'link_wikipedia']:
-        print('%s and %s' % (key, content[key],))
-        if key in content and key[-3:] == '_id' and isinstance(content[key], dict):
-            if '$oid' in content[key]:
-                save_these_fields[key] = ObjectId(content[key]['$oid'])
+        if key in content and key[-3:] == '_id':
+            save_this[key] = fix_oid(content[key])
         elif key in content:
-            save_these_fields[key] = content[key]
+            save_this[key] = content[key]
         else:
             return make_response('Could not create keyword, missing field %s in POSTed JSON' % key, 400)
 
-    return mongo_json.dumps(db.add_keyword(username, **save_these_fields))
+    return mongo_json.dumps(db.add_keyword(username, **save_this))
 
 @router.route('/v1/keyword/all', methods=['GET'])
 def get_all_keywords():

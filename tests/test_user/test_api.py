@@ -158,18 +158,29 @@ class TestNotesAPI(unittest.TestCase):
         self.assertEqual(response.status_code, 400)
 
     def testUpdateNote(self):
-
-        notes_possible = db.get_notes_by_name(USERNAME, NOTE_NAME)
-        print(len(notes_possible))
-        note_to_update = notes_possible[0]
-        NOTE_ID = note_to_update['_id']
-
         data = {
+            'class_name': CLASS_NAME,
+            'note_name': NOTE_NAME
+        }
+        data_str = json.dumps(data)
+        headers = [('Content-type', 'application/json')]
+        response = self.client.post('%s?username=%s' % (self.new_url, USERNAME,), data=data_str, headers=headers)
+        if response.status_code != 200:
+            print(response.data)
+        self.assertEqual(response.status_code, 200)
+        myValidate(self, json.loads(response.data.decode()), note_schema)
+
+        note_data = json.loads(response.data.decode())
+        note_username = note_data['username']
+        note_note_id = note_data['_id']['$oid']
+        print('note_data returned = %s' % (note_data,))
+
+        new_data = {
             'note_content': 'I have a fancy name'
         }
         data = json.dumps(data)
         headers = [('Content-type', 'application/json')]
-        response = self.client.post('%s?username=%s&note_id=%s' % (self.update_url, USERNAME, NOTE_ID,), data=data, headers=headers)
+        response = self.client.post('%s?username=%s&note_id=%s' % (self.update_url, note_username, note_note_id,), data=data, headers=headers)
         if response.status_code != 200:
             print(response.data)
         self.assertEqual(response.status_code, 200)
