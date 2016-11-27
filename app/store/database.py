@@ -111,9 +111,11 @@ class Database(object):
         if force_id is not None:
             note['_id'] = ObjectId(force_id)
         note_id = self._note_collection.insert_one(note).inserted_id
+        print('added note: %s' % (self.get_note(username, note_id)))
         return self.get_note(username, note_id)
 
     def update_note(self, username, note_id, content):
+        print('update_note %s, %s' % (username, note_id,))
         self._note_collection.update_one({'username': username, '_id': ObjectId(str(note_id))}, {'$set': content})
         return self.get_note(username, note_id)
 
@@ -124,7 +126,7 @@ class Database(object):
 
     def get_notes_by_name(self, username: str, name: str):
         result = self._note_collection.find({'username': username, 'name': name})
-        return result
+        return list(result)
 
     def get_all_notes(self, username, class_name=None):
         if class_name is None:

@@ -6,6 +6,10 @@ from app.user.api.schema import (
     transcript_schema, transcript_list,
     keyword_schema, keyword_list)
 
+from app.store.database import Database
+
+db = Database()
+
 import json
 import unittest
 
@@ -21,7 +25,7 @@ import bson.json_util as mongo_json
 FACEBOOK_USER_ID = '1234567890'
 USERNAME = FACEBOOK_USER_ID
 CLASS_NAME = 'EECS393'
-NOTE_NAME = 'Design Patterns for Practical Use'
+NOTE_NAME = 'First Note'
 NOTE_ID = ObjectId('123456789012345678901231')
 TRANSCRIPT_ID = ObjectId('abcdef0123456789abcdef01')
 DBPEDIA_LINK = 'DBpedia.com'
@@ -154,6 +158,12 @@ class TestNotesAPI(unittest.TestCase):
         self.assertEqual(response.status_code, 400)
 
     def testUpdateNote(self):
+
+        notes_possible = db.get_notes_by_name(USERNAME, NOTE_NAME)
+        print(len(notes_possible))
+        note_to_update = notes_possible[0]
+        NOTE_ID = note_to_update['_id']
+
         data = {
             'note_content': 'I have a fancy name'
         }
