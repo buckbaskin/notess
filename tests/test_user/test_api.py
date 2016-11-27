@@ -22,7 +22,7 @@ FACEBOOK_USER_ID = '1234567890'
 USERNAME = FACEBOOK_USER_ID
 CLASS_NAME = 'EECS393'
 NOTE_NAME = 'Design Patterns for Practical Use'
-NOTE_ID = ObjectId('123456789012345678901234')
+NOTE_ID = ObjectId('123456789012345678901231')
 TRANSCRIPT_ID = ObjectId('abcdef0123456789abcdef01')
 DBPEDIA_LINK = 'DBpedia.com'
 WIKIPEDIA_LINK = 'wikipedia.com'
@@ -163,6 +163,11 @@ class TestNotesAPI(unittest.TestCase):
         if response.status_code != 200:
             print(response.data)
         self.assertEqual(response.status_code, 200)
+        try:
+            myValidate(self, json.loads(response.data.decode()), note_schema)
+        except ValueError:
+            print(response.data)
+            raise
 
     def testUpdateNoteEmpty(self):
         data = {}

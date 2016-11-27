@@ -197,8 +197,13 @@ def save_existing_note():
     if not content:
         return make_response('Could not update note. No JSON note information was POSTed', 400)
 
-    db.update_note(username, note_id, content)
-    return make_response(*NOTE_SAVED)
+    update_result = db.update_note(username, note_id, content)
+    if update_result is None:
+        return make_response('Note_id not found in database for this user', 404)
+    # if not isinstance(update_result, dict):
+
+
+    return mongo_json.dumps(db.update_note(username, note_id, content))
 
 @router.route('/v1/transcript/new', methods=['POST'])
 def create_transcript():

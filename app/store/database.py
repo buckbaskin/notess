@@ -102,12 +102,14 @@ class Database(object):
 
     ### Notes Database ###
 
-    def add_note(self, username: str, class_name: str, note_name: str):
+    def add_note(self, username: str, class_name: str, note_name: str, force_id: str=None):
         note = {
             'username': username,
             'class_name': class_name,
             'note_name': note_name
         }
+        if force_id is not None:
+            note['_id'] = ObjectId(force_id)
         note_id = self._note_collection.insert_one(note).inserted_id
         return self.get_note(username, note_id)
 
@@ -117,7 +119,11 @@ class Database(object):
 
     def get_note(self, username, note_id):
         # require username because it might return different stuff for a note shared between users
-        result = self._note_collection.find_one({'_id': ObjectId(note_id)})
+        result = self._note_collection.find_one({'_id': ObjectId(note_id), 'username': username})
+        return result
+
+    def get_notes_by_name(self, username: str, name: str):
+        result = self._note_collection.find({'username': username, 'name': name})
         return result
 
     def get_all_notes(self, username, class_name=None):
