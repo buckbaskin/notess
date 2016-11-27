@@ -207,6 +207,15 @@ class TestTranscriptAPI(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         myValidate(self, json.loads(response.data.decode()), transcript_schema)
 
+    def testTranscriptsByClass(self):
+        response = self.client.get('%s?username=%s&note_id=%s' % (self.class_url, USERNAME, CLASS_ID,))
+        self.assertEqual(response.status_code, 200)
+        myValidate(self, json.loads(response.data.decode()), transcript_list)
+
+    def testTranscriptsByClassFail(self):
+        response = self.client.get('%s?username=%s' % (self.class_url, USERNAME,))
+        self.assertEqual(response.status_code, 400)
+
     def testTranscriptsByNote(self):
         response = self.client.get('%s?username=%s&note_id=%s' % (self.note_url, USERNAME, NOTE_ID,))
         self.assertEqual(response.status_code, 200)
