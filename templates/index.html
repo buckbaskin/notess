@@ -50,6 +50,7 @@
     $(document).ready(function() {
         var $KNOWLEDGE = $.knowledge();
         $KNOWLEDGE.init(GWS_CORE);
+        DATA_SERVICE.createNewClass('testuser2x3d', 'tcls', function(){});
         FB_AUTH();
 
         var noteTab = $('#noteTab');

@@ -121,7 +121,8 @@ def create_new_class():
         class_metadata['class_name'] = request.args['class_name']
 
     created_class = db.add_class(username, class_name)
-    return mongo_json.dumps(created_class)
+    result = mongo_json.dumps(created_class)
+    return result
 
 @router.route('/v1/class/update', methods=['POST'])
 def save_existing_class():
