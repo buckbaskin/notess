@@ -108,12 +108,10 @@ def get_all_classes():
 def create_new_class():
     try:
         username = request.args['username']
-        print(username)
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_USER)
     try:
         class_name = request.args['class_name']
-        print(class_name)
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_CLASS)
     class_metadata = request.get_json()
@@ -149,7 +147,6 @@ def save_existing_class():
 def get_all_notes():
     try:
         username = request.args['username']
-        print(username)
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_USER)
     results = db.get_all_notes(username)
@@ -161,12 +158,10 @@ def get_all_notes():
 def get_class_notes():
     try:
         username = request.args['username']
-        print(username)
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_USER)
     try:
         class_name = request.args['class_name']
-        print(class_name)
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_CLASS)
     notes_from_database = db.get_all_notes(username, class_name)
@@ -179,11 +174,9 @@ def create_new_note():
     '''
     try:
         username = request.args['username']
-        print(username)
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_USER)
     content = request.get_json()
-    print(content)
     if not content:
         return make_response('Could not create new note. No JSON note information was POSTed', 400)
     save_this = {}

@@ -50,13 +50,12 @@
     $(document).ready(function() {
         var $KNOWLEDGE = $.knowledge();
         $KNOWLEDGE.init(GWS_CORE);
-        $KNOWLEDGE.createNewClass('testuser2x3d', 'tcls', function(){});
+        DATA_SERVICE.createNewClass('testuser2x3d', 'tcls', function(){});
         FB_AUTH();
 
         var noteTab = $('#noteTab');
         var editorTab = $('#editorTab');
         noteTab.removeClass('active');
-
     });
 </script>
 
