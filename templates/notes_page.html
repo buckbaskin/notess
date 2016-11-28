@@ -12,40 +12,22 @@
 </head>
 
 <body>
-    {% include "navbar.html" %}
-    {% include "tutorial.html" %}
-    {%  include "slidePanel.html" %}
-    <div class="container-fluid">
-        <h1>ANTS</h1>
-        <div id="title">
-            <label class="pull-left">Untitled Note</label>
-            <input class="clickedit" type="text" />
-            <div class="clearfix"></div>
-        </div>
+  {% include "navbar.html" %}
 
-        {% include "control_buttons.html" %}
-
-        <br>
-        {% include "note_panels.html" %}
-        <br>
-
-        <div class="row">
-            <div class="col-lg-4 col-lg-offset-4">
-                <button id="start_button" onclick="GWS_CORE.startButton(event)" type="button" class="btn btn-block btn-success">Start</button>
-            </div>
-        </div>
-        {% include "google_gws_info.html" %}
-    </div>
-
-    <div id="snackbar">Keyword updated</div>
+  <div class="container">
+    <h2>Notes</h2>
+    <ul class="list-group">
+      <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
+      <a href="#" class="list-group-item list-group-item-action">Morbi leo risus</a>
+      <a href="#" class="list-group-item list-group-item-action">Porta ac consectetur ac</a>
+      <a href="#" class="list-group-item list-group-item-action">Vestibulum at eros</a>
+    </ul>
+  </div>
 </body>
-
 
 <script src="../../static/gwscore.js"></script>
 <script src="../../static/knowledge.js"></script>
 <script src="../../static/fb_auth.js"></script>
-
-
 <script>
     $(document).ready(function() {
         var $KNOWLEDGE = $.knowledge();
@@ -54,9 +36,7 @@
 
         var noteTab = $('#noteTab');
         var editorTab = $('#editorTab');
-        noteTab.removeClass('active');
+        noteTab.addClass('active');
+        editorTab.removeClass('active');
     });
 </script>
-
-{#Setup Facebok API: Reference: https://developers.facebook.com/docs/facebook-login/web#}
-{% include 'fb_auth_script.html' %}

@@ -7,3 +7,7 @@ from flask import render_template
 @server.route('/')
 def hello():
     return render_template('index.html')
+
+@server.route('/notes')
+def notes_page():
+    return render_template('notes_page.html')
