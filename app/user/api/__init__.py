@@ -226,9 +226,17 @@ def save_existing_note():
     if update_result is None:
         return make_response('Note_id not found in database for this user', 404)
     # if not isinstance(update_result, dict):
+    print('debug: POST update note %s for username: %s' % (username, note_id,))
+    print('debug:      {')
+    for key in save_this:
+        value = save_this[key]
+        value_str = str(value)
+        if len(value_str) > 80:
+            value_str = value_str[:76] + ' ...'
+        print('debug:        %s : %s' % (key, value_str,))
+    print('debug:      }')
 
-
-    return mongo_json.dumps(db.update_note(username, note_id, content))
+    return mongo_json.dumps(update_result)
 
 @router.route('/v1/transcript/new', methods=['POST'])
 def create_transcript():
@@ -251,6 +259,15 @@ def create_transcript():
             save_this[key] = content[key]
         else:
             return make_response('Could not create transcript. Key %s not found in POST' % (key,), 400)
+
+    print('debug: POST create new transcript for username %s note %s' % (transcript, note,))
+    print('debug:      {')
+    if len(save_this['text']) < 80:
+        print('debug:        %s : %s' % ('text', save_this['text']))
+    else:
+        print('debug:        %s : %s' % ('text', save_this['text'][:76]+' ...'))
+    print('debug:        %s : %s' % ('recording_link', save_this['recording_link']))
+    print('debug:      }')
     
     return mongo_json.dumps(db.add_transcript(username, note_id, **save_this))
 
@@ -273,6 +290,7 @@ def get_note_transcripts():
         note_id = request.args['note_id']
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_NOTE)
+    print('debug: GET transcripts for username %s note %s' % (username, note_id,))
     transcripts_from_database = db.get_all_transcripts(username, note_id=note_id)
     return mongo_json.dumps(transcripts_from_database)
 
