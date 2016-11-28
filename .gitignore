@@ -3,6 +3,7 @@ venv/
 .coverage
 cover/
 mypycover/
+*.pyc
 
 # My lowly vim
 *.swp

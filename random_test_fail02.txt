@@ -1,0 +1,104 @@
+...............FF..........................F.....
+======================================================================
+FAIL: testPruneList_noPruning (tests.test_knowledge.test_watson.test_watson.TestWatson)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+File "/home/buck/Github/notess/tests/test_knowledge/test_watson/test_watson.py", line 42, in testPruneList_noPruning
+self.assertEqual(mock_incoming_request, prune_keywords(mock_incoming_request));
+nose.proxy.AssertionError: '[{"relevance": "0.5", "text": "sequential de[211 chars]n"}]' != '[{"text": "sequential design process", "rele[211 chars]5"}]'
+- [{"relevance": "0.5", "text": "sequential design process"}, {"relevance": "0.5", "text": "software development processes"}, {"relevance": "0.5", "text": "waterfall model"}, {"relevance": "0.5", "text": "downwards"}, {"relevance": "0.5", "text": "Initiation"}]
++ [{"text": "sequential design process", "relevance": "0.5"}, {"text": "software development processes", "relevance": "0.5"}, {"text": "waterfall model", "relevance": "0.5"}, {"text": "downwards", "relevance": "0.5"}, {"text": "Initiation", "relevance": "0.5"}]
+
+-------------------- >> begin captured stdout << ---------------------
+0.5
+0.5
+0.5
+0.5
+0.5
+[{'text': 'sequential design process', 'relevance': '0.5'}, {'text': 'software development processes', 'relevance': '0.5'}, {'text': 'waterfall model', 'relevance': '0.5'}, {'text': 'downwards', 'relevance': '0.5'}, {'text': 'Initiation', 'relevance': '0.5'}]
+[{"text": "sequential design process", "relevance": "0.5"}, {"text": "software development processes", "relevance": "0.5"}, {"text": "waterfall model", "relevance": "0.5"}, {"text": "downwards", "relevance": "0.5"}, {"text": "Initiation", "relevance": "0.5"}]
+
+--------------------- >> end captured stdout << ----------------------
+
+======================================================================
+FAIL: testPruneList_somePruning (tests.test_knowledge.test_watson.test_watson.TestWatson)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+File "/home/buck/Github/notess/tests/test_knowledge/test_watson/test_watson.py", line 56, in testPruneList_somePruning
+self.assertEqual(mock_incoming_request_returned, prune_keywords(mock_incoming_request));
+nose.proxy.AssertionError: '[{"relevance": "0.5", "text": "waterfall mod[88 chars]n"}]' != '[{"text": "waterfall model", "relevance": "0[88 chars]5"}]'
+- [{"relevance": "0.5", "text": "waterfall model"}, {"relevance": "0.5", "text": "downwards"}, {"relevance": "0.5", "text": "Initiation"}]
++ [{"text": "waterfall model", "relevance": "0.5"}, {"text": "downwards", "relevance": "0.5"}, {"text": "Initiation", "relevance": "0.5"}]
+
+-------------------- >> begin captured stdout << ---------------------
+0.1
+0.1
+0.5
+0.5
+0.5
+[{'text': 'sequential design process', 'relevance': '0.1'}, {'text': 'software development processes', 'relevance': '0.1'}, {'text': 'waterfall model', 'relevance': '0.5'}, {'text': 'downwards', 'relevance': '0.5'}, {'text': 'Initiation', 'relevance': '0.5'}]
+[{"text": "waterfall model", "relevance": "0.5"}, {"text": "downwards", "relevance": "0.5"}, {"text": "Initiation", "relevance": "0.5"}]
+
+--------------------- >> end captured stdout << ----------------------
+
+======================================================================
+FAIL: testAllTranscripts (tests.test_user.test_api.TestTranscriptAPI)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+File "/home/buck/Github/notess/tests/test_user/test_api.py", line 29, in myValidate
+validate(loaded_json, schema)
+File "/home/buck/Github/notess/venv/lib/python3.4/site-packages/jsonschema/validators.py", line 478, in validate
+cls(schema, *args, **kwargs).validate(instance)
+jsonschema.exceptions.ValidationError: 'recording_link' is a required property
+
+Failed validating 'required' in schema['items']:
+{'properties': {'_id': {'properties': {'$oid': {'type': 'string'}},
+'required': ['$oid'],
+'type': 'object'},
+'class_name': {'type': 'string'},
+'note_id': {'properties': {'$oid': {'type': 'string'}},
+'required': ['$oid'],
+'type': 'object'},
+'recording_link': {'type': 'string'},
+'text': {'type': 'string'},
+'username': {'type': 'string'}},
+'required': ['_id', 'note_id', 'text', 'recording_link'],
+'type': 'object'}
+
+On instance[0]:
+{'_id': {'$oid': '583a1f1792c2b41b3ce8b679'},
+'note_id': {'$oid': '123456789012345678901234'},
+'text': 'This is a beautiful transcript.',
+'username': '1234567890'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+File "/home/buck/Github/notess/tests/test_user/test_api.py", line 213, in testAllTranscripts
+myValidate(self, json.loads(response.data.decode()), transcript_list)
+File "/home/buck/Github/notess/tests/test_user/test_api.py", line 31, in myValidate
+self.fail()
+AssertionError: None
+
+Name                               Stmts   Miss  Cover
+------------------------------------------------------
+app.py                                 3      0   100%
+app/api.py                             6      0   100%
+app/knowledge.py                       0      0   100%
+app/knowledge/api.py                  55      2    96%
+app/knowledge/dbpedia.py               0      0   100%
+app/knowledge/dbpedia/dbpedia.py      36      0   100%
+app/knowledge/dbpedia/schema.py        4      0   100%
+app/knowledge/watson.py                0      0   100%
+app/knowledge/watson/watson.py         9      0   100%
+app/store.py                           1      0   100%
+app/store/database.py                139     38    73%
+app/user.py                            0      0   100%
+app/user/api.py                      238     63    74%
+app/user/api/schema.py                13      0   100%
+------------------------------------------------------
+TOTAL                                504    103    80%
+----------------------------------------------------------------------
+Ran 49 tests in 0.195s
+
+FAILED (failures=3)

@@ -6,6 +6,10 @@ from app.user.api.schema import (
     transcript_schema, transcript_list,
     keyword_schema, keyword_list)
 
+from app.store.database import Database
+
+db = Database()
+
 import json
 import unittest
 
@@ -15,20 +19,46 @@ from jsonschema.exceptions import ValidationError
 
 from bson.objectid import ObjectId
 
-USERNAME = 'johndoe'
+import json
+import bson.json_util as mongo_json
+
+FACEBOOK_USER_ID = '1234567890'
+USERNAME = FACEBOOK_USER_ID
 CLASS_NAME = 'EECS393'
-NOTE_ID = ObjectId('123456789012345678901234')
+NOTE_NAME = 'First Note'
+NOTE_ID = ObjectId('123456789012345678901231')
 TRANSCRIPT_ID = ObjectId('abcdef0123456789abcdef01')
+DBPEDIA_LINK = 'DBpedia.com'
+WIKIPEDIA_LINK = 'wikipedia.com'
 
 def myValidate(self, loaded_json, schema):
     try:
         validate(loaded_json, schema)
     except ValidationError:
+        raise
         self.fail()
 
 class TestUserAPI(unittest.TestCase):
     def setUp(self):
         self.client = server.test_client()
+
+    def testCreateUser(self):
+        data = {
+            'password': 'SuperFancyPassword',
+            'first_name': 'John',
+            'last_name': 'Doe',
+            'email': 'johndoe@gmail.com'
+        }
+        username_info = {'FACEBOOK_USER_ID': FACEBOOK_USER_ID}
+        data_str = json.dumps(data)
+        headers = [('Content-type', 'application/json')]
+        response = self.client.post('/v1/users/new?username=%(FACEBOOK_USER_ID)s' % username_info, data=data_str, headers=headers)
+
+        self.assertEqual(response.status_code, 200)
+        json_dict = json.loads(response.data.decode())
+        self.assertEqual(json_dict['email'], data['email'])
+        self.assertEqual(json_dict['last_name'], data['last_name'])
+        self.assertEqual(json_dict['first_name'], data['first_name'])
 
     def testOneUser(self):
         response = self.client.get('/v1/users/one?username=%s' % (USERNAME,))
@@ -47,6 +77,15 @@ class TestClassAPI(unittest.TestCase):
     def setUp(self):
         self.client = server.test_client()
         self.all_url = '/v1/class/all'
+        self.one_url = '/v1/class/one'
+        self.new_url = '/v1/class/new'
+        self.update_url = '/v1/class/update'
+
+    def testOneClass(self):
+        response = self.client.get('%s?username=%s&class_name=%s' % (self.one_url, USERNAME, CLASS_NAME,))
+        if response.status_code != 200:
+            print(response.data.decode('utf-8'))
+        self.assertEqual(response.status_code, 200)
 
     def testAllClass(self):
         response = self.client.get('%s?username=%s' % (self.all_url, USERNAME,))
@@ -57,11 +96,104 @@ class TestClassAPI(unittest.TestCase):
         response = self.client.get('%s' % (self.all_url,))
         self.assertEqual(response.status_code, 400)
 
+    def testNewClass(self):
+        response = self.client.post('%s?username=%s&class_name=%s' % (self.new_url, USERNAME, CLASS_NAME,), data={})
+        if response.status_code != 200:
+            print(response.data.decode('utf-8'))
+        self.assertEqual(response.status_code, 200)
+
+    def testNewClassWithData(self):
+        data = {
+            'metadata': 'metadata'
+        }
+        response = self.client.post('%s?username=%s&class_name=%s' % (self.new_url, USERNAME, CLASS_NAME,), data=data)
+        if response.status_code != 200:
+            print(response.data.decode('utf-8'))
+        self.assertEqual(response.status_code, 200)
+
+    def testUpdateClass(self):
+        data = {
+            'metadata': 'Set this as metadata'
+        }
+        data_str = json.dumps(data)
+        headers = [('Content-Type', 'application/json')]
+        response = self.client.post('%s?username=%s&class_name=%s' % (self.update_url, USERNAME, CLASS_NAME,), data=data_str, headers=headers)
+        if response.status_code != 200:
+            print(response.data.decode('utf-8'))
+        self.assertEqual(response.status_code, 200)
+
+    def testUpdateClassNoData(self):
+        data = {}
+        data_str = json.dumps(data)
+        headers = [('Content-Type', 'application/json')]
+        response = self.client.post('%s?username=%s&class_name=%s' % (self.update_url, USERNAME, CLASS_NAME,), data=data_str, headers=headers)
+        if response.status_code != 400:
+            print(response.data.decode('utf-8'))
+        self.assertEqual(response.status_code, 400)
+
 class TestNotesAPI(unittest.TestCase):
     def setUp(self):
         self.client = server.test_client()
         self.all_url = '/v1/note/all'
         self.class_url = '/v1/note/class'
+        self.update_url = '/v1/note/update'
+        self.new_url = '/v1/note/new'
+
+    def testNewNote(self):
+        data = {
+            'class_name': CLASS_NAME,
+            'note_name': NOTE_NAME
+        }
+        data = json.dumps(data)
+        headers = [('Content-type', 'application/json')]
+        response = self.client.post('%s?username=%s' % (self.new_url, USERNAME,), data=data, headers=headers)
+        if response.status_code != 200:
+            print(response.data)
+        self.assertEqual(response.status_code, 200)
+        myValidate(self, json.loads(response.data.decode()), note_schema)
+
+    def testNewNoteEmpty(self):
+        data = {}
+        response = self.client.post('%s?username=%s' % (self.new_url, USERNAME,), data=data)
+        self.assertEqual(response.status_code, 400)
+
+    def testUpdateNote(self):
+        data = {
+            'class_name': CLASS_NAME,
+            'note_name': NOTE_NAME
+        }
+        data_str = json.dumps(data)
+        headers = [('Content-type', 'application/json')]
+        response = self.client.post('%s?username=%s' % (self.new_url, USERNAME,), data=data_str, headers=headers)
+        if response.status_code != 200:
+            print(response.data)
+        self.assertEqual(response.status_code, 200)
+        myValidate(self, json.loads(response.data.decode()), note_schema)
+
+        note_data = json.loads(response.data.decode())
+        note_username = note_data['username']
+        note_note_id = note_data['_id']['$oid']
+        print('note_data returned = %s' % (note_data,))
+
+        new_data = {
+            'note_content': 'I have a fancy name'
+        }
+        data = json.dumps(data)
+        headers = [('Content-type', 'application/json')]
+        response = self.client.post('%s?username=%s&note_id=%s' % (self.update_url, note_username, note_note_id,), data=data, headers=headers)
+        if response.status_code != 200:
+            print(response.data)
+        self.assertEqual(response.status_code, 200)
+        try:
+            myValidate(self, json.loads(response.data.decode()), note_schema)
+        except ValueError:
+            print(response.data)
+            raise
+
+    def testUpdateNoteEmpty(self):
+        data = {}
+        response = self.client.post('%s?username=%s' % (self.update_url, USERNAME,), data=data)
+        self.assertEqual(response.status_code, 400)
 
     def testAllNotes(self):
         response = self.client.get('%s?username=%s' % (self.all_url, USERNAME,))
@@ -88,16 +220,49 @@ class TestNotesAPI(unittest.TestCase):
 class TestTranscriptAPI(unittest.TestCase):
     def setUp(self):
         self.client = server.test_client()
+        self.new_url = '/v1/transcript/new'
         self.all_url = '/v1/transcript/all'
-        self.class_url = '/v1/transcript/class'
+        # self.class_url = '/v1/transcript/class'
         self.note_url = '/v1/transcript/note'
+        self.headers = [('Content-Type', 'application/json')]
+
+    def testNewTranscript(self):
+        data = {
+            'text': 'This is a beautiful transcript.',
+            'recording_link': '/userfiles/%s/transcript.wav' % (USERNAME)
+        }
+        data_str = json.dumps(data)
+        response = self.client.post('%s?username=%s&note_id=%s' % (self.new_url, USERNAME, NOTE_ID,), data=data_str, headers=self.headers)
+        if response.status_code != 200:
+            print(response.data.decode())
+        self.assertEqual(response.status_code, 200)
+        myValidate(self, json.loads(response.data.decode()), transcript_schema)
+
+    # transcripts are not currently searchable by class
+    # def testTranscriptsByClass(self):
+    #     response = self.client.get('%s?username=%s&note_id=%s' % (self.class_url, USERNAME, CLASS_ID,))
+    #     self.assertEqual(response.status_code, 200)
+    #     myValidate(self, json.loads(response.data.decode()), transcript_list)
+
+    # def testTranscriptsByClassFail(self):
+    #     response = self.client.get('%s?username=%s' % (self.class_url, USERNAME,))
+    #     self.assertEqual(response.status_code, 400)
+
+    def testTranscriptsByNote(self):
+        response = self.client.get('%s?username=%s&note_id=%s' % (self.note_url, USERNAME, NOTE_ID,))
+        self.assertEqual(response.status_code, 200)
+        myValidate(self, json.loads(response.data.decode()), transcript_list)
+
+    def testTranscriptsByNoteFail(self):
+        response = self.client.get('%s?username=%s' % (self.note_url, USERNAME,))
+        self.assertEqual(response.status_code, 400)
 
     def testAllTranscripts(self):
         response = self.client.get('%s?username=%s' % (self.all_url, USERNAME,))
         self.assertEqual(response.status_code, 200)
         myValidate(self, json.loads(response.data.decode()), transcript_list)
 
-    def testAllNotesFail(self):
+    def testAllTranscriptsFail(self):
         response = self.client.get('%s' % (self.all_url,))
         self.assertEqual(response.status_code, 400)
 
@@ -114,10 +279,29 @@ def generate_test_keyword_variant(variant: str, getstr: str, get: bool = True, s
 class TestKeywordAPI(unittest.TestCase):
     def setUp(self):
         self.client = server.test_client()
+        self.new_url = '/v1/keyword/new'
         self.all_url = '/v1/keyword/all'
         self.class_url = '/v1/keyword/class'
         self.note_url = '/v1/keyword/note'
         self.transcript_url = '/v1/keyword/transcript'
+        self.headers = [('Content-Type', 'application/json')]
+
+    def testNewKeyword(self):
+        data = {
+            'text': 'analytical geometry',
+            'relevance': 0.93,
+            'description': 'The field of analytical geometry is a complex field squarely delimited by a number of obtuse factors.',
+            'note_id': NOTE_ID,
+            'transcript_id': TRANSCRIPT_ID,
+            'link_dbpedia': DBPEDIA_LINK,
+            'link_wikipedia': WIKIPEDIA_LINK
+        }
+        data_str = mongo_json.dumps(data)
+        response = self.client.post('%s?username=%s' % (self.new_url, USERNAME), data=data_str, headers=self.headers)
+        if response.status_code != 200:
+            print(response.data.decode())
+        self.assertEqual(response.status_code, 200)
+        myValidate(self, json.loads(response.data.decode()), keyword_schema)
 
     def testAllKeywords(self):
         response = self.client.get('%s?username=%s' % (self.all_url, USERNAME,))

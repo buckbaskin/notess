@@ -1,0 +1,81 @@
+...............FF............E......................
+======================================================================
+ERROR: testNewKeyword (tests.test_user.test_api.TestKeywordAPI)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+File "/home/buck/Github/notess/tests/test_user/test_api.py", line 262, in testNewKeyword
+data_str = json.dumps(data)
+File "/usr/lib/python3.4/json/__init__.py", line 230, in dumps
+return _default_encoder.encode(obj)
+File "/usr/lib/python3.4/json/encoder.py", line 192, in encode
+chunks = self.iterencode(o, _one_shot=True)
+File "/usr/lib/python3.4/json/encoder.py", line 250, in iterencode
+return _iterencode(o, 0)
+File "/usr/lib/python3.4/json/encoder.py", line 173, in default
+raise TypeError(repr(o) + " is not JSON serializable")
+TypeError: ObjectId('123456789012345678901234') is not JSON serializable
+
+======================================================================
+FAIL: testPruneList_noPruning (tests.test_knowledge.test_watson.test_watson.TestWatson)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+File "/home/buck/Github/notess/tests/test_knowledge/test_watson/test_watson.py", line 42, in testPruneList_noPruning
+self.assertEqual(mock_incoming_request, prune_keywords(mock_incoming_request));
+nose.proxy.AssertionError: '[{"relevance": "0.5", "text": "sequential de[211 chars]n"}]' != '[{"text": "sequential design process", "rele[211 chars]5"}]'
+- [{"relevance": "0.5", "text": "sequential design process"}, {"relevance": "0.5", "text": "software development processes"}, {"relevance": "0.5", "text": "waterfall model"}, {"relevance": "0.5", "text": "downwards"}, {"relevance": "0.5", "text": "Initiation"}]
++ [{"text": "sequential design process", "relevance": "0.5"}, {"text": "software development processes", "relevance": "0.5"}, {"text": "waterfall model", "relevance": "0.5"}, {"text": "downwards", "relevance": "0.5"}, {"text": "Initiation", "relevance": "0.5"}]
+
+-------------------- >> begin captured stdout << ---------------------
+0.5
+0.5
+0.5
+0.5
+0.5
+[{'text': 'sequential design process', 'relevance': '0.5'}, {'text': 'software development processes', 'relevance': '0.5'}, {'text': 'waterfall model', 'relevance': '0.5'}, {'text': 'downwards', 'relevance': '0.5'}, {'text': 'Initiation', 'relevance': '0.5'}]
+[{"text": "sequential design process", "relevance": "0.5"}, {"text": "software development processes", "relevance": "0.5"}, {"text": "waterfall model", "relevance": "0.5"}, {"text": "downwards", "relevance": "0.5"}, {"text": "Initiation", "relevance": "0.5"}]
+
+--------------------- >> end captured stdout << ----------------------
+
+======================================================================
+FAIL: testPruneList_somePruning (tests.test_knowledge.test_watson.test_watson.TestWatson)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+File "/home/buck/Github/notess/tests/test_knowledge/test_watson/test_watson.py", line 56, in testPruneList_somePruning
+self.assertEqual(mock_incoming_request_returned, prune_keywords(mock_incoming_request));
+nose.proxy.AssertionError: '[{"relevance": "0.5", "text": "waterfall mod[88 chars]n"}]' != '[{"text": "waterfall model", "relevance": "0[88 chars]5"}]'
+- [{"relevance": "0.5", "text": "waterfall model"}, {"relevance": "0.5", "text": "downwards"}, {"relevance": "0.5", "text": "Initiation"}]
++ [{"text": "waterfall model", "relevance": "0.5"}, {"text": "downwards", "relevance": "0.5"}, {"text": "Initiation", "relevance": "0.5"}]
+
+-------------------- >> begin captured stdout << ---------------------
+0.1
+0.1
+0.5
+0.5
+0.5
+[{'text': 'sequential design process', 'relevance': '0.1'}, {'text': 'software development processes', 'relevance': '0.1'}, {'text': 'waterfall model', 'relevance': '0.5'}, {'text': 'downwards', 'relevance': '0.5'}, {'text': 'Initiation', 'relevance': '0.5'}]
+[{"text": "waterfall model", "relevance": "0.5"}, {"text": "downwards", "relevance": "0.5"}, {"text": "Initiation", "relevance": "0.5"}]
+
+--------------------- >> end captured stdout << ----------------------
+
+Name                               Stmts   Miss  Cover
+------------------------------------------------------
+app.py                                 3      0   100%
+app/api.py                             6      0   100%
+app/knowledge.py                       0      0   100%
+app/knowledge/api.py                  55      2    96%
+app/knowledge/dbpedia.py               0      0   100%
+app/knowledge/dbpedia/dbpedia.py      36      0   100%
+app/knowledge/dbpedia/schema.py        4      0   100%
+app/knowledge/watson.py                0      0   100%
+app/knowledge/watson/watson.py         9      0   100%
+app/store.py                           1      0   100%
+app/store/database.py                139     37    73%
+app/user.py                            0      0   100%
+app/user/api.py                      238     55    77%
+app/user/api/schema.py                13      0   100%
+------------------------------------------------------
+TOTAL                                504     94    81%
+----------------------------------------------------------------------
+Ran 52 tests in 0.340s
+
+FAILED (errors=1, failures=2)
