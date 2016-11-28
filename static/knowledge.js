@@ -380,7 +380,7 @@
             toggleSlider: toggleSlider,
             addDescriptions: addDescriptions,
             createNewNote: createNewNote,
-            getAllNote: getAllNote,
+            createNewClass: createNewClass,
             getAllNoteForClass: getAllNoteForClass,
             getKeywords: getKeywords,
             init: init,

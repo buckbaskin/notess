@@ -108,10 +108,12 @@ def get_all_classes():
 def create_new_class():
     try:
         username = request.args['username']
+        print(username)
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_USER)
     try:
         class_name = request.args['class_name']
+        print(class_name)
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_CLASS)
     class_metadata = request.get_json()
@@ -121,7 +123,8 @@ def create_new_class():
         class_metadata['class_name'] = request.args['class_name']
 
     created_class = db.add_class(username, class_name)
-    return mongo_json.dumps(created_class)
+    result = mongo_json.dumps(created_class)
+    return result
 
 @router.route('/v1/class/update', methods=['POST'])
 def save_existing_class():
