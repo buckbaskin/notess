@@ -101,6 +101,7 @@ def get_all_classes():
         username = request.args['username']
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_USER)
+    print('debug: GET all classes for username: %s' % (username,))
     classes_from_database = db.get_all_classes(username)
     return mongo_json.dumps(classes_from_database)
 
@@ -148,6 +149,7 @@ def get_all_notes():
         username = request.args['username']
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_USER)
+    print('debug: GET all notes for username: %s' % (username,))
     results = db.get_all_notes(username)
     if results is None:
         return make_response(*INVALID_REQUEST_NO_NOTE)
@@ -163,6 +165,7 @@ def get_class_notes():
         class_name = request.args['class_name']
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_CLASS)
+    print('debug: GET all notes for  username %s for class %s' % (username, class_name,))
     notes_from_database = db.get_all_notes(username, class_name)
     return mongo_json.dumps(notes_from_database)
 
@@ -184,6 +187,9 @@ def create_new_note():
             save_this[key] = content[key]
         else:
             make_response('New note could not be created, missing field %s' % (key,), 400)
+    print('debug: POST create note for username: %s' % (username,))
+    print('debug:      { class_name: %s' % (save_this['class_name'],))
+    print('debug:        note_name: %s }' % (save_this['note_name'],))
     return mongo_json.dumps(db.add_note(username, **save_this))
 
 @router.route('/v1/note/update', methods=['POST'])
