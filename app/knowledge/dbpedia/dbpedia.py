@@ -9,7 +9,6 @@ class DBPediaAPI:
         headers = {'Accept': 'application/json'}
         response = requests.get(url=uri_string, headers=headers)
         result = DBPediaAPI.QueryResult(keyword=keyword, json_string=response.text)
-        print("searched")
         return result
 
     class QueryResult:
