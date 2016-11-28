@@ -189,6 +189,141 @@
             });
         };
 
+        //GET v1/class/all
+        var getAllClasses = function (userid, callback) {
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                url: "/v1/class/all",
+                data: {username: userid},
+                success: function (result) {
+                    callback(result);
+                },
+                error: function () {
+                    console.log("Cannot get notes.")
+                }
+            });
+        };
+
+        // POST /v1/class/new
+        var createNewClass = function (userid, class_name, callback) {
+
+            $.ajax({
+                type: "POST",
+                url: '/v1/class/new?username='+ userid + '&class_name='+ class_name,
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({class_name: class_name}), //redundancy
+                success: function (result) {
+                    callback(result);
+                },
+                error: function () {
+                    console.log("Cannot create new notes")
+                }
+            });
+        };
+
+        //GET v1/note/all
+        var getAllNote = function (userid, callback) {
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                url: "/v1/note/all",
+                data: {username: userid},
+                success: function (result) {
+                    callback(result);
+                },
+                error: function () {
+                    console.log("Cannot get notes.")
+                }
+            });
+        };
+
+        //GET v1/note/class
+        var getAllNoteForClass = function (userid, classname, callback) {
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                url: "/v1/note/class",
+                data: {username: userid, class_name: classname},
+                success: function (result) {
+                    callback(result);
+                },
+                error: function () {
+                    console.log("Cannot get notes.")
+                }
+            });
+        };
+
+        // POST /v1/note/new
+        var createNewNote = function (userid, content, callback) {
+            console.log('/v1/note/new?username='+ userid);
+
+            $.ajax({
+                type: "POST",
+                url: '/v1/note/new?username='+ userid,
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(content),
+                success: function (result) {
+                    callback(result);
+                },
+                error: function () {
+                    console.log("Cannot create new notes")
+                }
+            });
+        };
+
+        // POST /v1/note/update
+        var updateNote = function (userid, noteid, content, callback) {
+            console.log('/v1/note/update?username='+ userid + '&note_id=' + noteid);
+
+            $.ajax({
+                type: "POST",
+                url: '/v1/note/update?username='+ userid + '&note_id=' + noteid,
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(content),
+                success: function (result) {
+                    callback(result);
+                },
+                error: function () {
+                    console.log("Cannot create new notes")
+                }
+            });
+        };
+
+        // GET /v1/transcript/note
+        var getTranscriptForNote = function (userid, noteid, callback) {
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                url: "/v1/transcript/note",
+                data: {username: userid, note_id: noteid},
+                success: function (result) {
+                    callback(result);
+                },
+                error: function () {
+                    console.log("Cannot get notes.")
+                }
+            });
+        };
+
+        // POST /v1/transcript/new
+        var createTranscriptForNote = function (userid, noteid, content, callback) {
+            console.log('/v1/transcript/new?username='+ userid + '&note_id=' + noteid);
+
+            $.ajax({
+                type: "POST",
+                url: '/v1/transcript/new?username='+ userid + '&note_id=' + noteid,
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(content),
+                success: function (result) {
+                    callback(result);
+                },
+                error: function () {
+                    console.log("Cannot create new notes")
+                }
+            });
+        };
+
         var create_knowledge_card = function (keyword, description) {
             var knowledge_card = {};
             knowledge_card.displayed = false;
@@ -244,6 +379,9 @@
         return {
             toggleSlider: toggleSlider,
             addDescriptions: addDescriptions,
+            createNewNote: createNewNote,
+            getAllNote: getAllNote,
+            getAllNoteForClass: getAllNoteForClass,
             getKeywords: getKeywords,
             init: init,
             populateKeywordPanel: populateKeywordPanel,

@@ -50,11 +50,13 @@
     $(document).ready(function() {
         var $KNOWLEDGE = $.knowledge();
         $KNOWLEDGE.init(GWS_CORE);
+        $KNOWLEDGE.getAllNoteForClass('testuser2x3', 'tcs', function(){});
         FB_AUTH();
 
         var noteTab = $('#noteTab');
         var editorTab = $('#editorTab');
         noteTab.removeClass('active');
+
     });
 </script>
 
