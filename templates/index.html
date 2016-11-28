@@ -42,6 +42,7 @@
 
 
 <script src="../../static/gwscore.js"></script>
+<script src="../../static/dataService.js"></script>
 <script src="../../static/knowledge.js"></script>
 <script src="../../static/fb_auth.js"></script>
 
@@ -49,10 +50,29 @@
 <script>
     $(document).ready(function() {
         var $KNOWLEDGE = $.knowledge();
+        var dataService = DATA_SERVICE();
         $KNOWLEDGE.init(GWS_CORE);
-        DATA_SERVICE.createNewClass('testuser2x3d', 'tcls', function(){});
+        dataService.createNewClass('testuser2x3d', 'tcls', function(){});
         FB_AUTH();
+        var isNew = '{{isNew}}';
+        var note_id = '{{note_id}}';
+        console.log(isNew);
+        console.log(note_id);
+        if (isNew == "True"){
+            // Create note
+            dataService.createNewNote('testuser', {class_name:'C1',note_name:'N1'}, function (result) {
+                result =JSON.parse(result);
+                note_id = result._id.$oid;
+                console.log(result._id.$oid);
+                console.log(window.location.host);
+                window.location.replace('http://'+window.location.host+'/docs?note_id='+note_id);
+            });
+            // Redirects to the newly created note
+            // So when user refreshes, they don't have to find their note again.
+        }else{
+            // We load old notes.
 
+        }
         var noteTab = $('#noteTab');
         var editorTab = $('#editorTab');
         noteTab.removeClass('active');
