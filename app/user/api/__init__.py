@@ -260,7 +260,7 @@ def create_transcript():
         else:
             return make_response('Could not create transcript. Key %s not found in POST' % (key,), 400)
 
-    print('debug: POST create new transcript for username %s note %s' % (transcript, note,))
+    print('debug: POST create new transcript for username %s note %s' % (username, note_id,))
     print('debug:      {')
     if len(save_this['text']) < 80:
         print('debug:        %s : %s' % ('text', save_this['text']))
