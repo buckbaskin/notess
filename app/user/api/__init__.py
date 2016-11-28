@@ -182,7 +182,7 @@ def create_new_note():
     if not content:
         return make_response('Could not create new note. No JSON note information was POSTed', 400)
     save_this = {}
-    for key in ['class_name', 'note_name']:
+    for key in ['class_name', 'note_name', 'text']:
         if key in content:
             save_this[key] = content[key]
         else:
