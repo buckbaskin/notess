@@ -58,19 +58,25 @@
         var note_id = '{{note_id}}';
         console.log(isNew);
         console.log(note_id);
-        if (isNew == "True"){
-            // Create note
-            dataService.createNewNote('testuser', {class_name:'C1',note_name:'N1'}, function (result) {
-                result =JSON.parse(result);
+        function createNewNote() {
+            dataService.createNewNote('testuser', {class_name: 'C1', note_name: 'N1'}, function (result) {
+                result = JSON.parse(result);
                 note_id = result._id.$oid;
                 console.log(result._id.$oid);
                 console.log(window.location.host);
-                window.location.replace('http://'+window.location.host+'/docs?note_id='+note_id);
+                window.location.replace('http://' + window.location.host + '/docs?user_name=testuser&note_id=' + note_id);
             });
+        }
+
+        if (isNew == "True"){
+            // Create note
+            createNewNote();
             // Redirects to the newly created note
             // So when user refreshes, they don't have to find their note again.
+
         }else{
             // We load old notes.
+            // Verify if the old id exists, otherwise, we create a new note.
 
         }
         var noteTab = $('#noteTab');
