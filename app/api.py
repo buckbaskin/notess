@@ -26,7 +26,7 @@ def load_editor():
     try:
         found_result = db.get_note(note_id=note_id, username=user_name)
         if found_result is not None:
-            return render_template('index.html', isNew=False, note_id=note_id)
+            return render_template('index.html', isNew=False, note_id=note_id, note_text="This note is fresh")
     except:
         print("caught some unknown error")
     return render_template('index.html', isNew=True, note_id=-1)
