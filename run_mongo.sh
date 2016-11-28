@@ -1,1 +1,2 @@
-docker run -p 27017:27017 mongo
+echo This script requires sudo
+sudo docker run -p 27017:27017 mongo
