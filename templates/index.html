@@ -53,10 +53,10 @@
         var dataService = DATA_SERVICE();
         var textArea = $('#noteTextarea');
         var noteTitle = $('#titleEditor');
-        var noteTitleLabel = document.getElementById('titleLabel')
+        var noteTitleLabel = document.getElementById('titleLabel');
+        var userid = 'testuser';
 
         $KNOWLEDGE.init(GWS_CORE);
-        dataService.createNewClass('testuser2x3d', 'tcls', function(){});
         FB_AUTH();
         var isNew = '{{isNew}}';
         var note_id = '{{note_id}}';
@@ -65,7 +65,7 @@
         console.log(isNew);
         console.log(note_id);
         function createNewNote() {
-            dataService.createNewNote('testuser', {class_name: '', note_name: 'New Note', text:'This is your new note'}, function (result) {
+            dataService.createNewNote(userid, {class_name: '', note_name: 'New Note', text:'This is your new note'}, function (result) {
                 result = JSON.parse(result);
                 note_id = result._id.$oid;
                 console.log(result._id.$oid);
@@ -96,6 +96,8 @@
             if (time-lastSavedTime > timeout){
                 lastSavedTime = time;
                 //save note call
+                var pendingText = textArea.val();
+                dataService.updateNote(userid, note_id, {text: pendingText});
                 console.log('saved--' + textArea.val());
             }
         };
@@ -104,7 +106,7 @@
         });
         noteTitle.on('focusout', function(){
             var newTitle = noteTitleLabel.innerText;
-            //save title call
+            dataService.updateNote(userid, note_id, {note_name: newTitle})
         });
 
         var noteTab = $('#noteTab');
