@@ -122,7 +122,8 @@ def create_new_class():
         class_metadata['class_name'] = request.args['class_name']
 
     created_class = db.add_class(username, class_name)
-    return mongo_json.dumps(created_class)
+    result = mongo_json.dumps(created_class)
+    return result
 
 @router.route('/v1/class/update', methods=['POST'])
 def save_existing_class():
@@ -239,6 +240,24 @@ def save_existing_note():
 
     return mongo_json.dumps(update_result)
 
+@router.route('/v1/note/get', methods=['GET'])
+def get_one_note():
+    # TODO: validate user identity
+    try:
+        note_id = request.args['note_id']
+    except KeyError:
+        return make_response("No note id")
+    try:
+        user_name = request.args['user_name']
+    except KeyError:
+        return make_response("No user id")
+    try:
+        found_result = db.get_note(note_id=note_id, username=user_name)
+        return mongo_json.dumps(found_result)
+    except:
+        print("caught some unknown error")
+    return make_response('Note_id not found in database for this user', 404)
+
 @router.route('/v1/transcript/update', methods=['POST'])
 def update_transcript():
     try:
@@ -304,6 +323,7 @@ def create_transcript():
     
     return mongo_json.dumps(db.add_transcript(username, note_id, **save_this))
 
+
 @router.route('/v1/transcript/all', methods=['GET'])
 def get_all_transcripts():
     try:
@@ -312,6 +332,7 @@ def get_all_transcripts():
         return make_response(*INVALID_REQUEST_NO_USER)
     transcripts_from_database = db.get_all_transcripts(username)
     return mongo_json.dumps(transcripts_from_database)
+
 
 @router.route('/v1/transcript/note', methods=['GET'])
 def get_note_transcripts():

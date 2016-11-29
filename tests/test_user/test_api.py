@@ -158,6 +158,40 @@ class TestNotesAPI(unittest.TestCase):
         response = self.client.post('%s?username=%s' % (self.new_url, USERNAME,), data=data)
         self.assertEqual(response.status_code, 400)
 
+    def testGetNote(self):
+        data = {
+            'class_name': CLASS_NAME,
+            'note_name': NOTE_NAME,
+            'text': 'Blah Blah Update this'
+        }
+        data_str = json.dumps(data)
+        headers = [('Content-type', 'application/json')]
+        response = self.client.post('%s?username=%s' % (self.new_url, USERNAME,), data=data_str, headers=headers)
+        if response.status_code != 200:
+            print(response.data)
+        self.assertEqual(response.status_code, 200)
+        myValidate(self, json.loads(response.data.decode()), note_schema)
+
+        note_data = json.loads(response.data.decode())
+        note_username = note_data['username']
+        note_note_id = note_data['_id']['$oid']
+
+        response = self.client.get('/v1/note/get', query_string='user_name='+USERNAME+'&note_id='+ note_note_id)
+        self.assertEqual(response.status_code, 200)
+
+    def testGetNote_notExist(self):
+        response = self.client.get('/v1/note/get', query_string='user_name=testuser&note_id=583cd3e64855a87f80000000')
+        self.assertEqual(response.status_code, 200)
+
+    def testGetNote_noNoteId(self):
+        response = self.client.get('/v1/note/get', query_string='user_name=testuser')
+        self.assertEqual(response.status_code, 200)
+
+    def testGetNote_noUserId(self):
+        response = self.client.get('/v1/note/get', query_string='noteid=test')
+        self.assertEqual(response.status_code, 200)
+
+
     def testUpdateNote(self):
         data = {
             'class_name': CLASS_NAME,

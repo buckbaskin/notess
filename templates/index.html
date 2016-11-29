@@ -18,8 +18,8 @@
     <div class="container-fluid">
         <h1>ANTS</h1>
         <div id="title">
-            <label class="pull-left">Untitled Note</label>
-            <input class="clickedit" type="text" />
+            <label id="titleLabel" class="pull-left">Untitled Note</label>
+            <input id="titleEditor" class="clickedit" type="text" />
             <div class="clearfix"></div>
         </div>
 
@@ -38,10 +38,12 @@
     </div>
 
     <div id="snackbar">Keyword updated</div>
+    <div id="snackbar2">Note Saved</div>
 </body>
 
 
 <script src="../../static/gwscore.js"></script>
+<script src="../../static/dataService.js"></script>
 <script src="../../static/knowledge.js"></script>
 <script src="../../static/fb_auth.js"></script>
 
@@ -49,8 +51,83 @@
 <script>
     $(document).ready(function() {
         var $KNOWLEDGE = $.knowledge();
-        $KNOWLEDGE.init(GWS_CORE);
+        var dataService = DATA_SERVICE();
+        var textArea = $('#noteTextarea');
+        var noteTitle = $('#titleEditor');
+        var noteTitleLabel = document.getElementById('titleLabel');
+        var userid = 'testuser';
+        var reflectiveCallback = function (result) {
+            console.log(result)
+        }
+
+        $KNOWLEDGE.init(GWS_CORE, dataService);
         FB_AUTH();
+        var isNew = '{{isNew}}';
+        var note_id = '{{note_id}}';
+        console.log(isNew);
+        console.log(note_id);
+        function createNewNote() {
+            dataService.createNewNote(userid, {class_name: '', note_name: 'New Note', text:'This is your new note'}, function (result) {
+                result = JSON.parse(result);
+                note_id = result._id.$oid;
+                console.log(result._id.$oid);
+                console.log(window.location.host);
+                window.location.replace('http://' + window.location.host + '/docs?user_name=testuser&note_id=' + note_id);
+            });
+        }
+
+        function loadNote(result){
+            console.log(result)
+            var text = result['text'];
+            textArea.val(text);
+            noteTitleLabel.innerText = result.note_name;
+        }
+
+        if (isNew == "True"){
+            // Create note
+            createNewNote();
+            // Redirects to the newly created note
+            // So when user refreshes, they don't have to find their note again.
+
+        }else{
+            dataService.getNote(userid, note_id, loadNote);
+        }
+
+        // Saving mechanism for the text box.
+        var lastSavedTime = new Date().getTime();
+        var uploadedID = 0;
+        var pendingID = 0;
+        var timeout = 4000;
+        var update = function (id){
+            var d = new Date();
+            var time = d.getTime();
+            var delta = time-lastSavedTime;
+            if (delta > timeout){
+                lastSavedTime = time;
+                uploadedID = id;
+                //save note call
+                var pendingText = textArea.val();
+                dataService.updateNote(userid, note_id, {text: pendingText}, reflectiveCallback);
+                console.log('saved--' + textArea.val());
+                dataService.showUpdatedLabel("All Changes Saved");
+            }
+        };
+
+        var updateLabel = function(){
+            if (uploadedID < pendingID){
+                dataService.showUpdatedLabel("Pending changes");
+            }
+        };
+
+        textArea.on('input', function(){
+            pendingID++;
+            updateLabel();
+            setTimeout(function() { update(pendingID); }, timeout);
+        });
+        noteTitle.on('focusout', function(){
+            var newTitle = noteTitleLabel.innerText;
+            dataService.updateNote(userid, note_id, {note_name: newTitle}, reflectiveCallback)
+        });
 
         var noteTab = $('#noteTab');
         var editorTab = $('#editorTab');
