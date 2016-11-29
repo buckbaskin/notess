@@ -170,11 +170,11 @@ class Database(object):
         if note_id is None:
             result = self._transcript_collection.find({'username': username})
         else:
-            result = self._transcript_collection.find({'username': username, 'node_id': ObjectId(str(note_id))})
+            result = self._transcript_collection.find({'username': username, 'node_id': str(note_id)})
         return result
 
     def delete_transcript(self, username, transcript_id) -> int:
-        result = self._transcript_collection.delete_one({'_id': transcript_id, 'username': username})
+        result = self._transcript_collection.delete_one({'_id': ObjectId(transcript_id), 'username': username})
         return result.deleted_count
 
     def delete_all_transcripts(self, username) -> int:
