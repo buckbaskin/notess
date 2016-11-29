@@ -65,6 +65,20 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(processed_keyword_dict_list[0]['description'], "none")
 
     @patch('app.knowledge.dbpedia.dbpedia.DBPediaAPI.search')
+    def test_add_descriptions_to_keywords_dict_check_substring(self, mock_api_search):
+        mock_keyword_dict_list = [{'text': 'waterfall model', 'relevance': '0.90001'}]
+
+        mock_keyword = "waterfall"
+        mock_return = {'results': [{'description': 'mock_answerA'}, {'description': 'mock_answer2'}]}
+        mock_return_json = json.dumps(mock_return)
+        mock_result = dbpedia.DBPediaAPI.QueryResult(mock_keyword, mock_return_json)
+        mock_api_search.return_value = mock_result
+
+        processed_keyword_dict_list = knowledge.add_descriptions_to_keywords_dict(mock_keyword_dict_list)
+        self.assertTrue('description' in processed_keyword_dict_list[0], ERROR_MESSAGE_DESCRIPTION_ABSENT)
+        self.assertNotEqual(processed_keyword_dict_list[0]['description'], "none")
+
+    @patch('app.knowledge.dbpedia.dbpedia.DBPediaAPI.search')
     def test_add_descriptions_to_keywords_dict_extra_element(self, mock_api_search):
         mock_keyword_dict_list = [{'text': 'bigtable', 'relevance': '0.90001', 'extras': 'credit'}]
 
