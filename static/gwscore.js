@@ -1,11 +1,16 @@
-var GWS_CORE = (function(knowledgeModule) {
+var GWS_CORE = (function() {
     var final_transcript = '';
     var interim_transcript = '';
     var recognizing = false;
     var ignore_onend;
     var start_timestamp;
     var keywords = [];
+    var DATA_SERVICE;
     var start_button = document.getElementById("start_button");
+
+    function init(dataService){
+        DATA_SERVICE = dataService;
+    }
 
     if (!('webkitSpeechRecognition' in window)) {
 
@@ -16,6 +21,7 @@ var GWS_CORE = (function(knowledgeModule) {
 
         recognition.onstart = function() {
             recognizing = true;
+            DATA_SERVICE.onTranscriptCreate();
             showInfo('info_speak_now');
         };
 
@@ -72,6 +78,7 @@ var GWS_CORE = (function(knowledgeModule) {
                 // showButtons('inline-block');
             }
             showKeywordHyperlinks();
+            DATA_SERVICE.onTranscriptUpdate(getTranscript());
         };
     }
 
@@ -184,6 +191,7 @@ var GWS_CORE = (function(knowledgeModule) {
         highlightSimulation: highlightSimulation,
         startButton: startButton,
         showInfo: showInfo,
+        init: init,
         getKeywords: getKeywords,
         generateGoogleSearchURL: generateGoogleSearchURL,
         addKeywords: addKeywords,
