@@ -142,11 +142,12 @@ class TestNotesAPI(unittest.TestCase):
     def testNewNote(self):
         data = {
             'class_name': CLASS_NAME,
-            'note_name': NOTE_NAME
+            'note_name': NOTE_NAME,
+            'text': 'Example Text'
         }
-        data = json.dumps(data)
+        data_str = json.dumps(data)
         headers = [('Content-type', 'application/json')]
-        response = self.client.post('%s?username=%s' % (self.new_url, USERNAME,), data=data, headers=headers)
+        response = self.client.post('%s?username=%s' % (self.new_url, USERNAME,), data=data_str, headers=headers)
         if response.status_code != 200:
             print(response.data)
         self.assertEqual(response.status_code, 200)
@@ -160,7 +161,8 @@ class TestNotesAPI(unittest.TestCase):
     def testUpdateNote(self):
         data = {
             'class_name': CLASS_NAME,
-            'note_name': NOTE_NAME
+            'note_name': NOTE_NAME,
+            'text': 'Blah Blah Update this'
         }
         data_str = json.dumps(data)
         headers = [('Content-type', 'application/json')]
