@@ -107,6 +107,7 @@ class Database(object):
             'username': username,
             'class_name': class_name,
             'note_name': note_name,
+            'current_transcription_id': 'none',
             'text': text
         }
         if force_id is not None:
