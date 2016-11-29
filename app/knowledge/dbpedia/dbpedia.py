@@ -9,7 +9,6 @@ class DBPediaAPI:
         headers = {'Accept': 'application/json'}
         response = requests.get(url=uri_string, headers=headers)
         result = DBPediaAPI.QueryResult(keyword=keyword, json_string=response.text)
-        print("searched")
         return result
 
     class QueryResult:
@@ -21,7 +20,7 @@ class DBPediaAPI:
             self.json_dict = json.loads(json_string)
 
         def has_results(self):
-            return len(self.json_dict['results']) > 0
+            return len(self.json_dict['results']) > 0 and (self.get_first_description() is not None)
 
         def __bool__(self):
             return self.has_results()

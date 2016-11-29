@@ -11,7 +11,7 @@ var FB_AUTH = (function() {
           // Logged into your app and Facebook.
           testAPI();
             var uid = response.authResponse.userID;
-            console.log("USER ID!: uid");
+            console.log("USER ID!: " + response.authResponse.userID);
         } else if (response.status === 'not_authorized') {
           // The person is logged into Facebook, but not your app.
           document.getElementById('status').innerHTML = 'Please log ' +
@@ -67,12 +67,11 @@ var FB_AUTH = (function() {
         fjs.parentNode.insertBefore(js, fjs);
       }(document, 'script', 'facebook-jssdk'));
 
-      // Here we run a very simple test of the Graph API after login is
-      // successful.  See statusChangeCallback() for when this call is made.
       function testAPI() {
         console.log('Welcome!  Fetching your information.... ');
         FB.api('/me', function(response) {
           console.log('Successful login for: ' + response.name);
+          console.log(response);
           document.getElementById('status').innerHTML =
             'Thanks for logging in, ' + response.name + '!';
         });

@@ -1,11 +1,17 @@
-var GWS_CORE = (function(knowledgeModule) {
+var GWS_CORE = (function() {
     var final_transcript = '';
     var interim_transcript = '';
     var recognizing = false;
     var ignore_onend;
     var start_timestamp;
     var keywords = [];
+    var DATA_SERVICE;
     var start_button = document.getElementById("start_button");
+
+    function init(dataService){
+        DATA_SERVICE = dataService;
+        dataService.setTranscriptSetter(setFinalTranscript);
+    }
 
     if (!('webkitSpeechRecognition' in window)) {
 
@@ -16,6 +22,7 @@ var GWS_CORE = (function(knowledgeModule) {
 
         recognition.onstart = function() {
             recognizing = true;
+            DATA_SERVICE.onTranscriptCreate();
             showInfo('info_speak_now');
         };
 
@@ -72,6 +79,7 @@ var GWS_CORE = (function(knowledgeModule) {
                 // showButtons('inline-block');
             }
             showKeywordHyperlinks();
+            DATA_SERVICE.onTranscriptUpdate(getTranscript());
         };
     }
 
@@ -169,7 +177,13 @@ var GWS_CORE = (function(knowledgeModule) {
             simulated_transcript = "Bayesian inference is largely based on the principles of Bayes' theorem.";
         final_transcript = simulated_transcript;
         final_span.innerHTML = linebreak(final_transcript);
-        refresher = setInterval(highlightSimulation, 1500);
+        //refresher = setInterval(highlightSimulation, 1500);
+    }
+
+    function setFinalTranscript(text){
+        final_transcript = text;
+        final_span.innerHTML = linebreak(final_transcript);
+        //refresher = setInterval(highlightSimulation, 1500);
     }
 
     function highlightSimulation(){
@@ -181,8 +195,10 @@ var GWS_CORE = (function(knowledgeModule) {
     return {
         getTranscript: getTranscript,
         getInterimTranscript: getInterimTranscript,
+        highlightSimulation: highlightSimulation,
         startButton: startButton,
         showInfo: showInfo,
+        init: init,
         getKeywords: getKeywords,
         generateGoogleSearchURL: generateGoogleSearchURL,
         addKeywords: addKeywords,

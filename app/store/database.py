@@ -71,17 +71,21 @@ class Database(object):
             'username': username,
             'class_name': class_name
         }
-        class_id = self._class_collection.insert_one(class_).inserted_id
+        try:
+            class_id = self._class_collection.insert_one(class_).inserted_id
+        except pymongo.errors.DuplicateKeyError:
+            # self.update_class(username, class_name, {})
+            pass
         return self.get_class(username, class_name)
 
     def update_class(self, username, class_name, content):
         if 'version' in content:
             del content['version']
-        self._class_collection.update_one({'_id': ObjectId(str(class_name))}, {'$set': content, '$inc': {'version': 1}})
+        self._class_collection.update_one({'class_name': class_name}, {'$set': content, '$inc': {'version': 1}})
         return self.get_class(username, class_name)
 
     def get_class(self, username, class_name):
-        class_result = self._class_collection.find_one({'username': username, '_id': ObjectId(str(class_name))})
+        class_result = self._class_collection.find_one({'username': username, 'class_name': class_name})
         return class_result
 
     def get_all_classes(self, username):
@@ -98,23 +102,33 @@ class Database(object):
 
     ### Notes Database ###
 
-    def add_note(self, username: str, class_name: str, note_name: str):
+    def add_note(self, username: str, class_name: str, note_name: str, text: str, force_id: str=None):
         note = {
             'username': username,
             'class_name': class_name,
-            'note_name': note_name
+            'note_name': note_name,
+            'current_transcription_id': 'none',
+            'text': text
         }
+        if force_id is not None:
+            note['_id'] = ObjectId(force_id)
         note_id = self._note_collection.insert_one(note).inserted_id
+        print('added note: %s' % (self.get_note(username, note_id)))
         return self.get_note(username, note_id)
 
     def update_note(self, username, note_id, content):
+        print('update_note %s, %s' % (username, note_id,))
         self._note_collection.update_one({'username': username, '_id': ObjectId(str(note_id))}, {'$set': content})
         return self.get_note(username, note_id)
 
     def get_note(self, username, note_id):
         # require username because it might return different stuff for a note shared between users
-        result = self._note_collection.find_one({'_id': ObjectId(note_id)})
+        result = self._note_collection.find_one({'_id': ObjectId(note_id), 'username': username})
         return result
+
+    def get_notes_by_name(self, username: str, name: str):
+        result = self._note_collection.find({'username': username, 'name': name})
+        return list(result)
 
     def get_all_notes(self, username, class_name=None):
         if class_name is None:
@@ -133,17 +147,18 @@ class Database(object):
 
     ### Transcript Database ###
 
-    def add_transcript(self, username: str, note_id: str, text: str):
+    def add_transcript(self, username: str, note_id: str, text: str, recording_link: str=''):
         transcript = {
             'username': username,
             'note_id': ObjectId(note_id),
-            'text': text
+            'text': text,
+            'recording_link': recording_link
         }
         transcript_id = self._transcript_collection.insert_one(transcript).inserted_id
         return self.get_transcript(username, transcript_id)
 
-    def update_transcript(self, username, transcript_id):
-        # TODO
+    def update_transcript(self, username, transcript_id, content):
+        self._transcript_collection.update_one({'username': username, '_id': ObjectId(str(transcript_id))}, {'$set': content})
         return self.get_transcript(username, transcript_id)
 
     def get_transcript(self, username, transcript_id):
@@ -168,14 +183,19 @@ class Database(object):
 
     ### Keyword Database ###
 
-    def add_keyword(self, username: str, note_id: str, transcript_id: str, text: str, relevance: float, description: str):
+    def add_keyword(self,
+                    username: str, note_id: str, transcript_id: str, text: str,
+                    relevance: float, description: str, link_dbpedia: str,
+                    link_wikipedia: str):
         keyword = {
             'username': username,
-            'note_id': note_id,
-            'transcript_id': transcript_id,
+            'note_id': ObjectId(note_id),
+            'transcript_id': ObjectId(transcript_id),
             'text': text,
             'relevance': relevance,
-            'description': description
+            'description': description,
+            'link_dbpedia': link_dbpedia,
+            'link_wikipedia': link_wikipedia
         }
         keyword_id = self._keyword_collection.insert_one(keyword).inserted_id
         self._keyword_rev_index.find_one_and_update(
@@ -188,6 +208,8 @@ class Database(object):
 
     def update_keyword(self, username, keyword_id):
         # TODO
+        import sys
+        sys.exit(1)
         return self.get_keyword(username, keyword_id)
 
     def get_keyword(self, username, keyword_id):

@@ -18,8 +18,8 @@
     <div class="container-fluid">
         <h1>ANTS</h1>
         <div id="title">
-            <label class="pull-left">Untitled Note</label>
-            <input class="clickedit" type="text" />
+            <label id="titleLabel" class="pull-left">Untitled Note</label>
+            <input id="titleEditor" class="clickedit" type="text" />
             <div class="clearfix"></div>
         </div>
 
@@ -38,10 +38,12 @@
     </div>
 
     <div id="snackbar">Keyword updated</div>
+    <div id="snackbar2">Note Saved</div>
 </body>
 
 
 <script src="../../static/gwscore.js"></script>
+<script src="../../static/dataService.js"></script>
 <script src="../../static/knowledge.js"></script>
 <script src="../../static/fb_auth.js"></script>
 
@@ -49,8 +51,28 @@
 <script>
     $(document).ready(function() {
         var $KNOWLEDGE = $.knowledge();
-        $KNOWLEDGE.init(GWS_CORE);
+        var dataService = DATA_SERVICE();
+        var userid = 'testuser';
+        GWS_CORE.init(dataService);
+
+        $KNOWLEDGE.init(GWS_CORE, dataService);
         FB_AUTH();
+        var isNew = '{{isNew}}';
+        var note_id = '{{note_id}}';
+
+        if (isNew == "True"){
+            // Create note
+            dataService.onNewNoteCreate(userid);
+            // Redirects to the newly created note
+            // So when user refreshes, they don't have to find their note again.
+
+        }else{
+            dataService.onNoteLoad(userid, note_id);
+        }
+
+        var noteTab = $('#noteTab');
+        var editorTab = $('#editorTab');
+        noteTab.removeClass('active');
     });
 </script>
 

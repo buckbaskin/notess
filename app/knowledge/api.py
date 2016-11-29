@@ -78,10 +78,20 @@ def add_descriptions():
 def add_descriptions_to_keywords_dict(keyword_dict_list):
     api_object = dbpedia.DBPediaAPI()
     for keyword_dict in keyword_dict_list:
+        description_set = False;
         lookup_result = api_object.search(keyword_dict['text'])
         if lookup_result.has_results():
             keyword_dict['description'] = lookup_result.get_first_description()
+            description_set = True
         else:
+            keyword_words = keyword_dict['text'].split(" ")
+            for word in reversed(keyword_words):
+                lookup_result = api_object.search(word)
+                if lookup_result.has_results():
+                    keyword_dict['description'] = lookup_result.get_first_description()
+                    description_set = True;
+                    break;
+        if not description_set:
             keyword_dict['description'] = "none"
     return keyword_dict_list
 
