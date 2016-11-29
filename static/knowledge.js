@@ -61,7 +61,7 @@
 
         var augmentTranscription = function () {
             // Also upload transcription here.
-            DATA_SERVICE.
+            //DATA_SERVICE.
             transcription = GWS_CORE.getTranscript();
             if (transcription !== "" || typeof transcription === 'undefined') {
                 populateKeywordPanel(transcription);

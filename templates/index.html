@@ -63,8 +63,6 @@
         FB_AUTH();
         var isNew = '{{isNew}}';
         var note_id = '{{note_id}}';
-        var note_name = '{{note_title}}'
-        var note_text = '{{note_text}}';
         console.log(isNew);
         console.log(note_id);
         function createNewNote() {
@@ -77,6 +75,13 @@
             });
         }
 
+        function loadNote(result){
+            console.log(result)
+            var text = result['text'];
+            textArea.val(text);
+            noteTitleLabel.innerText = result.note_name;
+        }
+
         if (isNew == "True"){
             // Create note
             createNewNote();
@@ -84,10 +89,7 @@
             // So when user refreshes, they don't have to find their note again.
 
         }else{
-            textArea.val(note_text);
-            noteTitleLabel.innerText = note_name;
-            // We load old notes.
-            // In the cloud, we verify if the old id exists, otherwise, we create a new note.
+            dataService.getNote(userid, note_id, loadNote);
         }
 
         // Saving mechanism for the text box.

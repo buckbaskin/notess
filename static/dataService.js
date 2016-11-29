@@ -6,7 +6,7 @@ var DATA_SERVICE = (function () {
             type: "GET",
             dataType: "json",
             url: "/v1/class/all",
-            data: {username: userid},
+            data: {user_name: userid},
             success: function (result) {
                 callback(result);
             },
@@ -39,7 +39,7 @@ var DATA_SERVICE = (function () {
             type: "GET",
             dataType: "json",
             url: "/v1/note/all",
-            data: {username: userid},
+            data: {user_name: userid},
             success: function (result) {
                 callback(result);
             },
@@ -55,7 +55,7 @@ var DATA_SERVICE = (function () {
             type: "GET",
             dataType: "json",
             url: "/v1/note/class",
-            data: {username: userid, class_name: classname},
+            data: {user_name: userid, class_name: classname},
             success: function (result) {
                 callback(result);
             },
@@ -101,13 +101,29 @@ var DATA_SERVICE = (function () {
         });
     };
 
+    // GET /v1/note/get
+    var getNote = function (userid, noteid, callback) {
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: "/v1/note/get",
+            data: {user_name: userid, note_id: noteid},
+            success: function (result) {
+                callback(result);
+            },
+            error: function () {
+                console.log("Cannot get notes.")
+            }
+        });
+    };
+
     // GET /v1/transcript/note
     var getTranscriptForNote = function (userid, noteid, callback) {
         $.ajax({
             type: "GET",
             dataType: "json",
             url: "/v1/transcript/note",
-            data: {username: userid, note_id: noteid},
+            data: {user_name: userid, note_id: noteid},
             success: function (result) {
                 callback(result);
             },
@@ -138,9 +154,10 @@ var DATA_SERVICE = (function () {
     return {
         createNewClass: createNewClass,
         getAllClasses:getAllClasses,
-        getNotesList: getAllNote,
-        getNote: getAllNoteForClass,
+        getAllNote: getAllNote,
+        getAllNoteForClass: getAllNoteForClass,
         createNewNote: createNewNote,
+        getNote: getNote,
         updateNote: updateNote,
         getTranscriptForNote: getTranscriptForNote,
         createTranscriptForNote: createTranscriptForNote

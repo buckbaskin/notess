@@ -240,6 +240,26 @@ def save_existing_note():
 
     return mongo_json.dumps(update_result)
 
+
+@router.route('/v1/note/get', methods=['GET'])
+def get_one_note():
+    # TODO: validate user identity
+    try:
+        note_id = request.args['note_id']
+    except KeyError:
+        return make_response("No note id")
+    try:
+        user_name = request.args['user_name']
+    except KeyError:
+        return make_response("No user id")
+    try:
+        found_result = db.get_note(note_id=note_id, username=user_name)
+        return mongo_json.dumps(found_result)
+    except:
+        print("caught some unknown error")
+    return make_response('Note_id not found in database for this user', 404)
+
+
 @router.route('/v1/transcript/new', methods=['POST'])
 def create_transcript():
     try:
