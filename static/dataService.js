@@ -1,22 +1,11 @@
 var DATA_SERVICE = (function () {
     var userId;
     var noteId;
-
-    // Saving mechanism for the text box.
-    var lastSavedTime = new Date().getTime();
-    var uploadedID = 0;
-    var pendingID = 0;
-    var timeout = 1500;
-
-    var textArea = $('#noteTextarea');
-    var noteTitle = $('#titleEditor');
-    var noteTitleLabel = document.getElementById('titleLabel')
-
     var currentTranscriptId;
     var allTranscriptIds = [];
     var setFinalTranscript;
 
-    var reflectiveCallback = function (result) {
+    var defaultCallback = function (result) {
         console.log(result)
     };
 
@@ -201,6 +190,42 @@ var DATA_SERVICE = (function () {
         });
     };
 
+    var onTranscriptCreate = function () {
+        createTranscriptForNote({text: ''}, function (result) {
+            result = JSON.parse(result);
+            currentTranscriptId = result._id.$oid;
+            allTranscriptIds.push(currentTranscriptId);
+            console.log('tid=' + currentTranscriptId);
+            console.log('tids=' + allTranscriptIds);
+
+            updateNote({current_transcription_id: currentTranscriptId},defaultCallback)
+        })
+    };
+
+    var onTranscriptUpdate = function (finalized) {
+        updateTranscript({text: finalized}, function () {
+            // Do nothing.
+        });
+    };
+
+    var setTranscriptSetter = function (setterFunction) {
+        setFinalTranscript = setterFunction;
+    };
+
+
+    // Part of the below code interacts with the UI.
+
+    // Saving mechanism for the text box.
+    var lastSavedTime = new Date().getTime();
+    var uploadedID = 0;
+    var pendingID = 0;
+    var timeout = 1500;
+
+    var textArea = $('#noteTextarea');
+    var noteTitle = $('#titleEditor');
+    var noteTitleLabel = document.getElementById('titleLabel')
+
+    // Download and display server content on load.
     var onNoteLoad = function (userid, note_id) {
         userId = userid;
         noteId = note_id;
@@ -220,6 +245,7 @@ var DATA_SERVICE = (function () {
         })
     };
 
+    // Updates the server when we detect local changes.
     var onNoteUpdate = function () {
         var d = new Date();
         var time = d.getTime();
@@ -231,21 +257,17 @@ var DATA_SERVICE = (function () {
             var pendingText = textArea.val();
             showUpdatedLabel("All Changes Saved");
             updateNote({text: pendingText}, function (callback) {
-                reflectiveCallback(callback);
+                defaultCallback(callback);
             });
             //console.log('sent--' + textArea.val());
         }
     };
 
-    var showPendingLabel = function () {
+    textArea.on('input', function () {
+        pendingID++;
         if (uploadedID < pendingID) {
             showUpdatedLabel("Pending changes");
         }
-    };
-
-    textArea.on('input', function () {
-        pendingID++;
-        showPendingLabel();
         setTimeout(function () {
             onNoteUpdate();
         }, timeout);
@@ -253,26 +275,8 @@ var DATA_SERVICE = (function () {
 
     noteTitle.on('focusout', function () {
         var newTitle = noteTitleLabel.innerText;
-        updateNote({note_name: newTitle}, reflectiveCallback)
+        updateNote({note_name: newTitle}, defaultCallback)
     });
-
-    var onTranscriptCreate = function () {
-        createTranscriptForNote({text: ''}, function (result) {
-            result = JSON.parse(result);
-            currentTranscriptId = result._id.$oid;
-            allTranscriptIds.push(currentTranscriptId);
-            console.log('tid=' + currentTranscriptId);
-            console.log('tids=' + allTranscriptIds);
-
-            updateNote({current_transcription_id: currentTranscriptId},reflectiveCallback)
-        })
-    };
-
-    var onTranscriptUpdate = function (finalized) {
-        updateTranscript({text: finalized}, function () {
-            // Do nothing.
-        });
-    };
 
     var showUpdatedLabel = function (text) {
         // Get the snackbar DIV
@@ -283,10 +287,6 @@ var DATA_SERVICE = (function () {
 
         x.innerHTML = text;
     };
-
-    var setTranscriptSetter = function (setterFunction) {
-        setFinalTranscript = setterFunction;
-    }
 
     return {
         createNewClass: createNewClass,
