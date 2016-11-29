@@ -1,4 +1,4 @@
-var FB_AUTH = (function() {
+var FB_AUTH = (function(noteController) {
           // This is called with the results from from FB.getLoginStatus().
       function statusChangeCallback(response) {
         console.log('statusChangeCallback');
@@ -9,7 +9,7 @@ var FB_AUTH = (function() {
         // for FB.getLoginStatus().
         if (response.status === 'connected') {
           // Logged into your app and Facebook.
-          testAPI();
+          setupUser();
             var uid = response.authResponse.userID;
             console.log("USER ID!: " + response.authResponse.userID);
         } else if (response.status === 'not_authorized') {
@@ -67,13 +67,14 @@ var FB_AUTH = (function() {
         fjs.parentNode.insertBefore(js, fjs);
       }(document, 'script', 'facebook-jssdk'));
 
-      function testAPI() {
-        console.log('Welcome!  Fetching your information.... ');
+      function setupUser() {
         FB.api('/me', function(response) {
           console.log('Successful login for: ' + response.name);
           console.log(response);
           document.getElementById('status').innerHTML =
             'Thanks for logging in, ' + response.name + '!';
+          noteController.setUsername(response.name);
+          noteController.setUserId(response.id);
         });
       }
 });

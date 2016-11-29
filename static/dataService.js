@@ -1,5 +1,4 @@
 var DATA_SERVICE = (function () {
-    var userId;
     var noteId;
 
     // Saving mechanism for the text box.
@@ -53,7 +52,7 @@ var DATA_SERVICE = (function () {
     };
 
     //GET v1/note/all
-    var getAllNote = function (callback) {
+    var getAllNotes = function (userid, callback) {
         $.ajax({
             type: "GET",
             dataType: "json",
@@ -69,7 +68,7 @@ var DATA_SERVICE = (function () {
     };
 
     //GET v1/note/class
-    var getAllNoteForClass = function (classname, callback) {
+    var getAllNotesForClass = function (userid, classname, callback) {
         $.ajax({
             type: "GET",
             dataType: "json",
@@ -87,7 +86,6 @@ var DATA_SERVICE = (function () {
     // POST /v1/note/new
     var createNewNote = function (content, callback) {
         console.log('/v1/note/new?username=' + userId);
-
         $.ajax({
             type: "POST",
             url: '/v1/note/new?username=' + userId,
@@ -256,8 +254,9 @@ var DATA_SERVICE = (function () {
     return {
         createNewClass: createNewClass,
         getAllClasses: getAllClasses,
-        getAllNote: getAllNote,
-        getAllNoteForClass: getAllNoteForClass,
+        getAllNotes: getAllNotes,
+        getAllNotesForClass: getAllNoteForClass,
+        createNewNote: createNewNote,
         getNote: getNote,
         onNoteLoad: onNoteLoad,
         onNewNoteCreate: onNewNoteCreate,
