@@ -25,7 +25,7 @@ def load_editor():
         return make_response("No user id")
     try:
         found_result = db.get_note(note_id=note_id, username=user_name)
-        return_text = found_result['text'].replace('\n\n', '-break-')
+        return_text = found_result['text'].replace('\n', ' ')
         if found_result is not None:
             return render_template('index.html', isNew=False, note_id=note_id, note_title=found_result['note_name'], note_text=return_text)
     except:

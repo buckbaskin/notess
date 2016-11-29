@@ -55,6 +55,9 @@
         var noteTitle = $('#titleEditor');
         var noteTitleLabel = document.getElementById('titleLabel');
         var userid = 'testuser';
+        var reflectiveCallback = function (result) {
+            console.log(result)
+        }
 
         $KNOWLEDGE.init(GWS_CORE);
         FB_AUTH();
@@ -82,7 +85,7 @@
 
         }else{
             textArea.val(note_text);
-            noteTitleLabel.innerText = note_name
+            noteTitleLabel.innerText = note_name;
             // We load old notes.
             // In the cloud, we verify if the old id exists, otherwise, we create a new note.
         }
@@ -97,7 +100,7 @@
                 lastSavedTime = time;
                 //save note call
                 var pendingText = textArea.val();
-                dataService.updateNote(userid, note_id, {text: pendingText});
+                dataService.updateNote(userid, note_id, {text: pendingText}, reflectiveCallback);
                 console.log('saved--' + textArea.val());
             }
         };
@@ -106,7 +109,7 @@
         });
         noteTitle.on('focusout', function(){
             var newTitle = noteTitleLabel.innerText;
-            dataService.updateNote(userid, note_id, {note_name: newTitle})
+            dataService.updateNote(userid, note_id, {note_name: newTitle}, reflectiveCallback)
         });
 
         var noteTab = $('#noteTab');
