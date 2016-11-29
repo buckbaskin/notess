@@ -53,7 +53,7 @@
         var $KNOWLEDGE = $.knowledge();
         var dataService = DATA_SERVICE();
         var userid = 'testuser';
-
+        GWS_CORE.init(dataService);
 
         $KNOWLEDGE.init(GWS_CORE, dataService);
         FB_AUTH();
@@ -69,7 +69,6 @@
         }else{
             dataService.onNoteLoad(userid, note_id);
         }
-
 
         var noteTab = $('#noteTab');
         var editorTab = $('#editorTab');

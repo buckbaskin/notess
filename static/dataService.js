@@ -10,21 +10,22 @@ var DATA_SERVICE = (function () {
 
     var textArea = $('#noteTextarea');
     var noteTitle = $('#titleEditor');
-    var noteTitleLabel = document.getElementById('titleLabel');
+    var noteTitleLabel = document.getElementById('titleLabel')
+
     var currentTranscriptId;
-    var allTranscriptId;
+    var allTranscriptIds = [];
 
     var reflectiveCallback = function (result) {
         console.log(result)
     };
 
     //GET v1/class/all
-    var getAllClasses = function (userid, callback) {
+    var getAllClasses = function (callback) {
         $.ajax({
             type: "GET",
             dataType: "json",
             url: "/v1/class/all",
-            data: {user_name: userid},
+            data: {user_name: userId},
             success: function (result) {
                 callback(result);
             },
@@ -35,11 +36,11 @@ var DATA_SERVICE = (function () {
     };
 
     // POST /v1/class/new
-    var createNewClass = function (userid, class_name, callback) {
+    var createNewClass = function (class_name, callback) {
 
         $.ajax({
             type: "POST",
-            url: '/v1/class/new?username=' + userid + '&class_name=' + class_name,
+            url: '/v1/class/new?username=' + userId + '&class_name=' + class_name,
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify({class_name: class_name}), //redundancy
             success: function (result) {
@@ -52,12 +53,12 @@ var DATA_SERVICE = (function () {
     };
 
     //GET v1/note/all
-    var getAllNote = function (userid, callback) {
+    var getAllNote = function (callback) {
         $.ajax({
             type: "GET",
             dataType: "json",
             url: "/v1/note/all",
-            data: {user_name: userid},
+            data: {user_name: userId},
             success: function (result) {
                 callback(result);
             },
@@ -68,12 +69,12 @@ var DATA_SERVICE = (function () {
     };
 
     //GET v1/note/class
-    var getAllNoteForClass = function (userid, classname, callback) {
+    var getAllNoteForClass = function (classname, callback) {
         $.ajax({
             type: "GET",
             dataType: "json",
             url: "/v1/note/class",
-            data: {user_name: userid, class_name: classname},
+            data: {user_name: userId, class_name: classname},
             success: function (result) {
                 callback(result);
             },
@@ -136,12 +137,12 @@ var DATA_SERVICE = (function () {
     };
 
     // GET /v1/transcript/note
-    var getTranscriptForNote = function (userid, noteid, callback) {
+    var getTranscriptForNote = function (callback) {
         $.ajax({
             type: "GET",
             dataType: "json",
             url: "/v1/transcript/note",
-            data: {user_name: userid, note_id: noteid},
+            data: {user_name: userId, note_id: noteId},
             success: function (result) {
                 callback(result);
             },
@@ -152,12 +153,12 @@ var DATA_SERVICE = (function () {
     };
 
     // POST /v1/transcript/new
-    var createTranscriptForNote = function (userid, noteid, content, callback) {
-        console.log('/v1/transcript/new?username=' + userid + '&note_id=' + noteid);
+    var createTranscriptForNote = function (content, callback) {
+        console.log('/v1/transcript/new?username=' + userId + '&note_id=' + noteId);
 
         $.ajax({
             type: "POST",
-            url: '/v1/transcript/new?username=' + userid + '&note_id=' + noteid,
+            url: '/v1/transcript/new?username=' + userId + '&note_id=' + noteId,
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify(content),
             success: function (result) {
@@ -228,10 +229,16 @@ var DATA_SERVICE = (function () {
     });
 
     var onTranscriptCreate = function () {
-
+        createTranscriptForNote({text: ''}, function (result) {
+            result = JSON.parse(result);
+            currentTranscriptId = result._id.$oid;
+            allTranscriptIds.push(currentTranscriptId);
+            console.log('tid=' + currentTranscriptId);
+            console.log('tids=' + allTranscriptIds);
+        })
     };
 
-    var onTranscriptUpdate = function () {
+    var onTranscriptUpdate = function (finalized) {
 
     };
 
@@ -256,7 +263,9 @@ var DATA_SERVICE = (function () {
         onNewNoteCreate: onNewNoteCreate,
         updateNote: updateNote,
         getTranscriptForNote: getTranscriptForNote,
-        createTranscriptForNote: createTranscriptForNote
+        createTranscriptForNote: createTranscriptForNote,
+        onTranscriptCreate: onTranscriptCreate,
+        onTranscriptUpdate: onTranscriptUpdate
     }
 
 });
