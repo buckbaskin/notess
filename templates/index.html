@@ -60,11 +60,12 @@
         FB_AUTH();
         var isNew = '{{isNew}}';
         var note_id = '{{note_id}}';
+        var note_name = '{{note_title}}'
         var note_text = '{{note_text}}';
         console.log(isNew);
         console.log(note_id);
         function createNewNote() {
-            dataService.createNewNote('testuser', {class_name: 'C1', note_name: 'N1'}, function (result) {
+            dataService.createNewNote('testuser', {class_name: '', note_name: 'New Note'}, function (result) {
                 result = JSON.parse(result);
                 note_id = result._id.$oid;
                 console.log(result._id.$oid);
@@ -81,6 +82,7 @@
 
         }else{
             textArea.val(note_text);
+            noteTitleLabel.innerText = note_name
             // We load old notes.
             // In the cloud, we verify if the old id exists, otherwise, we create a new note.
         }
