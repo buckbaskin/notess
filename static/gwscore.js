@@ -10,6 +10,7 @@ var GWS_CORE = (function() {
 
     function init(dataService){
         DATA_SERVICE = dataService;
+        dataService.setTranscriptSetter(setFinalTranscript);
     }
 
     if (!('webkitSpeechRecognition' in window)) {
@@ -175,6 +176,12 @@ var GWS_CORE = (function() {
         if (simulated_transcript.length < 10)
             simulated_transcript = "Bayesian inference is largely based on the principles of Bayes' theorem.";
         final_transcript = simulated_transcript;
+        final_span.innerHTML = linebreak(final_transcript);
+        //refresher = setInterval(highlightSimulation, 1500);
+    }
+
+    function setFinalTranscript(text){
+        final_transcript = text;
         final_span.innerHTML = linebreak(final_transcript);
         //refresher = setInterval(highlightSimulation, 1500);
     }

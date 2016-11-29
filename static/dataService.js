@@ -14,6 +14,7 @@ var DATA_SERVICE = (function () {
 
     var currentTranscriptId;
     var allTranscriptIds = [];
+    var setFinalTranscript;
 
     var reflectiveCallback = function (result) {
         console.log(result)
@@ -137,12 +138,13 @@ var DATA_SERVICE = (function () {
     };
 
     // GET /v1/transcript/note
-    var getTranscriptForNote = function (callback) {
+    var getCurrentTranscript = function (callback) {
+        console.log('/v1/transcript/one?username=' + userId + '&transcript_id=' + currentTranscriptId);
         $.ajax({
             type: "GET",
             dataType: "json",
-            url: "/v1/transcript/note",
-            data: {user_name: userId, note_id: noteId},
+            url: "/v1/transcript/one",
+            data: {username: userId, transcript_id: currentTranscriptId},
             success: function (result) {
                 callback(result);
             },
@@ -159,6 +161,24 @@ var DATA_SERVICE = (function () {
         $.ajax({
             type: "POST",
             url: '/v1/transcript/new?username=' + userId + '&note_id=' + noteId,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(content),
+            success: function (result) {
+                callback(result);
+            },
+            error: function () {
+                console.log("Cannot create new notes")
+            }
+        });
+    };
+
+    // POST /v1/transcript/update
+    var updateTranscript = function (content, callback) {
+        console.log('/v1/transcript/update?username=' + userId + '&transcript_id=' + currentTranscriptId);
+
+        $.ajax({
+            type: "POST",
+            url: '/v1/transcript/update?username=' + userId + '&transcript_id=' + currentTranscriptId,
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify(content),
             success: function (result) {
@@ -189,6 +209,14 @@ var DATA_SERVICE = (function () {
             var text = result['text'];
             textArea.val(text);
             noteTitleLabel.innerText = result.note_name;
+            if (result.current_transcription_id == 'none'){
+                console.log("no tid")
+            }else{
+                currentTranscriptId = result.current_transcription_id;
+                getCurrentTranscript(function callback(result) {
+                    setFinalTranscript(result.text);
+                });
+            }
         })
     };
 
@@ -235,11 +263,15 @@ var DATA_SERVICE = (function () {
             allTranscriptIds.push(currentTranscriptId);
             console.log('tid=' + currentTranscriptId);
             console.log('tids=' + allTranscriptIds);
+
+            updateNote({current_transcription_id: currentTranscriptId},reflectiveCallback)
         })
     };
 
     var onTranscriptUpdate = function (finalized) {
-
+        updateTranscript({text: finalized}, function () {
+            // Do nothing.
+        });
     };
 
     var showUpdatedLabel = function (text) {
@@ -252,6 +284,9 @@ var DATA_SERVICE = (function () {
         x.innerHTML = text;
     };
 
+    var setTranscriptSetter = function (setterFunction) {
+        setFinalTranscript = setterFunction;
+    }
 
     return {
         createNewClass: createNewClass,
@@ -262,10 +297,11 @@ var DATA_SERVICE = (function () {
         onNoteLoad: onNoteLoad,
         onNewNoteCreate: onNewNoteCreate,
         updateNote: updateNote,
-        getTranscriptForNote: getTranscriptForNote,
+        getTranscriptForNote: getCurrentTranscript,
         createTranscriptForNote: createTranscriptForNote,
         onTranscriptCreate: onTranscriptCreate,
-        onTranscriptUpdate: onTranscriptUpdate
+        onTranscriptUpdate: onTranscriptUpdate,
+        setTranscriptSetter: setTranscriptSetter
     }
 
 });
