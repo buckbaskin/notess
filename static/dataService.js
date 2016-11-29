@@ -1,4 +1,22 @@
 var DATA_SERVICE = (function () {
+    var userId;
+    var noteId;
+
+    // Saving mechanism for the text box.
+    var lastSavedTime = new Date().getTime();
+    var uploadedID = 0;
+    var pendingID = 0;
+    var timeout = 1500;
+
+    var textArea = $('#noteTextarea');
+    var noteTitle = $('#titleEditor');
+    var noteTitleLabel = document.getElementById('titleLabel');
+    var currentTranscriptId;
+    var allTranscriptId;
+
+    var reflectiveCallback = function (result) {
+        console.log(result)
+    };
 
     //GET v1/class/all
     var getAllClasses = function (userid, callback) {
@@ -66,12 +84,12 @@ var DATA_SERVICE = (function () {
     };
 
     // POST /v1/note/new
-    var createNewNote = function (userid, content, callback) {
-        console.log('/v1/note/new?username=' + userid);
+    var createNewNote = function (content, callback) {
+        console.log('/v1/note/new?username=' + userId);
 
         $.ajax({
             type: "POST",
-            url: '/v1/note/new?username=' + userid,
+            url: '/v1/note/new?username=' + userId,
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify(content),
             success: function (result) {
@@ -84,12 +102,12 @@ var DATA_SERVICE = (function () {
     };
 
     // POST /v1/note/update
-    var updateNote = function (userid, noteid, content, callback) {
-        console.log('/v1/note/update?username=' + userid + '&note_id=' + noteid);
+    var updateNote = function (content, callback) {
+        console.log('/v1/note/update?username=' + userId + '&note_id=' + noteId);
 
         $.ajax({
             type: "POST",
-            url: '/v1/note/update?username=' + userid + '&note_id=' + noteid,
+            url: '/v1/note/update?username=' + userId + '&note_id=' + noteId,
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify(content),
             success: function (result) {
@@ -102,12 +120,12 @@ var DATA_SERVICE = (function () {
     };
 
     // GET /v1/note/get
-    var getNote = function (userid, noteid, callback) {
+    var getNote = function (callback) {
         $.ajax({
             type: "GET",
             dataType: "json",
             url: "/v1/note/get",
-            data: {user_name: userid, note_id: noteid},
+            data: {user_name: userId, note_id: noteId},
             success: function (result) {
                 callback(result);
             },
@@ -151,6 +169,72 @@ var DATA_SERVICE = (function () {
         });
     };
 
+    var onNewNoteCreate = function (userid) {
+        userId = userid;
+        createNewNote({class_name: '', note_name: 'New Note', text: 'This is your new note'}, function (result) {
+            result = JSON.parse(result);
+            noteId = result._id.$oid;
+            console.log(result._id.$oid);
+            console.log(window.location.host);
+            window.location.replace('http://' + window.location.host + '/docs?user_name='+ userId +'&note_id=' + noteId);
+        });
+    };
+
+    var onNoteLoad = function (userid, note_id) {
+        userId = userid;
+        noteId = note_id;
+        getNote(function (result) {
+            console.log(result);
+            var text = result['text'];
+            textArea.val(text);
+            noteTitleLabel.innerText = result.note_name;
+        })
+    };
+
+    var onNoteUpdate = function () {
+        var d = new Date();
+        var time = d.getTime();
+        var delta = time - lastSavedTime;
+        if (delta > timeout) {
+            lastSavedTime = time;
+            uploadedID = pendingID;
+            //save note call
+            var pendingText = textArea.val();
+            showUpdatedLabel("All Changes Saved");
+            updateNote({text: pendingText}, function (callback) {
+                reflectiveCallback(callback);
+            });
+            //console.log('sent--' + textArea.val());
+        }
+    };
+
+    var showPendingLabel = function () {
+        if (uploadedID < pendingID) {
+            showUpdatedLabel("Pending changes");
+        }
+    };
+
+    textArea.on('input', function () {
+        pendingID++;
+        showPendingLabel();
+        setTimeout(function () {
+            onNoteUpdate();
+        }, timeout);
+    });
+
+    noteTitle.on('focusout', function () {
+        var newTitle = noteTitleLabel.innerText;
+        updateNote({note_name: newTitle}, reflectiveCallback)
+    });
+
+    var onTranscriptCreate = function () {
+
+    };
+
+    var onTranscriptUpdate = function () {
+
+    };
+
     var showUpdatedLabel = function (text) {
         // Get the snackbar DIV
         var x = document.getElementById("snackbar2");
@@ -167,12 +251,12 @@ var DATA_SERVICE = (function () {
         getAllClasses: getAllClasses,
         getAllNote: getAllNote,
         getAllNoteForClass: getAllNoteForClass,
-        createNewNote: createNewNote,
         getNote: getNote,
+        onNoteLoad: onNoteLoad,
+        onNewNoteCreate: onNewNoteCreate,
         updateNote: updateNote,
         getTranscriptForNote: getTranscriptForNote,
-        createTranscriptForNote: createTranscriptForNote,
-        showUpdatedLabel: showUpdatedLabel
+        createTranscriptForNote: createTranscriptForNote
     }
 
 });

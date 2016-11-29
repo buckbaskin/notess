@@ -15,7 +15,9 @@
         var transcription;
         var GWS_CORE;
         var DATA_SERVICE;
-        var defaultTitle = "Untitled Note"
+        var defaultTitle = "Untitled Note";
+        var currentTranscriptionId = "";
+        var transcriptions = [];
 
         var recordButtonHandler = function () {
             $recordButton.click(function () {
@@ -32,7 +34,7 @@
 
         var refreshButtonHandler = function () {
             $refreshButton.click(function () {
-                augmentTranscription();
+                onTranscriptionUpdate();
             });
         };
 
@@ -50,18 +52,16 @@
             floatingPanel.css('box-shadow', '10px 10px 8px #888');
             keywordsButton.click(function () {
                 toggleSlider();
-                augmentTranscription();
+                onTranscriptionUpdate();
             });
             closeButton.click(function () {
                 toggleSlider();
             });
-            //stopAugmentRefreshID = setInterval(augmentTranscription, 5000);
+            //stopAugmentRefreshID = setInterval(onTranscriptionUpdate, 5000);
             console.log(stopAugmentRefreshID);
         };
 
-        var augmentTranscription = function () {
-            // Also upload transcription here.
-            //DATA_SERVICE.
+        var onTranscriptionUpdate = function () {
             transcription = GWS_CORE.getTranscript();
             if (transcription !== "" || typeof transcription === 'undefined') {
                 populateKeywordPanel(transcription);
