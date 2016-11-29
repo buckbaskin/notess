@@ -102,11 +102,12 @@ class Database(object):
 
     ### Notes Database ###
 
-    def add_note(self, username: str, class_name: str, note_name: str, force_id: str=None):
+    def add_note(self, username: str, class_name: str, note_name: str, text: str, force_id: str=None):
         note = {
             'username': username,
             'class_name': class_name,
-            'note_name': note_name
+            'note_name': note_name,
+            'text': text
         }
         if force_id is not None:
             note['_id'] = ObjectId(force_id)
