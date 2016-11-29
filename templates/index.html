@@ -18,8 +18,8 @@
     <div class="container-fluid">
         <h1>ANTS</h1>
         <div id="title">
-            <label class="pull-left">Untitled Note</label>
-            <input class="clickedit" type="text" />
+            <label id="titleLabel" class="pull-left">Untitled Note</label>
+            <input id="titleEditor" class="clickedit" type="text" />
             <div class="clearfix"></div>
         </div>
 
@@ -52,6 +52,9 @@
         var $KNOWLEDGE = $.knowledge();
         var dataService = DATA_SERVICE();
         var textArea = $('#noteTextarea');
+        var noteTitle = $('#titleEditor');
+        var noteTitleLabel = document.getElementById('titleLabel')
+
         $KNOWLEDGE.init(GWS_CORE);
         dataService.createNewClass('testuser2x3d', 'tcls', function(){});
         FB_AUTH();
@@ -84,14 +87,22 @@
 
         // Saving mechanism for the text box.
         var lastSavedTime = 0;
-        textArea.on('input', function (){
+        var timeout = 5000;
+        var update = function (){
             var d = new Date();
             var time = d.getTime();
-            if (time-lastSavedTime > 5000){
+            if (time-lastSavedTime > timeout){
                 lastSavedTime = time;
                 //save note call
                 console.log('saved--' + textArea.val());
             }
+        };
+        textArea.on('input', function(){
+            setTimeout(function() { update(); }, timeout);
+        });
+        noteTitle.on('focusout', function(){
+            var newTitle = noteTitleLabel.innerText;
+            //save title call
         });
 
         var noteTab = $('#noteTab');
