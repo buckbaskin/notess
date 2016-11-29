@@ -65,7 +65,7 @@
         console.log(isNew);
         console.log(note_id);
         function createNewNote() {
-            dataService.createNewNote('testuser', {class_name: '', note_name: 'New Note'}, function (result) {
+            dataService.createNewNote('testuser', {class_name: '', note_name: 'New Note', text:'This is your new note'}, function (result) {
                 result = JSON.parse(result);
                 note_id = result._id.$oid;
                 console.log(result._id.$oid);
