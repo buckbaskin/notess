@@ -101,6 +101,7 @@ def get_all_classes():
         username = request.args['username']
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_USER)
+    print('debug: GET all classes for username: %s' % (username,))
     classes_from_database = db.get_all_classes(username)
     return mongo_json.dumps(classes_from_database)
 
@@ -121,7 +122,8 @@ def create_new_class():
         class_metadata['class_name'] = request.args['class_name']
 
     created_class = db.add_class(username, class_name)
-    return mongo_json.dumps(created_class)
+    result = mongo_json.dumps(created_class)
+    return result
 
 @router.route('/v1/class/update', methods=['POST'])
 def save_existing_class():
@@ -148,6 +150,7 @@ def get_all_notes():
         username = request.args['username']
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_USER)
+    print('debug: GET all notes for username: %s' % (username,))
     results = db.get_all_notes(username)
     if results is None:
         return make_response(*INVALID_REQUEST_NO_NOTE)
@@ -163,6 +166,7 @@ def get_class_notes():
         class_name = request.args['class_name']
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_CLASS)
+    print('debug: GET all notes for  username %s for class %s' % (username, class_name,))
     notes_from_database = db.get_all_notes(username, class_name)
     return mongo_json.dumps(notes_from_database)
 
@@ -179,12 +183,16 @@ def create_new_note():
     if not content:
         return make_response('Could not create new note. No JSON note information was POSTed', 400)
     save_this = {}
-    for key in ['class_name', 'note_name']:
+    for key in ['class_name', 'note_name', 'text']:
         if key in content:
             save_this[key] = content[key]
         else:
             make_response('New note could not be created, missing field %s' % (key,), 400)
-    return mongo_json.dumps(db.add_note(username, **save_this))
+    print('debug: %s' % (content,))
+    print('debug: POST create note for username: %s' % (username,))
+    print('debug:      { class_name: %s' % (save_this['class_name'],))
+    print('debug:        note_name: %s }' % (save_this['note_name'],))
+    return mongo_json.dumps(db.add_note(username, save_this['class_name'], save_this['note_name'], save_this['text']))
 
 @router.route('/v1/note/update', methods=['POST'])
 def save_existing_note():
@@ -220,9 +228,37 @@ def save_existing_note():
     if update_result is None:
         return make_response('Note_id not found in database for this user', 404)
     # if not isinstance(update_result, dict):
+    print('debug: POST update note %s for username: %s' % (username, note_id,))
+    print('debug:      {')
+    for key in save_this:
+        value = save_this[key]
+        value_str = str(value)
+        if len(value_str) > 80:
+            value_str = value_str[:76] + ' ...'
+        print('debug:        %s : %s' % (key, value_str,))
+    print('debug:      }')
+
+    return mongo_json.dumps(update_result)
 
 
-    return mongo_json.dumps(db.update_note(username, note_id, content))
+@router.route('/v1/note/get', methods=['GET'])
+def get_one_note():
+    # TODO: validate user identity
+    try:
+        note_id = request.args['note_id']
+    except KeyError:
+        return make_response("No note id")
+    try:
+        user_name = request.args['user_name']
+    except KeyError:
+        return make_response("No user id")
+    try:
+        found_result = db.get_note(note_id=note_id, username=user_name)
+        return mongo_json.dumps(found_result)
+    except:
+        print("caught some unknown error")
+    return make_response('Note_id not found in database for this user', 404)
+
 
 @router.route('/v1/transcript/new', methods=['POST'])
 def create_transcript():
@@ -245,8 +281,18 @@ def create_transcript():
             save_this[key] = content[key]
         else:
             return make_response('Could not create transcript. Key %s not found in POST' % (key,), 400)
+
+    print('debug: POST create new transcript for username %s note %s' % (username, note_id,))
+    print('debug:      {')
+    if len(save_this['text']) < 80:
+        print('debug:        %s : %s' % ('text', save_this['text']))
+    else:
+        print('debug:        %s : %s' % ('text', save_this['text'][:76]+' ...'))
+    print('debug:        %s : %s' % ('recording_link', save_this['recording_link']))
+    print('debug:      }')
     
     return mongo_json.dumps(db.add_transcript(username, note_id, **save_this))
+
 
 @router.route('/v1/transcript/all', methods=['GET'])
 def get_all_transcripts():
@@ -256,6 +302,7 @@ def get_all_transcripts():
         return make_response(*INVALID_REQUEST_NO_USER)
     transcripts_from_database = db.get_all_transcripts(username)
     return mongo_json.dumps(transcripts_from_database)
+
 
 @router.route('/v1/transcript/note', methods=['GET'])
 def get_note_transcripts():
@@ -267,6 +314,7 @@ def get_note_transcripts():
         note_id = request.args['note_id']
     except KeyError:
         return make_response(*INVALID_REQUEST_NO_NOTE)
+    print('debug: GET transcripts for username %s note %s' % (username, note_id,))
     transcripts_from_database = db.get_all_transcripts(username, note_id=note_id)
     return mongo_json.dumps(transcripts_from_database)
 

@@ -15,13 +15,27 @@
   {% include "navbar.html" %}
 
   <div class="container">
-    <h2>Notes</h2>
-    <ul class="list-group">
-      <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
-      <a href="#" class="list-group-item list-group-item-action">Morbi leo risus</a>
-      <a href="#" class="list-group-item list-group-item-action">Porta ac consectetur ac</a>
-      <a href="#" class="list-group-item list-group-item-action">Vestibulum at eros</a>
-    </ul>
+    <div class="row"><h2>Notes</h2></div>
+    <div class="row">
+      <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Class Filter
+          <span class="caret"></span></button>
+          <ul class="dropdown-menu">
+            <li><a href="#">All</a></li>
+            <li><a href="#">CSS</a></li>
+            <li><a href="#">JavaScript</a></li>
+          </ul>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+      <ul class="list-group">
+        <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in &nbsp;&nbsp;&nbsp;&nbsp;<span class="label label-warning classTag">Primary</span></a>
+        <a href="#" class="list-group-item list-group-item-action">Morbi leo risus &nbsp;&nbsp;&nbsp;&nbsp;<span class="label label-warning classTag">Primary</span></a>
+        <a href="#" class="list-group-item list-group-item-action">Porta ac consectetur ac &nbsp;&nbsp;&nbsp;&nbsp;<span class="label label-warning classTag">Primary</span></a>
+        <a href="#" class="list-group-item list-group-item-action">Vestibulum at eros &nbsp;&nbsp;&nbsp;&nbsp;<span class="label label-warning classTag">Primary</span></a>
+      </ul>
+    </div>
   </div>
 </body>
 

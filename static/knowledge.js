@@ -14,6 +14,7 @@
         var $refreshButton = $('#refresh_button');
         var transcription;
         var GWS_CORE;
+        var DATA_SERVICE;
         var defaultTitle = "Untitled Note"
 
         var recordButtonHandler = function () {
@@ -35,9 +36,15 @@
             });
         };
 
-        var init = function (gws_core) {
+        var init = function (gws_core, data_service) {
             GWS_CORE = gws_core;
-            tutorial.modal('toggle')
+            DATA_SERVICE = data_service;
+            if (document.cookie != "tutorial=true"){
+                document.cookie = "tutorial=true";
+                tutorial.modal('toggle');
+            }else{
+                console.log("Tutorial already displayed")
+            }
             recordButtonHandler();
             refreshButtonHandler();
             floatingPanel.css('box-shadow', '10px 10px 8px #888');
@@ -53,6 +60,8 @@
         };
 
         var augmentTranscription = function () {
+            // Also upload transcription here.
+            //DATA_SERVICE.
             transcription = GWS_CORE.getTranscript();
             if (transcription !== "" || typeof transcription === 'undefined') {
                 populateKeywordPanel(transcription);
@@ -85,7 +94,7 @@
             setTimeout(function () {
                 x.className = x.className.replace("show", "");
             }, 3000);
-        }
+        };
 
         var keywordsCallback = function (keywordsJson) {
             // stores the 'text' field of each JSON object

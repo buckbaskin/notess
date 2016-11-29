@@ -26,8 +26,8 @@ except DuplicateKeyError:
     print('existing class')
 
 try:
-    db.add_note(USERNAME, CLASS_NAME, NOTE_NAME1)
-    db.add_note(USERNAME, CLASS_NAME, NOTE_NAME2)
+    db.add_note(USERNAME, CLASS_NAME, NOTE_NAME1, 'First note text')
+    db.add_note(USERNAME, CLASS_NAME, NOTE_NAME2, 'Second note text')
     print('added two notes')
 except DuplicateKeyError:
     print('existing notes')
