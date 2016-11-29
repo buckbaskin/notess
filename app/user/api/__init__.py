@@ -239,6 +239,38 @@ def save_existing_note():
 
     return mongo_json.dumps(update_result)
 
+@router.route('/v1/transcript/update', methods=['POST'])
+def update_transcript():
+    try:
+        username = request.args['username']
+    except KeyError:
+        return make_response(*INVALID_REQUEST_NO_USER)
+    try:
+        transcript_id = request.args['transcript_id']
+    except KeyError:
+        return make_response('Invalid request. transcript_id not in url parameters', 400)
+
+    content = request.get_json()
+    if not content:
+        content = {}
+    save_this = {}
+    for key in ['text']:
+        if key in content:
+            save_this[key] = content[key]
+        else:
+            make_response('Count not update transcript. Key %s not found in POSTed JSON' % (key,), 400)
+
+    print('debug: POST update transcript %s for username %s' % (transcript_id, username,))
+    if len(save_this['text']) >= 80:
+        debug_txt = save_this['text'][:76] + ' ...'
+    else:
+        debug_txt = save_this['text']
+    print('debug:      text : %s' % (debug_txt,))
+
+    db.update_transcript(username, transcript_id, save_this)
+    return mongo_json.dumps(db.get_transcript(username, transcript_id,))
+    
+
 @router.route('/v1/transcript/new', methods=['POST'])
 def create_transcript():
     try:
@@ -253,7 +285,7 @@ def create_transcript():
     if not content:
         content = {}
     save_this = {}
-    for key in ['text', 'recording_link']:
+    for key in ['text']:
         if key in content and key[-3:] == '_id':
             save_this[key] = fix_oid(content[key])
         elif key in content:
@@ -267,7 +299,7 @@ def create_transcript():
         print('debug:        %s : %s' % ('text', save_this['text']))
     else:
         print('debug:        %s : %s' % ('text', save_this['text'][:76]+' ...'))
-    print('debug:        %s : %s' % ('recording_link', save_this['recording_link']))
+    # print('debug:        %s : %s' % ('recording_link', save_this['recording_link']))
     print('debug:      }')
     
     return mongo_json.dumps(db.add_transcript(username, note_id, **save_this))

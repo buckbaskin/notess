@@ -146,7 +146,7 @@ class Database(object):
 
     ### Transcript Database ###
 
-    def add_transcript(self, username: str, note_id: str, text: str, recording_link: str):
+    def add_transcript(self, username: str, note_id: str, text: str, recording_link: str=''):
         transcript = {
             'username': username,
             'note_id': ObjectId(note_id),
@@ -156,8 +156,8 @@ class Database(object):
         transcript_id = self._transcript_collection.insert_one(transcript).inserted_id
         return self.get_transcript(username, transcript_id)
 
-    def update_transcript(self, username, transcript_id):
-        # TODO
+    def update_transcript(self, username, transcript_id, content):
+        self._transcript_collection.update_one({'username': username, '_id': ObjectId(str(transcript_id))}, {'$set': content})
         return self.get_transcript(username, transcript_id)
 
     def get_transcript(self, username, transcript_id):

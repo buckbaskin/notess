@@ -223,6 +223,7 @@ class TestTranscriptAPI(unittest.TestCase):
     def setUp(self):
         self.client = server.test_client()
         self.new_url = '/v1/transcript/new'
+        self.update_url = '/v1/transcript/update'
         self.all_url = '/v1/transcript/all'
         # self.class_url = '/v1/transcript/class'
         self.note_url = '/v1/transcript/note'
@@ -240,15 +241,35 @@ class TestTranscriptAPI(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         myValidate(self, json.loads(response.data.decode()), transcript_schema)
 
-    # transcripts are not currently searchable by class
-    # def testTranscriptsByClass(self):
-    #     response = self.client.get('%s?username=%s&note_id=%s' % (self.class_url, USERNAME, CLASS_ID,))
-    #     self.assertEqual(response.status_code, 200)
-    #     myValidate(self, json.loads(response.data.decode()), transcript_list)
+    def testUpdateTranscript(self):
+        data = {
+            'text': 'Blah Blah Update this'
+        }
+        data_str = json.dumps(data)
+        response = self.client.post('%s?username=%s&note_id=%s' % (self.new_url, USERNAME, NOTE_ID,), data=data_str, headers=self.headers)
+        if response.status_code != 200:
+            print(response.data)
+        self.assertEqual(response.status_code, 200)
+        myValidate(self, json.loads(response.data.decode()), transcript_schema)
 
-    # def testTranscriptsByClassFail(self):
-    #     response = self.client.get('%s?username=%s' % (self.class_url, USERNAME,))
-    #     self.assertEqual(response.status_code, 400)
+        transcript_data = json.loads(response.data.decode())
+        transcript_username = transcript_data['username']
+        transcript_transcript_id = transcript_data['_id']['$oid']
+        print('transcript_data returned = %s' % (transcript_data,))
+
+        new_data = {
+            'text': ''
+        }
+        data_str = json.dumps(new_data)
+        response = self.client.post('%s?username=%s&transcript_id=%s' % (self.update_url, transcript_username, transcript_transcript_id,), data=data_str, headers=self.headers)
+        if response.status_code != 200:
+            print(response.data)
+        self.assertEqual(response.status_code, 200)
+        try:
+            myValidate(self, json.loads(response.data.decode()), transcript_schema)
+        except ValueError:
+            print(response.data)
+            raise
 
     def testTranscriptsByNote(self):
         response = self.client.get('%s?username=%s&note_id=%s' % (self.note_url, USERNAME, NOTE_ID,))
