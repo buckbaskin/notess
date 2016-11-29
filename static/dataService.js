@@ -166,8 +166,8 @@ var DATA_SERVICE = (function () {
         getAllTranscriptForUser(function(result){
             var filtered = [];
             for (var i = 0; i < result.length; i++) {
-                //console.log(result[i].note_id);
-                if (result[i].note_id == noteId)
+                console.log(result[i].note_id.$oid);
+                if (result[i].note_id.$oid == noteId)
                     filtered.push(result[i]);
             }
             callback(filtered);
