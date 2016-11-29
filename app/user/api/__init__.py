@@ -187,10 +187,11 @@ def create_new_note():
             save_this[key] = content[key]
         else:
             make_response('New note could not be created, missing field %s' % (key,), 400)
+    print('debug: %s' % (content,))
     print('debug: POST create note for username: %s' % (username,))
     print('debug:      { class_name: %s' % (save_this['class_name'],))
     print('debug:        note_name: %s }' % (save_this['note_name'],))
-    return mongo_json.dumps(db.add_note(username, **save_this))
+    return mongo_json.dumps(db.add_note(username, save_this['class_name'], save_this['note_name'], save_this['text']))
 
 @router.route('/v1/note/update', methods=['POST'])
 def save_existing_note():
