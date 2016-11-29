@@ -18,22 +18,16 @@
     <div class="row"><h2>Notes</h2></div>
     <div class="row">
       <div class="dropdown">
-        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Class Filter
-          <span class="caret"></span></button>
-          <ul class="dropdown-menu">
-            <li><a href="#">All</a></li>
-            <li><a href="#">CSS</a></li>
-            <li><a href="#">JavaScript</a></li>
+        <button id="classDropDown" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Class Filter<span class="caret"></span></button>
+          <ul id="classDropDownList" class="dropdown-menu">
+            <li class="classSelection"><a href="#">All</a></li>
           </ul>
         </div>
     </div>
     <br>
     <div class="row">
       <ul class="list-group" id="noteList">
-        <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in &nbsp;&nbsp;&nbsp;&nbsp;<span class="label label-warning classTag">Primary</span></a>
-        <a href="#" class="list-group-item list-group-item-action">Morbi leo risus &nbsp;&nbsp;&nbsp;&nbsp;<span class="label label-warning classTag">Primary</span></a>
-        <a href="#" class="list-group-item list-group-item-action">Porta ac consectetur ac &nbsp;&nbsp;&nbsp;&nbsp;<span class="label label-warning classTag">Primary</span></a>
-        <a href="#" class="list-group-item list-group-item-action">Vestibulum at eros &nbsp;&nbsp;&nbsp;&nbsp;<span class="label label-warning classTag">Primary</span></a>
+
       </ul>
     </div>
   </div>
@@ -42,11 +36,15 @@
 <script src="../../static/gwscore.js"></script>
 <script src="../../static/knowledge.js"></script>
 <script src="../../static/fb_auth.js"></script>
+<script src="../../static/dataService.js"></script>
+<script src="../../static/noteController.js"></script>
 <script>
     $(document).ready(function() {
         var $KNOWLEDGE = $.knowledge();
+        var NoteController = NOTE_CONTROLLER();
+
         $KNOWLEDGE.init(GWS_CORE);
-        FB_AUTH();
+        FB_AUTH(NoteController);
 
         var noteTab = $('#noteTab');
         var editorTab = $('#editorTab');

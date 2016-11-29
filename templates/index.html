@@ -13,15 +13,25 @@
 
 <body>
     {% include "navbar.html" %}
-    {% include "tutorial.html" %}
+{#    {% include "tutorial.html" %}#}
     {%  include "slidePanel.html" %}
     <div class="container-fluid">
         <h1>ANTS</h1>
-        <div id="title">
-            <label id="titleLabel" class="pull-left">Untitled Note</label>
-            <input id="titleEditor" class="clickedit" type="text" />
-            <div class="clearfix"></div>
-        </div>
+{#        <div class="row">#}
+{#            <div id="title" class="col-lg-2 pull-left">#}
+{#                <label id="titleLabel">Untitled Note</label>#}
+{#                <input id="titleEditor" class="clickedit" type="text" />#}
+{#                <div class="clearfix"></div>#}
+{#            </div>#}
+{#            <div class="col-lg-1">#}
+{#            </div>#}
+{#            <div id="class" class="col-lg-2">#}
+{#                <label id="className">Class Name</label>#}
+{#                <input class="clickedit" type="text" />#}
+{#                <div class="clearfix"></div>#}
+{#            </div>#}
+{#        </div>#}
+{#        <br>#}
 
         {% include "control_buttons.html" %}
 
@@ -32,6 +42,12 @@
         <div class="row">
             <div class="col-lg-4 col-lg-offset-4">
                 <button id="start_button" onclick="GWS_CORE.startButton(event)" type="button" class="btn btn-block btn-success">Start</button>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-lg-4 col-lg-offset-4">
+                <button id="saveButton" type="button" class="btn btn-block btn-primary">Save</button>
             </div>
         </div>
         {% include "google_gws_info.html" %}
@@ -55,22 +71,22 @@
         var dataService = DATA_SERVICE();
         var userid = 'testuser';
         var Note_Controller = NOTE_CONTROLLER();
-        GWS_CORE.init(dataService);
 
+        GWS_CORE.init(dataService);
         $KNOWLEDGE.init(GWS_CORE, dataService);
         FB_AUTH(Note_Controller);
         var isNew = '{{isNew}}';
         var note_id = '{{note_id}}';
 
-        if (isNew == "True"){
-            // Create note
-            dataService.onNewNoteCreate(userid);
-            // Redirects to the newly created note
-            // So when user refreshes, they don't have to find their note again.
-
-        }else{
-            dataService.onNoteLoad(userid, note_id);
-        }
+{#        if (isNew == "True"){#}
+{#            // Create note#}
+{#            dataService.onNewNoteCreate(userid);#}
+{#            // Redirects to the newly created note#}
+{#            // So when user refreshes, they don't have to find their note again.#}
+{##}
+{#        }else{#}
+{#            dataService.onNoteLoad(userid, note_id);#}
+{#        }#}
 
         var noteTab = $('#noteTab');
         var editorTab = $('#editorTab');
