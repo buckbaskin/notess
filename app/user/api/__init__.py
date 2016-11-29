@@ -324,6 +324,20 @@ def create_transcript():
     return mongo_json.dumps(db.add_transcript(username, note_id, **save_this))
 
 
+@router.route('/v1/transcript/one', methods=['GET'])
+def get_one_transcripts():
+    try:
+        username = request.args['username']
+    except KeyError:
+        return make_response(*INVALID_REQUEST_NO_USER)
+    try:
+        transcript_id = request.args['transcript_id']
+    except KeyError:
+        return make_response(*INVALID_REQUEST_NO_NOTE)
+    print('debug: GET transcripts for username %s transcript %s' % (username, transcript_id,))
+    result = db.get_transcript(username=username, transcript_id=transcript_id)
+    return mongo_json.dumps(result)
+
 @router.route('/v1/transcript/all', methods=['GET'])
 def get_all_transcripts():
     try:
@@ -347,20 +361,6 @@ def get_note_transcripts():
     print('debug: GET transcripts for username %s note %s' % (username, note_id,))
     transcripts_from_database = db.get_all_transcripts(username, note_id=note_id)
     return mongo_json.dumps(transcripts_from_database)
-
-@router.route('/v1/transcript/one', methods=['GET'])
-def get_one_transcripts():
-    try:
-        username = request.args['username']
-    except KeyError:
-        return make_response(*INVALID_REQUEST_NO_USER)
-    try:
-        transcript_id = request.args['transcript_id']
-    except KeyError:
-        return make_response(*INVALID_REQUEST_NO_NOTE)
-    print('debug: GET transcripts for username %s transcript %s' % (username, transcript_id,))
-    result = db.get_transcript(username=username, transcript_id=transcript_id)
-    return mongo_json.dumps(result)
 
 
 @router.route('/v1/keyword/new', methods=['POST'])

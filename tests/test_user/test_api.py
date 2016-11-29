@@ -296,7 +296,7 @@ class TestTranscriptAPI(unittest.TestCase):
             'text': ''
         }
         data_str = json.dumps(new_data)
-        response = self.client.post('%s?username=%s&transcript_id=%s' % (self.get_one_url, transcript_username, transcript_transcript_id,), data=data_str, headers=self.headers)
+        response = self.client.get('%s?username=%s&transcript_id=%s' % (self.get_one_url, transcript_username, transcript_transcript_id,), data=data_str, headers=self.headers)
         if response.status_code != 200:
             print(response.data)
         self.assertEqual(response.status_code, 200)
