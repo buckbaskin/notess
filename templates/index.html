@@ -38,6 +38,7 @@
     </div>
 
     <div id="snackbar">Keyword updated</div>
+    <div id="snackbar2">Note Saved</div>
 </body>
 
 
@@ -93,21 +94,35 @@
         }
 
         // Saving mechanism for the text box.
-        var lastSavedTime = 0;
-        var timeout = 5000;
-        var update = function (){
+        var lastSavedTime = new Date().getTime();
+        var uploadedID = 0;
+        var pendingID = 0;
+        var timeout = 4000;
+        var update = function (id){
             var d = new Date();
             var time = d.getTime();
-            if (time-lastSavedTime > timeout){
+            var delta = time-lastSavedTime;
+            if (delta > timeout){
                 lastSavedTime = time;
+                uploadedID = id;
                 //save note call
                 var pendingText = textArea.val();
                 dataService.updateNote(userid, note_id, {text: pendingText}, reflectiveCallback);
                 console.log('saved--' + textArea.val());
+                dataService.showUpdatedLabel("All Changes Saved");
             }
         };
+
+        var updateLabel = function(){
+            if (uploadedID < pendingID){
+                dataService.showUpdatedLabel("Pending changes");
+            }
+        };
+
         textArea.on('input', function(){
-            setTimeout(function() { update(); }, timeout);
+            pendingID++;
+            updateLabel();
+            setTimeout(function() { update(pendingID); }, timeout);
         });
         noteTitle.on('focusout', function(){
             var newTitle = noteTitleLabel.innerText;

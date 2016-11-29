@@ -151,16 +151,28 @@ var DATA_SERVICE = (function () {
         });
     };
 
+    var showUpdatedLabel = function (text) {
+        // Get the snackbar DIV
+        var x = document.getElementById("snackbar2");
+
+        // Add the "show" class to DIV
+        x.className = "show";
+
+        x.innerHTML = text;
+    };
+
+
     return {
         createNewClass: createNewClass,
-        getAllClasses:getAllClasses,
+        getAllClasses: getAllClasses,
         getAllNote: getAllNote,
         getAllNoteForClass: getAllNoteForClass,
         createNewNote: createNewNote,
         getNote: getNote,
         updateNote: updateNote,
         getTranscriptForNote: getTranscriptForNote,
-        createTranscriptForNote: createTranscriptForNote
+        createTranscriptForNote: createTranscriptForNote,
+        showUpdatedLabel: showUpdatedLabel
     }
 
 });

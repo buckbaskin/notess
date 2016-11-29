@@ -94,7 +94,7 @@
             setTimeout(function () {
                 x.className = x.className.replace("show", "");
             }, 3000);
-        }
+        };
 
         var keywordsCallback = function (keywordsJson) {
             // stores the 'text' field of each JSON object
