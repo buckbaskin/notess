@@ -293,6 +293,7 @@ def create_transcript():
     
     return mongo_json.dumps(db.add_transcript(username, note_id, **save_this))
 
+
 @router.route('/v1/transcript/all', methods=['GET'])
 def get_all_transcripts():
     try:
@@ -301,6 +302,7 @@ def get_all_transcripts():
         return make_response(*INVALID_REQUEST_NO_USER)
     transcripts_from_database = db.get_all_transcripts(username)
     return mongo_json.dumps(transcripts_from_database)
+
 
 @router.route('/v1/transcript/note', methods=['GET'])
 def get_note_transcripts():
