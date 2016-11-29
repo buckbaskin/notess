@@ -2,7 +2,7 @@ var DATA_SERVICE = (function () {
     var userId;
     var noteId;
     var currentTranscriptId;
-    var allTranscriptIds = [];
+    var allTranscripts = [];
     var setFinalTranscript;
 
     var defaultCallback = function (result) {
@@ -143,6 +143,37 @@ var DATA_SERVICE = (function () {
         });
     };
 
+    // GET /v1/transcript/note
+    var getAllTranscriptForUser = function (callback) {
+        console.log('/v1/transcript/note?username=' + userId);
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: "/v1/transcript/all",
+            data: {username: userId},
+            success: function (result) {
+                callback(result);
+            },
+            error: function () {
+                console.log("Cannot get notes.")
+            }
+        });
+    };
+
+    // GET /v1/transcript/note
+    var getAllTranscriptForNote = function (callback) {
+        console.log('simulated /v1/transcript/note?username=' + userId + '&note_id=' + noteId);
+        getAllTranscriptForUser(function(result){
+            var filtered = [];
+            for (var i = 0; i < result.length; i++) {
+                //console.log(result[i].note_id);
+                if (result[i].note_id == noteId)
+                    filtered.push(result[i]);
+            }
+            callback(filtered);
+        })
+    };
+
     // POST /v1/transcript/new
     var createTranscriptForNote = function (content, callback) {
         console.log('/v1/transcript/new?username=' + userId + '&note_id=' + noteId);
@@ -194,9 +225,9 @@ var DATA_SERVICE = (function () {
         createTranscriptForNote({text: ''}, function (result) {
             result = JSON.parse(result);
             currentTranscriptId = result._id.$oid;
-            allTranscriptIds.push(currentTranscriptId);
+            //allTranscriptIds.push(currentTranscriptId);
             console.log('tid=' + currentTranscriptId);
-            console.log('tids=' + allTranscriptIds);
+            //console.log('tids=' + allTranscriptIds);
 
             updateNote({current_transcription_id: currentTranscriptId},defaultCallback)
         })
@@ -240,6 +271,10 @@ var DATA_SERVICE = (function () {
                 currentTranscriptId = result.current_transcription_id;
                 getCurrentTranscript(function callback(result) {
                     setFinalTranscript(result.text);
+                });
+                getAllTranscriptForNote(function (result){
+                    allTranscripts = result;
+                    console.log(allTranscripts);
                 });
             }
         })

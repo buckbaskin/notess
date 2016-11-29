@@ -150,7 +150,7 @@ class Database(object):
     def add_transcript(self, username: str, note_id: str, text: str, recording_link: str=''):
         transcript = {
             'username': username,
-            'note_id': ObjectId(note_id),
+            'note_id': note_id,
             'text': text,
             'recording_link': recording_link
         }
@@ -174,7 +174,7 @@ class Database(object):
         return result
 
     def delete_transcript(self, username, transcript_id) -> int:
-        result = self._transcript_collection.delete_one({'_id': ObjectId(transcript_id), 'username': username})
+        result = self._transcript_collection.delete_one({'_id': transcript_id, 'username': username})
         return result.deleted_count
 
     def delete_all_transcripts(self, username) -> int:
