@@ -81,13 +81,15 @@
             // We load old notes.
             // In the cloud, we verify if the old id exists, otherwise, we create a new note.
         }
-        var lastSavedTime = 1480377828785;
+
+        // Saving mechanism for the text box.
+        var lastSavedTime = 0;
         textArea.on('input', function (){
             var d = new Date();
             var time = d.getTime();
             if (time-lastSavedTime > 5000){
                 lastSavedTime = time;
-                //save note
+                //save note call
                 console.log('saved--' + textArea.val());
             }
         });
