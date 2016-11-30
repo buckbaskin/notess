@@ -1,9 +1,7 @@
 var DATA_SERVICE = (function () {
-    var noteId;
     var currentTranscriptId;
     var allTranscripts = [];
     var setFinalTranscript;
-    var noteController = NOTE_CONTROLLER();
 
     var defaultCallback = function (result) {
         console.log(result)
@@ -37,7 +35,7 @@ var DATA_SERVICE = (function () {
             },
             error: function () {
                 console.log("Cannot create new notes");
-                noteController.showFailMsg();
+                showFailMsg();
             }
         });
     };
@@ -96,14 +94,14 @@ var DATA_SERVICE = (function () {
     };
 
     // POST /v1/note/update
-    var updateNote = function (content, callback) {
+    var updateNote = function (userId, noteId, text, callback) {
         console.log('/v1/note/update?username=' + userId + '&note_id=' + noteId);
 
         $.ajax({
             type: "POST",
             url: '/v1/note/update?username=' + userId + '&note_id=' + noteId,
             contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify(content),
+            data: JSON.stringify({text: text}),
             success: function (result) {
                 callback(result);
             },
@@ -114,7 +112,7 @@ var DATA_SERVICE = (function () {
     };
 
     // GET /v1/note/get
-    var getNote = function (callback) {
+    var getNote = function (userId, noteId, callback) {
         $.ajax({
             type: "GET",
             dataType: "json",
@@ -147,7 +145,7 @@ var DATA_SERVICE = (function () {
     };
 
     // GET /v1/transcript/note
-    var getAllTranscriptForUser = function (callback) {
+    var getAllTranscriptForUser = function (userId, callback) {
         console.log('/v1/transcript/note?username=' + userId);
         $.ajax({
             type: "GET",
@@ -164,9 +162,9 @@ var DATA_SERVICE = (function () {
     };
 
     // GET /v1/transcript/note
-    var getAllTranscriptForNote = function (callback) {
+    var getAllTranscriptsForNote = function (userId, noteId, callback) {
         console.log('simulated /v1/transcript/note?username=' + userId + '&note_id=' + noteId);
-        getAllTranscriptForUser(function(result){
+        getAllTranscriptForUser(userId, function(result){
             var filtered = [];
             for (var i = 0; i < result.length; i++) {
                 console.log(result[i].note_id.$oid);
@@ -178,14 +176,14 @@ var DATA_SERVICE = (function () {
     };
 
     // POST /v1/transcript/new
-    var createTranscriptForNote = function (content, callback) {
+    var createTranscriptForNote = function (userId, noteId, text, callback) {
         console.log('/v1/transcript/new?username=' + userId + '&note_id=' + noteId);
 
         $.ajax({
             type: "POST",
             url: '/v1/transcript/new?username=' + userId + '&note_id=' + noteId,
             contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify(content),
+            data: JSON.stringify({text: text}),
             success: function (result) {
                 callback(result);
             },
@@ -317,6 +315,12 @@ var DATA_SERVICE = (function () {
     //     updateNote({note_name: newTitle}, defaultCallback)
     // });
 
+    var showFailMsg = function() {
+      $('#saveFail').fadeIn('slow', function(){
+          $('#saveFail').delay(2000).fadeOut('slow', function(){});
+      });
+    };
+
     return {
         createNewClass: createNewClass,
         getAllClasses: getAllClasses,
@@ -331,7 +335,8 @@ var DATA_SERVICE = (function () {
         createTranscriptForNote: createTranscriptForNote,
         onTranscriptCreate: onTranscriptCreate,
         onTranscriptUpdate: onTranscriptUpdate,
-        setTranscriptSetter: setTranscriptSetter
+        setTranscriptSetter: setTranscriptSetter,
+        getTranscriptsForNote: getAllTranscriptsForNote
     }
 
 });

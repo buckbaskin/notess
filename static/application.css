@@ -129,7 +129,7 @@ label:hover {
     border-radius:5px;
 }
 
-#saveSuccess, #saveFail {
+#saveSuccess, #saveFail, #updateSuccess {
     position: fixed;
     z-index: 5000;
     top: 10%;

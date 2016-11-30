@@ -20,6 +20,11 @@
         {% include "control_buttons.html" %}
 
         <br>
+
+        <div id="updateSuccess" class="alert alert-success" role="alert" style="display:none;">
+            <strong>Success!</strong> You successfully updated your note.
+        </div>
+
         {% include "note_panels.html" %}
         <br>
 
@@ -33,13 +38,13 @@
 
         <div class="row">
             <div class="col-lg-4 col-lg-offset-4">
-                <button id="start_button" onclick="GWS_CORE.startButton(event)" type="button" class="btn btn-block btn-success">Start</button>
+                <button id="start_button" onclick="GWS_CORE.startButton(event)" type="button" class="btn btn-block btn-success" disabled>Start</button>
             </div>
         </div>
         <br>
         <div class="row">
             <div class="col-lg-4 col-lg-offset-4">
-                <button id="saveButton" type="button" class="btn btn-block btn-primary">Save</button>
+                <button id="updateButton" type="button" class="btn btn-block btn-warning">Update Note</button>
             </div>
         </div>
         {% include "google_gws_info.html" %}
@@ -61,33 +66,24 @@
     $(document).ready(function() {
         var $KNOWLEDGE = $.knowledge();
         var dataService = DATA_SERVICE();
-        var userid = 'testuser';
         var Note_Controller = NOTE_CONTROLLER();
+        var noteId = '{{ noteId }}';
+        var userId = '{{ userId }}';
+
+        Note_Controller.setNoteId(noteId);
+        Note_Controller.setUserId(userId);
+        Note_Controller.populateEditPage();
 
         GWS_CORE.init(dataService);
         $KNOWLEDGE.init(GWS_CORE, dataService);
         FB_AUTH(Note_Controller);
-        var isNew = '{{isNew}}';
-        var note_id = '{{note_id}}';
-
-{#        if (isNew == "True"){#}
-{#            // Create note#}
-{#            dataService.onNewNoteCreate(userid);#}
-{#            // Redirects to the newly created note#}
-{#            // So when user refreshes, they don't have to find their note again.#}
-{##}
-{#        }else{#}
-{#            dataService.onNoteLoad(userid, note_id);#}
-{#        }#}
 
         var noteTab = $('#noteTab');
         var editorTab = $('#editorTab');
         var editTab = $('#editTab');
         noteTab.removeClass('active');
-
-        editTab.on('click', function(e) {
-            e.preventDefault();
-        });
+        editorTab.removeClass('active');
+        editTab.addClass('active');
     });
 </script>
 

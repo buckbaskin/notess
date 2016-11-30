@@ -7,6 +7,7 @@ from app.store.database import Database
 
 db = Database()
 
+
 @server.route('/')
 def hello():
     return render_template('index.html', isNew=True, note_id=-1)
@@ -36,3 +37,16 @@ def load_editor():
 @server.route('/notes')
 def notes_page():
     return render_template('notes_page.html')
+
+
+@server.route('/edit', methods=['GET'])
+def edit_page():
+    try:
+        note_id = request.args['note_id']
+    except KeyError:
+        return make_response("No note id")
+    try:
+        user_id = request.args['user']
+    except KeyError:
+        return make_response("No user id")
+    return render_template('edit_page.html', userId=user_id, noteId=note_id)
