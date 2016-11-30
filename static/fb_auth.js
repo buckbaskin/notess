@@ -1,6 +1,6 @@
-var FB_AUTH = (function() {
-          // This is called with the results from from FB.getLoginStatus().
-      function statusChangeCallback(response) {
+var FB_AUTH = (function (noteController) {
+    // This is called with the results from from FB.getLoginStatus().
+    function statusChangeCallback(response) {
         console.log('statusChangeCallback');
         console.log(response);
         // The response object is returned with a status field that lets the
@@ -8,72 +8,75 @@ var FB_AUTH = (function() {
         // Full docs on the response object can be found in the documentation
         // for FB.getLoginStatus().
         if (response.status === 'connected') {
-          // Logged into your app and Facebook.
-          testAPI();
+            // Logged into your app and Facebook.
+            setupUser();
             var uid = response.authResponse.userID;
             console.log("USER ID!: " + response.authResponse.userID);
         } else if (response.status === 'not_authorized') {
-          // The person is logged into Facebook, but not your app.
-          document.getElementById('status').innerHTML = 'Please log ' +
-            'into this app.';
+            // The person is logged into Facebook, but not your app.
+            document.getElementById('status').innerHTML = 'Please log ' +
+                'into this app.';
         } else {
-          // The person is not logged into Facebook, so we're not sure if
-          // they are logged into this app or not.
-          document.getElementById('status').innerHTML = 'Please log ' +
-            'into Facebook.';
+            // The person is not logged into Facebook, so we're not sure if
+            // they are logged into this app or not.
+            document.getElementById('status').innerHTML = 'Please log ' +
+                'into Facebook.';
         }
-      }
+    }
 
-      // This function is called when someone finishes with the Login
-      // Button. Response contains the user ID.
-      function checkLoginState() {
-        FB.getLoginStatus(function(response) {
-          statusChangeCallback(response);
+    // This function is called when someone finishes with the Login
+    // Button. Response contains the user ID.
+    function checkLoginState() {
+        FB.getLoginStatus(function (response) {
+            statusChangeCallback(response);
         });
-      }
+    }
 
-      window.fbAsyncInit = function() {
-      FB.init({
-          appId      : '1441716825857085',
-          xfbml      : true,
-          version    : 'v2.8',
-          cookie     : true  // enable cookies to allow the server to access
-      });
+    window.fbAsyncInit = function () {
+        FB.init({
+            appId: '1441716825857085',
+            xfbml: true,
+            version: 'v2.8',
+            cookie: true  // enable cookies to allow the server to access
+        });
 
-      // Now that we've initialized the JavaScript SDK, we call
-      // FB.getLoginStatus().  This function gets the state of the
-      // person visiting this page and can return one of three states to
-      // the callback you provide.  They can be:
-      //
-      // 1. Logged into your app ('connected')
-      // 2. Logged into Facebook, but not your app ('not_authorized')
-      // 3. Not logged into Facebook and can't tell if they are logged into
-      //    your app or not.
-      //
-      // These three cases are handled in the callback function.
+        // Now that we've initialized the JavaScript SDK, we call
+        // FB.getLoginStatus().  This function gets the state of the
+        // person visiting this page and can return one of three states to
+        // the callback you provide.  They can be:
+        //
+        // 1. Logged into your app ('connected')
+        // 2. Logged into Facebook, but not your app ('not_authorized')
+        // 3. Not logged into Facebook and can't tell if they are logged into
+        //    your app or not.
+        //
+        // These three cases are handled in the callback function.
 
-      FB.getLoginStatus(function(response) {
-        statusChangeCallback(response);
-      });
+        FB.getLoginStatus(function (response) {
+            statusChangeCallback(response);
+        });
 
-      };
+    };
 
-      // Load the SDK asynchronously
-      (function(d, s, id) {
+    // Load the SDK asynchronously
+    (function (d, s, id) {
         var js, fjs = d.getElementsByTagName(s)[0];
         if (d.getElementById(id)) return;
-        js = d.createElement(s); js.id = id;
+        js = d.createElement(s);
+        js.id = id;
         js.src = "//connect.facebook.net/en_US/sdk.js";
         fjs.parentNode.insertBefore(js, fjs);
-      }(document, 'script', 'facebook-jssdk'));
+    }(document, 'script', 'facebook-jssdk'));
 
-      function testAPI() {
-        console.log('Welcome!  Fetching your information.... ');
-        FB.api('/me', function(response) {
-          console.log('Successful login for: ' + response.name);
-          console.log(response);
-          document.getElementById('status').innerHTML =
-            'Thanks for logging in, ' + response.name + '!';
+    function setupUser() {
+        FB.api('/me', function (response) {
+            console.log('Successful login for: ' + response.name);
+            console.log(response);
+            document.getElementById('status').innerHTML =
+                'Thanks for logging in, ' + response.name + '!';
+            noteController.setUsername(response.name);
+            noteController.setUserId(response.id);
+            noteController.init();
         });
-      }
+    }
 });

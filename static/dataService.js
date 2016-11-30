@@ -1,5 +1,4 @@
 var DATA_SERVICE = (function () {
-    var userId;
     var noteId;
     var currentTranscriptId;
     var allTranscripts = [];
@@ -10,12 +9,12 @@ var DATA_SERVICE = (function () {
     };
 
     //GET v1/class/all
-    var getAllClasses = function (callback) {
+    var getAllClasses = function (userId, callback) {
         $.ajax({
             type: "GET",
             dataType: "json",
             url: "/v1/class/all",
-            data: {user_name: userId},
+            data: {username: userId},
             success: function (result) {
                 callback(result);
             },
@@ -26,13 +25,12 @@ var DATA_SERVICE = (function () {
     };
 
     // POST /v1/class/new
-    var createNewClass = function (class_name, callback) {
-
+    var createNewClass = function (userId, className, callback) {
         $.ajax({
             type: "POST",
-            url: '/v1/class/new?username=' + userId + '&class_name=' + class_name,
+            url: '/v1/class/new?username=' + userId + '&class_name=' + className,
             contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify({class_name: class_name}), //redundancy
+            data: JSON.stringify({class_name: className}), //redundancy
             success: function (result) {
                 callback(result);
             },
@@ -43,12 +41,12 @@ var DATA_SERVICE = (function () {
     };
 
     //GET v1/note/all
-    var getAllNote = function (callback) {
+    var getAllNotes = function(userId, callback) {
         $.ajax({
             type: "GET",
             dataType: "json",
             url: "/v1/note/all",
-            data: {user_name: userId},
+            data: {username: userId},
             success: function (result) {
                 callback(result);
             },
@@ -59,12 +57,12 @@ var DATA_SERVICE = (function () {
     };
 
     //GET v1/note/class
-    var getAllNoteForClass = function (classname, callback) {
+    var getAllNotesForClass = function (userId, className, callback) {
         $.ajax({
             type: "GET",
             dataType: "json",
             url: "/v1/note/class",
-            data: {user_name: userId, class_name: classname},
+            data: {username: userId, class_name: className},
             success: function (result) {
                 callback(result);
             },
@@ -75,14 +73,17 @@ var DATA_SERVICE = (function () {
     };
 
     // POST /v1/note/new
-    var createNewNote = function (content, callback) {
+    var createNewNote = function (userId, className, noteName, text, callback) {
         console.log('/v1/note/new?username=' + userId);
-
         $.ajax({
             type: "POST",
             url: '/v1/note/new?username=' + userId,
             contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify(content),
+            data: JSON.stringify({
+                class_name: className,
+                note_name: noteName,
+                text: text
+            }),
             success: function (result) {
                 callback(result);
             },
@@ -127,7 +128,7 @@ var DATA_SERVICE = (function () {
     };
 
     // GET /v1/transcript/note
-    var getCurrentTranscript = function (callback) {
+    var getCurrentTranscript = function (userId, transcriptId, callback) {
         console.log('/v1/transcript/one?username=' + userId + '&transcript_id=' + currentTranscriptId);
         $.ajax({
             type: "GET",
@@ -254,7 +255,7 @@ var DATA_SERVICE = (function () {
 
     var textArea = $('#noteTextarea');
     var noteTitle = $('#titleEditor');
-    var noteTitleLabel = document.getElementById('titleLabel')
+    var noteTitleLabel = $('#titleLabel');
 
     // Download and display server content on load.
     var onNoteLoad = function (userid, note_id) {
@@ -298,36 +299,28 @@ var DATA_SERVICE = (function () {
         }
     };
 
-    textArea.on('input', function () {
-        pendingID++;
-        if (uploadedID < pendingID) {
-            showUpdatedLabel("Pending changes");
-        }
-        setTimeout(function () {
-            onNoteUpdate();
-        }, timeout);
-    });
+    // textArea.on('input', function () {
+    //     pendingID++;
+    //     if (uploadedID < pendingID) {
+    //         showUpdatedLabel("Pending changes");
+    //     }
+    //     setTimeout(function () {
+    //         // Stop auto save for now
+    //         //  onNoteUpdate();
+    //     }, timeout);
+    // });
 
-    noteTitle.on('focusout', function () {
-        var newTitle = noteTitleLabel.innerText;
-        updateNote({note_name: newTitle}, defaultCallback)
-    });
-
-    var showUpdatedLabel = function (text) {
-        // Get the snackbar DIV
-        var x = document.getElementById("snackbar2");
-
-        // Add the "show" class to DIV
-        x.className = "show";
-
-        x.innerHTML = text;
-    };
+    // noteTitle.on('focusout', function () {
+    //     var newTitle = noteTitleLabel.innerText;
+    //     updateNote({note_name: newTitle}, defaultCallback)
+    // });
 
     return {
         createNewClass: createNewClass,
         getAllClasses: getAllClasses,
-        getAllNote: getAllNote,
-        getAllNoteForClass: getAllNoteForClass,
+        getAllNotes: getAllNotes,
+        getAllNotesForClass: getAllNotesForClass,
+        createNewNote: createNewNote,
         getNote: getNote,
         onNoteLoad: onNoteLoad,
         onNewNoteCreate: onNewNoteCreate,

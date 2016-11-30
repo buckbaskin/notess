@@ -60,7 +60,6 @@
                 toggleSlider();
             });
             //stopAugmentRefreshID = setInterval(onTranscriptionUpdate, 5000);
-            console.log(stopAugmentRefreshID);
         };
 
         var onTranscriptionUpdate = function () {
