@@ -135,3 +135,7 @@ label:hover {
     top: 10%;
     left: 25%;
 }
+
+.deleteRow {
+    margin-bottom: 8%;
+}
