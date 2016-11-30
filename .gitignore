@@ -4,6 +4,7 @@ venv/
 cover/
 mypycover/
 *.pyc
+**/*.pyc
 
 # My lowly vim
 *.swp

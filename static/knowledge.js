@@ -7,6 +7,7 @@
         var floatingPanel = $('#floatingPanel');
         var keywordsButton = $('#keywordsButton');
         var closeButton = $('#closebtn');
+        var loadingWheel = $("#loading");
         var knowledge_cards = [];
         var dict = {};
         var stopAugmentRefreshID;
@@ -40,6 +41,7 @@
 
         var init = function (gws_core, data_service) {
             GWS_CORE = gws_core;
+            loadingWheel.hide();
             DATA_SERVICE = data_service;
             if (document.cookie != "tutorial=true"){
                 document.cookie = "tutorial=true";
@@ -96,6 +98,7 @@
         };
 
         var keywordsCallback = function (keywordsJson) {
+            loadingWheel.show();
             // stores the 'text' field of each JSON object
             keywords = [];
             // stores the entire JSON object
@@ -111,6 +114,9 @@
                     //keywordsList.append('<a href="#" class="list-group-item">' + obj.text + '</a>');
                     updated = true;
                 }
+            }
+            if (keywordsJsonObjects.length == 0){
+                loadingWheel.hide();
             }
             addDescriptions(keywordsJsonObjects, descriptionCallback);
             GWS_CORE.addKeywords(keywords);
@@ -129,6 +135,8 @@
             }
             // Knowledge card added.
             updateKnowledgeCard();
+            loadingWheel.hide();
+            console.log('Hiding Wheel!');
         };
 
         function generateDisplayableCard(card) {

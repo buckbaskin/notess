@@ -2,8 +2,8 @@ import json
 
 from watson_developer_cloud import AlchemyLanguageV1
 
-#backup apikey = 6b2352eeeb11ed3e8e4cb16d874506dea64503a5
-alchemy_language = AlchemyLanguageV1(api_key='f03242140ef3d503e4b744ef70f33c30214894ee')
+#backup apikey = f03242140ef3d503e4b744ef70f33c30214894ee
+alchemy_language = AlchemyLanguageV1(api_key='6b2352eeeb11ed3e8e4cb16d874506dea64503a5')
 
 '''
 Interface to Watson API and more specifically keyword search
