@@ -46,9 +46,7 @@
     </div>
 
     <div id="snackbar">Keyword updated</div>
-{#    <div id="snackbar2">Note Saved</div>#}
-<div id="snackbar2" class="alert alert-warning" role="alert" style="display:none;">
-
+    <div id="snackbar2" class="alert alert-warning" role="alert" style="display:none;">
     </div>
 </body>
 
@@ -72,16 +70,6 @@
         FB_AUTH(Note_Controller);
         var isNew = '{{isNew}}';
         var note_id = '{{note_id}}';
-
-{#        if (isNew == "True"){#}
-{#            // Create note#}
-{#            dataService.onNewNoteCreate(userid);#}
-{#            // Redirects to the newly created note#}
-{#            // So when user refreshes, they don't have to find their note again.#}
-{##}
-{#        }else{#}
-{#            dataService.onNoteLoad(userid, note_id);#}
-{#        }#}
 
         var noteTab = $('#noteTab');
         var editorTab = $('#editorTab');
