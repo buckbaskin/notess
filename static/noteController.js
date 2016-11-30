@@ -66,11 +66,18 @@ var NOTE_CONTROLLER = function () {
     };
 
     var showUpdatedLabel = function (text) {
-        // Get the snackbar DIV
-        var x = document.getElementById("snackbar2");
-        // Add the "show" class to DIV
-        x.className = "show";
-        x.innerHTML = text;
+        // // Get the snackbar DIV
+        // var x = document.getElementById("snackbar2");
+        var snackBar = $('#snackbar2');
+        // // Add the "show" class to DIV
+        // x.className = "show";
+        // x.innerHTML = text;
+
+        snackBar.html(text);
+        snackBar.fadeIn('slow', function() {
+           snackBar.delay(3000).fadeOut('slow', function () {
+            });
+        });
     };
 
     var getNoteContents = function () {
