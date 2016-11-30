@@ -3,6 +3,7 @@ var DATA_SERVICE = (function () {
     var currentTranscriptId;
     var allTranscripts = [];
     var setFinalTranscript;
+    var noteController = NOTE_CONTROLLER();
 
     var defaultCallback = function (result) {
         console.log(result)
@@ -35,7 +36,8 @@ var DATA_SERVICE = (function () {
                 callback(result);
             },
             error: function () {
-                console.log("Cannot create new notes")
+                console.log("Cannot create new notes");
+                noteController.showFailMsg();
             }
         });
     };

@@ -39,6 +39,14 @@
         {% include "note_panels.html" %}
         <br>
 
+        <div id="saveSuccess" class="alert alert-success" role="alert" style="display:none;">
+            <strong>Success!</strong> You successfully saved your note.
+        </div>
+
+        <div id="saveFail" class="alert alert-danger" role="alert" style="display:none;">
+            <strong>Oh snap!</strong> Your note failed to save!
+        </div>
+
         <div class="row">
             <div class="col-lg-4 col-lg-offset-4">
                 <button id="start_button" onclick="GWS_CORE.startButton(event)" type="button" class="btn btn-block btn-success">Start</button>

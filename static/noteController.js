@@ -139,7 +139,20 @@ var NOTE_CONTROLLER = (function () {
         ds.createNewClass(userId, className, function(result) {
             console.log('Successful call to create new class!');
             console.log(result);
+            showSuccessMsg();
         })
+    };
+
+    var showSuccessMsg = function() {
+      $('#saveSuccess').fadeIn('slow', function(){
+          $('#saveSuccess').delay(2000).fadeOut('slow', function(){});
+      });
+    };
+
+    var showFailMsg = function() {
+      $('#saveFail').fadeIn('slow', function(){
+          $('#saveFail').delay(2000).fadeOut('slow', function(){});
+      });
     };
 
     //************** Callbacks ************************
@@ -156,6 +169,7 @@ var NOTE_CONTROLLER = (function () {
     return {
         init: init,
         setUserId: setUserId,
-        setUsername: setUsername
+        setUsername: setUsername,
+        showFailMsg: showFailMsg
     }
 });

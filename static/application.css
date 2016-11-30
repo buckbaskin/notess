@@ -128,3 +128,10 @@ label:hover {
     background: #f2f5ff;
     border-radius:5px;
 }
+
+#saveSuccess, #saveFail {
+    position: fixed;
+    z-index: 5000;
+    top: 10%;
+    left: 25%;
+}
