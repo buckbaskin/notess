@@ -234,9 +234,19 @@
         // Handle Title Editing
         // TODO: Get title from database if opening existing note
         var endEdit = function(e) {
-            var input = $(e.target),
-                label = input && input.prev();
+            var input = $(e.target);
+            var label = input && input.prev();
+
             label.text(input.val() === '' ? defaultTitle : input.val());
+            input.hide();
+            label.show();
+        };
+
+        var endEdit2 = function(e) {
+            var input = $(e.target);
+            var label = input && input.prev();
+
+            label.text(input.val() === '' ? 'Class Name' : input.val());
             input.hide();
             label.show();
         };
@@ -246,6 +256,21 @@
         .keyup(function (e) {
             if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
                 endEdit(e);
+                return false;
+            } else {
+                return true;
+            }
+        })
+        .prev().click(function () {
+            $(this).hide();
+            $(this).next().show().focus();
+        });
+
+        $('.clickedit2').hide()
+        .focusout(endEdit2)
+        .keyup(function (e) {
+            if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+                endEdit2(e);
                 return false;
             } else {
                 return true;
