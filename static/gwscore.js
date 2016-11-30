@@ -10,7 +10,7 @@ var GWS_CORE = (function() {
 
     function init(dataService){
         DATA_SERVICE = dataService;
-        dataService.setTranscriptSetter(setFinalTranscript);
+        // dataService.setTranscriptSetter(setFinalTranscript);
     }
 
     if (!('webkitSpeechRecognition' in window)) {
@@ -22,7 +22,7 @@ var GWS_CORE = (function() {
 
         recognition.onstart = function() {
             recognizing = true;
-            DATA_SERVICE.onTranscriptCreate();
+            // DATA_SERVICE.onTranscriptCreate();
             showInfo('info_speak_now');
         };
 
@@ -79,7 +79,7 @@ var GWS_CORE = (function() {
                 // showButtons('inline-block');
             }
             showKeywordHyperlinks();
-            DATA_SERVICE.onTranscriptUpdate(getTranscript());
+            // DATA_SERVICE.onTranscriptUpdate(getTranscript());
         };
     }
 
