@@ -12,6 +12,7 @@ var NOTE_CONTROLLER = function () {
     var noteList = $('#noteList');
     var updateButton = $('#updateButton');
     var deleteButtonCol = $('#deleteButtonCol');
+    var noNotesAlert = $('#noNotes');
 
     // setup event listeners
     var init = function () {
@@ -217,18 +218,20 @@ var NOTE_CONTROLLER = function () {
 
     //************** Callbacks ************************
     var loadNotesListCallback = function (result) {
-        $.each(result, function (index, value) {
-            var noteName = value.note_name;
-            var noteClass = value.class_name;
-            var element = $('<a href="#" class="list-group-item list-group-item-action noteElement">' + noteName + ' &nbsp;&nbsp;&nbsp;&nbsp;<span class="label label-warning classTag">' + noteClass + '</span></a>');
-            // var deleteRow = $('<div class="row deleteRow"><button class="btn btn-md btn-danger deleteNoteButton"><span class="glyphicon glyphicon-trash"></span></button></div>');
-            // var deleteButton = deleteRow.find('.deleteNoteButton');
+        if(result.length > 0) {
+            $.each(result, function (index, value) {
+                var noteName = value.note_name;
+                var noteClass = value.class_name;
+                var element = $('<a href="#" class="list-group-item list-group-item-action noteElement">' + noteName + ' &nbsp;&nbsp;&nbsp;&nbsp;<span class="label label-warning classTag">' + noteClass + '</span></a>');
 
-            element.attr('value', value._id.$oid);
-            noteList.append(element);
-            // deleteButton.attr('value', value._id.$oid);
-            // deleteButtonCol.append(deleteRow);
-        });
+                element.attr('value', value._id.$oid);
+                noteList.append(element);
+            });
+            noNotesAlert.hide();
+        }
+        else {
+            noNotesAlert.show();
+        }
     };
 
     return {
