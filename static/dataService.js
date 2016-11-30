@@ -111,6 +111,40 @@ var DATA_SERVICE = (function () {
         });
     };
 
+    var updateNoteName = function (userId, noteId, noteName, callback) {
+        console.log('/v1/note/update?username=' + userId + '&note_id=' + noteId);
+
+        $.ajax({
+            type: "POST",
+            url: '/v1/note/update?username=' + userId + '&note_id=' + noteId,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({note_name: noteName}),
+            success: function (result) {
+                callback(result);
+            },
+            error: function () {
+                console.log("Cannot create new notes")
+            }
+        });
+    };
+
+    var updateClassName = function (userId, noteId, className, callback) {
+        console.log('/v1/note/update?username=' + userId + '&note_id=' + noteId);
+
+        $.ajax({
+            type: "POST",
+            url: '/v1/note/update?username=' + userId + '&note_id=' + noteId,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({class_name: className}),
+            success: function (result) {
+                callback(result);
+            },
+            error: function () {
+                console.log("Cannot create new notes")
+            }
+        });
+    };
+
     // GET /v1/note/get
     var getNote = function (userId, noteId, callback) {
         $.ajax({
@@ -331,6 +365,8 @@ var DATA_SERVICE = (function () {
         onNoteLoad: onNoteLoad,
         onNewNoteCreate: onNewNoteCreate,
         updateNote: updateNote,
+        updateNoteName: updateNoteName,
+        updateClassName: updateClassName,
         getTranscriptForNote: getCurrentTranscript,
         createTranscriptForNote: createTranscriptForNote,
         onTranscriptCreate: onTranscriptCreate,

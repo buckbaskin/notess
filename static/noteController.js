@@ -115,6 +115,14 @@ var NOTE_CONTROLLER = function () {
         ds.updateNote(userId, noteId, note, callback);
     };
 
+    var updateNoteName = function (noteId, noteName, callback) {
+        ds.updateNoteName(userId, noteId, noteName, callback);
+    };
+
+    var updateClassName = function (noteId, className, callback) {
+        ds.updateClassName(userId, noteId, className, callback);
+    };
+
     var createTranscriptForNote = function (noteId, callback) {
         var text = transcript.text();
         ds.createTranscriptForNote(userId, noteId, text, callback);
@@ -172,13 +180,13 @@ var NOTE_CONTROLLER = function () {
         });
     };
 
-    var setNoteId = function(id) {
+    var setNoteId = function (id) {
         noteId = id;
         console.log(noteId);
     };
 
-    var populateEditPage = function() {
-        getNote(noteId, function(result) {
+    var populateEditPage = function () {
+        getNote(noteId, function (result) {
             console.log(result);
             noteTitle = result.note_name;
             className = result.class_name;
@@ -188,37 +196,41 @@ var NOTE_CONTROLLER = function () {
             noteTextBox.val(result.text);
         });
 
-        getTranscriptsForNote(noteId, function(result) {
-            if(result.length > 0) {
+        getTranscriptsForNote(noteId, function (result) {
+            if (result.length > 0) {
                 var trans = result[0].text;
                 transcript.text(trans);
             }
         });
     };
 
-    var getTranscriptsForNote = function(noteId, callback) {
+    var getTranscriptsForNote = function (noteId, callback) {
         ds.getTranscriptsForNote(userId, noteId, callback);
     };
 
-    var updateButtonListener = function() {
-      updateButton.click(function() {
-        updateNote(noteId, getNoteContents(), function(result) {
-            console.log("Successful note update!");
-            console.log(result);
-            showSuccessUpdateMsg();
+    var updateButtonListener = function () {
+        updateButton.click(function () {
+            updateNote(noteId, getNoteContents(), function (result) {
+                console.log("Successful note update!");
+                console.log(result);
+                showSuccessUpdateMsg();
+            });
+            updateNoteName(noteId, $('#titleLabel').html(), function () {
+            });
+            updateClassName(noteId, $('#className').html(), function () {
+            });
         });
-      });
     };
 
-    var deleteNoteListener = function() {
-        $('.deleteNoteButton').click(function(e){
+    var deleteNoteListener = function () {
+        $('.deleteNoteButton').click(function (e) {
             console.log("Clicked delete!");
         });
     };
 
     //************** Callbacks ************************
     var loadNotesListCallback = function (result) {
-        if(result.length > 0) {
+        if (result.length > 0) {
             $.each(result, function (index, value) {
                 var noteName = value.note_name;
                 var noteClass = value.class_name;
