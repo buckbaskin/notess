@@ -159,7 +159,6 @@
 
         var toggleSlider = function () {
             if (hidden) {
-                populateKeywordPanel(GWS_CORE.getTranscript());
                 // show
                 document.getElementById("floatingPanel").style.width = "40%";
                 hidden = false;
