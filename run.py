@@ -1,4 +1,5 @@
 from app import server
 
 
-server.run(debug=True)
+if __name__ == '__main__':
+    server.run(debug=True)
