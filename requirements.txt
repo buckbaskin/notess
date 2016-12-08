@@ -15,5 +15,4 @@ watson-developer-cloud
 
 pymongo
 
-mod_wsgi-httpd
-mod_wsgi
+gunicorn

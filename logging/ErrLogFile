@@ -1,0 +1,39 @@
+[2016-12-08 19:20:22 +0000] [3901] [INFO] Starting gunicorn 19.6.0
+[2016-12-08 19:20:22 +0000] [3901] [INFO] Listening at: http://0.0.0.0:80 (3901)
+[2016-12-08 19:20:22 +0000] [3901] [INFO] Using worker: sync
+[2016-12-08 19:20:22 +0000] [3904] [INFO] Booting worker with pid: 3904
+[2016-12-08 19:20:22 +0000] [3905] [INFO] Booting worker with pid: 3905
+[2016-12-08 19:20:22 +0000] [3906] [INFO] Booting worker with pid: 3906
+[2016-12-08 19:20:29 +0000] [3901] [INFO] Handling signal: int
+[2016-12-08 19:20:29 +0000] [3904] [INFO] Worker exiting (pid: 3904)
+[2016-12-08 19:20:29 +0000] [3906] [INFO] Worker exiting (pid: 3906)
+[2016-12-08 19:20:29 +0000] [3905] [INFO] Worker exiting (pid: 3905)
+[2016-12-08 19:20:30 +0000] [3901] [INFO] Shutting down: Master
+[2016-12-08 19:20:31 +0000] [3934] [INFO] Starting gunicorn 19.6.0
+[2016-12-08 19:20:31 +0000] [3934] [INFO] Listening at: http://0.0.0.0:80 (3934)
+[2016-12-08 19:20:31 +0000] [3934] [INFO] Using worker: sync
+[2016-12-08 19:20:31 +0000] [3937] [INFO] Booting worker with pid: 3937
+[2016-12-08 19:20:32 +0000] [3938] [INFO] Booting worker with pid: 3938
+[2016-12-08 19:20:32 +0000] [3939] [INFO] Booting worker with pid: 3939
+[2016-12-08 19:20:34 +0000] [3934] [INFO] Handling signal: int
+[2016-12-08 19:20:34 +0000] [3937] [INFO] Worker exiting (pid: 3937)
+[2016-12-08 19:20:34 +0000] [3938] [INFO] Worker exiting (pid: 3938)
+[2016-12-08 19:20:34 +0000] [3939] [INFO] Worker exiting (pid: 3939)
+[2016-12-08 19:20:34 +0000] [3934] [INFO] Shutting down: Master
+[2016-12-08 19:20:37 +0000] [3967] [INFO] Starting gunicorn 19.6.0
+[2016-12-08 19:20:37 +0000] [3967] [INFO] Listening at: http://0.0.0.0:80 (3967)
+[2016-12-08 19:20:37 +0000] [3967] [INFO] Using worker: sync
+[2016-12-08 19:20:37 +0000] [3970] [INFO] Booting worker with pid: 3970
+[2016-12-08 19:20:37 +0000] [3971] [INFO] Booting worker with pid: 3971
+[2016-12-08 19:20:37 +0000] [3973] [INFO] Booting worker with pid: 3973
+[2016-12-08 19:20:39 +0000] [3967] [INFO] Handling signal: int
+[2016-12-08 19:20:39 +0000] [3970] [INFO] Worker exiting (pid: 3970)
+[2016-12-08 19:20:39 +0000] [3971] [INFO] Worker exiting (pid: 3971)
+[2016-12-08 19:20:39 +0000] [3973] [INFO] Worker exiting (pid: 3973)
+[2016-12-08 19:20:40 +0000] [3967] [INFO] Shutting down: Master
+[2016-12-08 19:20:58 +0000] [4000] [INFO] Starting gunicorn 19.6.0
+[2016-12-08 19:20:58 +0000] [4000] [INFO] Listening at: http://0.0.0.0:80 (4000)
+[2016-12-08 19:20:58 +0000] [4000] [INFO] Using worker: sync
+[2016-12-08 19:20:58 +0000] [4004] [INFO] Booting worker with pid: 4004
+[2016-12-08 19:20:58 +0000] [4005] [INFO] Booting worker with pid: 4005
+[2016-12-08 19:20:58 +0000] [4007] [INFO] Booting worker with pid: 4007
