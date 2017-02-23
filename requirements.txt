@@ -3,9 +3,9 @@ coverage
 flask
 jsonschema
 
-# mypy
+mypy
 lxml
-# mypy-lang
+mypy-lang
 
 nose
 nose-timer
