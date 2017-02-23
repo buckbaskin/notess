@@ -14,6 +14,7 @@
         var $recordButton = $('#start_button');
         var $refreshButton = $('#refresh_button');
         var transcription;
+        var editPageTranscription;
         var GWS_CORE;
         var DATA_SERVICE;
         var defaultTitle = "Untitled Note";
@@ -63,13 +64,20 @@
         };
 
         var onTranscriptionUpdate = function () {
-            transcription = GWS_CORE.getTranscript();
+            console.log("LOG: onTranscriptionUpdate Method Called")
+            console.log(window.location.href)
+            if (window.location.href.indexOf("edit") > -1) {
+                transcription =  document.getElementById("final_span").innerHTML;
+            } else {
+                transcription = GWS_CORE.getTranscript();
+            }
             if (transcription !== "" || typeof transcription === 'undefined') {
                 populateKeywordPanel(transcription);
             }
         };
 
         var populateKeywordPanel = function (text) {
+            console.log("LOG: populateKeywordsPanel Method Called")
             if (text !== "" || typeof text === 'undefined') {
                 getKeywords(text, keywordsCallback);
             }
@@ -288,7 +296,9 @@
             init: init,
             populateKeywordPanel: populateKeywordPanel,
             stopRefreshingKeywords: stopRefreshingKeywords,
-            isDuplicate: isDuplicate
+            isDuplicate: isDuplicate,
+            transcription: editPageTranscription
+
         };
     };
 

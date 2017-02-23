@@ -1,4 +1,7 @@
 venv/
+py3env/
+python-virtual-environments/
+env/
 *__pycache__/
 .coverage
 cover/
