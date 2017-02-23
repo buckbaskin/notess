@@ -5,7 +5,7 @@ jsonschema
 
 # mypy
 lxml
-mypy-lang
+# mypy-lang
 
 nose
 nose-timer

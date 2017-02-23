@@ -87,6 +87,7 @@ var GWS_CORE = (function() {
         keywords = getKeywords();
         //console.log(keywords);
         var str = document.getElementById("final_span") ;
+        console.log("$$$$$$$$$$$$$$" + str.innerHTML)
         keywords.sort(function(a, b){
             return b.length - a.length;
         });
@@ -188,7 +189,11 @@ var GWS_CORE = (function() {
 
     function highlightSimulation(){
         var final_span = document.getElementById("final_span") ;
-        final_span.innerHTML = linebreak(final_transcript);
+        if (window.location.href.indexOf("edit") > -1 ) {
+            final_span.innerHTML = linebreak(final_span.innerHTML)
+        } else {
+            final_span.innerHTML = linebreak(final_transcript);
+        }
         showKeywordHyperlinks()
     }
 

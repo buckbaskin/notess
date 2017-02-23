@@ -13,6 +13,7 @@ var NOTE_CONTROLLER = function () {
     var updateButton = $('#updateButton');
     var deleteButtonCol = $('#deleteButtonCol');
     var noNotesAlert = $('#noNotes');
+    var editTranscription
 
     // setup event listeners
     var init = function () {
@@ -48,6 +49,7 @@ var NOTE_CONTROLLER = function () {
                 });
             }
         });
+
     };
 
     var dropDownListener = function () {
@@ -198,9 +200,13 @@ var NOTE_CONTROLLER = function () {
         });
 
         getTranscriptsForNote(noteId, function (result) {
+            console.log("Didnt make it")
             if (result.length > 0) {
                 var trans = result[0].text;
                 transcript.text(trans);
+                editTranscription = trans
+                //KNOWLEDGE.transcription = trans
+                console.log("Edit Page Trans: " + editTranscription)
             }
         });
     };
@@ -252,6 +258,8 @@ var NOTE_CONTROLLER = function () {
         setUserId: setUserId,
         setUsername: setUsername,
         setNoteId: setNoteId,
-        populateEditPage: populateEditPage
+        populateEditPage: populateEditPage,
+        editTranscription: editTranscription
+
     }
 };

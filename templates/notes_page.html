@@ -49,9 +49,9 @@
 <script>
     $(document).ready(function() {
         var $KNOWLEDGE = $.knowledge();
-        var NoteController = NOTE_CONTROLLER();
-
+        var NoteController = NOTE_CONTROLLER($KNOWLEDGE);
         $KNOWLEDGE.init(GWS_CORE);
+
         FB_AUTH(NoteController);
 
         var noteTab = $('#noteTab');
